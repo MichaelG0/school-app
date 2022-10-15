@@ -1,0 +1,238 @@
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+$l-black: #3c3f42;
+$my-green: #198754;
+$my-red: #dc3545;
+
+// ===========================GENERAL===========================
+
+body {
+    padding-bottom: 3rem;
+}
+
+a {
+    cursor: pointer !important;
+    text-decoration: none;
+}
+
+* {
+    word-break: break-word;
+}
+
+// ===========================BUTTONS===========================
+
+.btn {
+    &:focus {
+        box-shadow: none !important;
+    }
+}
+
+.btn-dark {
+    color: #fff !important;
+    background-color: #1c1f23 !important;
+    border-color: #1a1e21 !important;
+
+    &:hover {
+        background-color: $l-black  !important;
+        border-color: $l-black  !important;
+    }
+
+    &:active {
+        background-color: #1c1f23 !important;
+        border-color: #1a1e21 !important;
+    }
+}
+
+.btn-outline-dark {
+    &:hover {
+        background-color: #1c1f23 !important;
+        border-color: #1a1e21 !important;
+    }
+
+    &:active {
+        color: #fff !important;
+        background-color: $l-black  !important;
+        border-color: $l-black  !important;
+    }
+}
+
+.btn-link {
+    text-decoration: none;
+}
+
+// ===========================FORM===========================
+
+input,
+select,
+textarea {
+    box-shadow: none !important;
+    font-size: .93rem !important;
+
+    &:focus:not(.warning, .success) {
+        border-color: #2b30359c !important;
+    }
+}
+
+textarea {
+    margin-top: 15px;
+}
+
+// ===========================MODAL===========================
+
+.warning {
+    border-color: $my-red;
+
+    &:focus {
+        border-color: $my-red;
+    }
+}
+
+.success {
+    border-color: $my-green;
+
+    &:focus {
+        border-color: $my-green;
+    }
+}
+
+.text-success {
+    color: $my-green  !important;
+}
+
+.modal-dialog {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.modal-header {
+    border: none;
+    justify-content: center;
+}
+
+.modal-body {
+    padding: 20px;
+    text-align: left;
+
+    input {
+        margin-top: 15px;
+
+        &:first-of-type {
+            margin-top: 10px;
+        }
+    }
+
+    .btn-wrp {
+        width: 100%;
+        margin: 20px 0;
+
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.modal-footer {
+    justify-content: center;
+}
+
+
+// ===========================SPINNER===========================
+
+.spinner {
+    animation: rotate 2s linear infinite;
+    width: 1.6rem;
+    margin-top: -5px;
+
+    .path {
+        stroke: #fff;
+        stroke-linecap: round;
+        animation: dash 1.5s ease-in-out infinite;
+    }
+
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes dash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+// ===========================POSTS===========================
+
+#pag-content-wrp{
+    max-width: 1000px;
+}
+
+.card, aside {
+    font-size: .93rem;
+}
+
+aside {
+    display: none;
+    position: sticky;
+    top: calc(100vh - 782px);
+    height: fit-content;
+    background-color: #fff;
+    box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+
+@media screen and (min-width: 768px) {
+    aside {
+        display: initial;
+    }
+}
+
+// ===========================ALERT===========================
+
+.alert {
+    position: fixed;
+    top: 4.2rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 300px;
+    max-width: 90%;
+    opacity: 0;
+    z-index: 1080;
+    animation: alert 3s;
+}
+
+@keyframes alert {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    15%, 80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+// ===========================VIDEO===========================
+
+video {
+    max-width: 100%;
+}

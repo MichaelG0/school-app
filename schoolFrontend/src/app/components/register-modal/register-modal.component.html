@@ -1,0 +1,48 @@
+<div (show.bs.modal)="resetModal()" class="modal fade" id="exampleModalToggle" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalToggleLabel">Join MarsU</h2>
+            </div>
+
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit(signUpForm)" id="carouselExampleIndicators"
+                class="modal-body carousel slide carousel-dark" data-bs-interval="false" data-bs-touch="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <input [ngClass]="textWarning('email', btnClicked)" formControlName="email" type="email" class="form-control" placeholder="Enter your email">
+                        <small *ngIf="warning('email', btnClicked)" class="text-danger">
+                            Looks like this email is incomplete.
+                        </small>
+                        <small *ngIf="success('email', btnClicked)" class="text-success">
+                            Looking good!
+                        </small>
+                    </div>
+                    <div class="carousel-item">
+                        <input [ngClass]="textWarning('name', btnClicked2)" formControlName="name" type="text" class="form-control"
+                            placeholder="Name">
+                        <input [ngClass]="textWarning('surname', btnClicked2)" formControlName="surname" type="text" class="form-control"
+                            placeholder="Surname">
+                        <input [ngClass]="textWarning('password', btnClicked2)" formControlName="password" type="password" class="form-control"
+                            placeholder="Choose a Password">
+                        <small class="text-muted">8 characters or longer.</small>
+                    </div>
+                </div>
+                <div (click)="btnClicked = true" class="btn-wrp">
+                    <button *ngIf="!gotEmail" (click)="gotEmail = true" class="btn btn-dark px-4" type="button"
+                        data-bs-target="#carouselExampleIndicators" data-bs-slide="next"
+                        [disabled]="signUpForm.get('email')!.invalid">Continue</button>
+                </div>
+                <div (click)="btnClicked2 = true" class="btn-wrp">
+                    <button *ngIf="gotEmail" class="btn btn-dark px-4" type="submit" [disabled]="signUpForm.invalid">Join</button>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <span>Already a member?
+                    <a href="#exampleModalToggle2" data-bs-toggle="modal" role="button">Log in</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

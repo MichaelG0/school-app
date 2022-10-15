@@ -1,0 +1,23 @@
+form {
+    max-width: 700px;
+}
+
+label {
+    margin: 1rem 0 .5rem;
+}
+
+.modal-body input {
+    margin-top: 0;
+}
+
+input:read-only {
+    color: gray;
+
+    &:focus {
+        border-color: lightgray !important;
+    }
+}
+
+small {
+    display: block;
+}

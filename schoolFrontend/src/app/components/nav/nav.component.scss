@@ -1,0 +1,130 @@
+#header {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+}
+
+* {
+    word-break: normal;
+}
+
+.src-btn {
+    border-radius: 0 0.3rem 0.3rem 0 !important;
+}
+
+.nav-link {
+    background: linear-gradient(currentColor 0 0) bottom left/ var(--underline-width, 0%) 0.1em no-repeat;
+    transition: background-size 0.5s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    --underline-width: 100%;
+}
+
+#dropdownUser1 {
+    padding: 0;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 20rem;
+    transition: all .07s ease-out;
+
+    #avatar-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 38px;
+        width: 38px;
+        border-radius: 20rem;
+        background: url(../../../assets/avatar.png) center;
+        background-size: 46px;
+        overflow: hidden;
+
+        &:hover {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        img {
+            height: inherit;
+        }
+    }
+
+    span{
+        max-width: 120px;
+        overflow: hidden;
+    }
+}
+
+#nav-links,
+#src-bar,
+.apply-btn,
+#dropdownUser1 span {
+    display: none;
+}
+
+#sandwich {
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+    height: 2.5rem;
+}
+
+#logo {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    right: 0;
+    top: 0.8rem;
+    pointer-events: none;
+
+    a {
+        pointer-events: auto
+    }
+}
+
+// ===========================MEDIA QUERY===========================
+
+@media screen and (min-width: 576px) {
+    #src-bar {
+        display: flex;
+    }
+
+    #logo {
+        position: initial;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #dropdownUser1 {
+        padding: 3px 12px 3px 6px;
+
+        &:hover {
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        #avatar-box {
+            height: 32px;
+            width: 32px;
+            background-size: 40px;
+
+            &:hover {
+                border: none;
+            }
+        }
+    }
+
+    .apply-btn,
+    #dropdownUser1 span {
+        display: initial;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    #nav-links {
+        display: flex;
+    }
+
+    #sandwich {
+        display: none;
+    }
+}
