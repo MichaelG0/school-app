@@ -15,6 +15,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/apply/apply.module').then((m) => m.ApplyModule),
   },
+  {
+    path: ':token/confirmation',
+    loadChildren: () =>
+      import(
+        './pages/enrolment-confirmation/enrolment-confirmation.module'
+      ).then((m) => m.EnrolmentConfirmationModule),
+  },
 ];
 
 @NgModule({

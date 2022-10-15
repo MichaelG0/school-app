@@ -8,7 +8,7 @@ import { ILoginRequest } from '../interfaces/ilogin-request';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ISignUpRequest } from '../interfaces/isign-up-request';
 import { IStudentRequest } from '../interfaces/istudent-request';
-import { IStudentConfirmationToken } from '../interfaces/istudent-confirmation-token';
+import { IUserResponse } from '../interfaces/iuser-response';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +66,7 @@ export class UserService {
   }
 
   // editUser(id: number, userData: ISignUpRequest) {
-  //   return this.http.patch<ISignUpRequest>(`${this.apiUrl}/users/' + id, userData).pipe(
+  //   return this.http.patch<ISignUpRequest>(`${this.apiUrl}/users/${id}`, userData).pipe(
   //     tap((res: any) => {
   //       const user: IJwtResponse = {
   //         token: JSON.parse(localStorage.getItem('user')!).token,
@@ -80,7 +80,24 @@ export class UserService {
   // }
 
   apply(student: IStudentRequest) {
-    return this.http.post<IStudentConfirmationToken>(`${this.apiUrl}/users/apply`, student)
+    return this.http.post<IUserResponse>(`${this.apiUrl}/users/apply`, student).pipe(
+      tap((res) => {
+        const user: IJwtResponse = {
+          token: JSON.parse(localStorage.getItem('user')!).token,
+          type: 'Bearer',
+          user: res
+        }
+        localStorage.setItem('user', JSON.stringify(user))
+        this.loggedUser.next(user);
+      }),
+      catchError(() => of(true))
+    );
+  }
+
+  enrol(token: string) {
+    return this.http.get<IUserResponse>(`${this.apiUrl}/users/enrol?token=${token}`).pipe(
+      catchError(() => of(false))
+    )
   }
 
   getUser(id: number) {

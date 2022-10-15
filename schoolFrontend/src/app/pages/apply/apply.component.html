@@ -1,27 +1,27 @@
-<div class="container">
-    <form [formGroup]="applyForm" (ngSubmit)="onSubmit(applyForm)" class="modal-body container px-0 py-2">
+<div *ngIf="!confirmation; else confDialog" class="container">
+    <form [formGroup]="applyForm" (ngSubmit)="onSubmit(applyForm)" class="modal-body container inner-cont px-0 py-2">
         <h3>Apply</h3>
         <label for="email">Email</label>
         <input formControlName="email" type="email" class="form-control" placeholder="Email" id="email" readOnly>
         <label for="firstname">Name</label>
-        <input formControlName="firstname" type="text" class="form-control" placeholder="Name" id="firstname">
-        <small *ngIf="submissionFailed" class="text-danger">No spaces, numbers or special characters</small>
+        <input [ngClass]="textWarning('firstname', btnClicked)" formControlName="firstname" type="text" class="form-control" placeholder="Name" id="firstname">
+        <small *ngIf="warning('firstname', btnClicked)" class="text-danger">No spaces, numbers or special characters</small>
         <label for="surname">Surname</label>
-        <input formControlName="surname" type="text" class="form-control" placeholder="Surname" id="surname">
-        <small *ngIf="submissionFailed" class="text-danger">No spaces, numbers or special characters</small>
+        <input [ngClass]="textWarning('surname', btnClicked)" formControlName="surname" type="text" class="form-control" placeholder="Surname" id="surname">
+        <small *ngIf="warning('surname', btnClicked)" class="text-danger">No spaces, numbers or special characters</small>
         <label for="gender">Gender</label>
-        <select formControlName="gender" class="form-select" id="gender">
+        <select [ngClass]="textWarning('gender', btnClicked)" formControlName="gender" class="form-select" id="gender">
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
             <option value="OTHER">Other</option>
         </select>
-        <small *ngIf="submissionFailed" class="text-danger">Select one</small>
+        <small *ngIf="warning('gender', btnClicked)" class="text-danger">Select one</small>
         <label for="address">Address</label>
-        <input formControlName="address" type="text" class="form-control" placeholder="Address" id="address">
-        <small *ngIf="submissionFailed" class="text-danger">Must specify an address</small>
+        <input [ngClass]="textWarning('address', btnClicked)" formControlName="address" type="text" class="form-control" placeholder="Address" id="address">
+        <small *ngIf="warning('address', btnClicked)" class="text-danger">Must specify an address</small>
 
 
-        <div (click)="submissionFailed = true" class="btn-wrp">
+        <div (click)="btnClicked = true" class="btn-wrp">
             <button class="btn btn-dark px-4" type="submit" [disabled]="applyForm.invalid">
                 <span *ngIf="!loading">Apply Now</span>
                 <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
@@ -31,3 +31,12 @@
         </div>
     </form>
 </div>
+
+<ng-template #confDialog>
+    <div class="container">
+        <div class="container inner-cont pt-1">
+            <h3 class="mt-4 mb-3">We received your application!</h3>
+            <p>Check your inbox and click on the link to enrol to Mars University.</p>
+        </div>
+    </div>
+</ng-template>

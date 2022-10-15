@@ -1,8 +1,5 @@
 package com.capstone.schoolmanagement.auth.login;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capstone.schoolmanagement.auth.jwt.JwtResponse;
 import com.capstone.schoolmanagement.auth.jwt.JwtUtils;
 import com.capstone.schoolmanagement.auth.users.UserDetailsImpl;
+import com.capstone.schoolmanagement.auth.users.UserResponse;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,15 +36,10 @@ public class LoginController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities()
-				.stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
 		
 		System.out.println(userDetails.toString());
 
-		JwtResponse jwtresp = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-				userDetails.getName(), userDetails.getSurname(), roles);
+		JwtResponse jwtresp = new JwtResponse(jwt, UserResponse.buildUserResponse(userDetails));
 
 		return ResponseEntity.ok(jwtresp);
 	}

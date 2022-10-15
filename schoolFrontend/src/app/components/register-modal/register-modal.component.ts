@@ -68,8 +68,8 @@ export class RegisterModalComponent implements OnInit {
 
   textWarning(prop: string, btnClk: boolean) {
     if (this.signUpForm.get(prop)!.invalid && btnClk === true) return 'warning';
-    else if (this.signUpForm.get(prop)!.valid && btnClk === true)
-      return 'success';
+    else if (this.signUpForm.get(prop)!.valid && btnClk === true) return 'success';
     return '';
   }
+  
 }

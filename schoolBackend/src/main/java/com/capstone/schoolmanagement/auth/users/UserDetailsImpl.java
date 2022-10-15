@@ -8,8 +8,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.capstone.schoolmanagement.model.users.EGender;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+
+@Getter
 public class UserDetailsImpl implements UserDetails {
 	private Long id;
 	private String email;
@@ -17,6 +21,8 @@ public class UserDetailsImpl implements UserDetails {
 	private String password;
 	private String name;
 	private String surname;
+	private EGender gender;
+	private String address;
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(Long id, String email, String password, String name, String surname,
@@ -44,10 +50,6 @@ public class UserDetailsImpl implements UserDetails {
 		return authorities;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
 	@Override
 	public String getUsername() {
 		return email;
@@ -56,14 +58,6 @@ public class UserDetailsImpl implements UserDetails {
 	@Override
 	public String getPassword() {
 		return password;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getSurname() {
-		return surname;
 	}
 
 	@Override

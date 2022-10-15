@@ -32,8 +32,8 @@ import com.capstone.schoolmanagement.auth.jwt.JwtUtils;
 import com.capstone.schoolmanagement.auth.login.LoginController;
 import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.controllers.IControllerPage;
-import com.capstone.schoolmanagement.model.StudentConfirmationToken;
 import com.capstone.schoolmanagement.model.users.Student;
+import com.capstone.schoolmanagement.model.users.StudentConfirmationToken;
 import com.capstone.schoolmanagement.model.users.StudentDto;
 
 import lombok.RequiredArgsConstructor;
@@ -57,19 +57,14 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities()
-				.stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
-
-		JwtResponse jwtresp = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-				userDetails.getName(), userDetails.getSurname(), roles);
+		
+		JwtResponse jwtresp = new JwtResponse(jwt, UserResponse.buildUserResponse(userDetails));
 
 		return ResponseEntity.ok(jwtresp);
 	}
 
 	@PostMapping("/apply")
-	public ResponseEntity<StudentConfirmationToken> studentApplication(@RequestBody @Valid StudentDto studentDto) {
+	public ResponseEntity<UserResponse> studentApplication(@RequestBody @Valid StudentDto studentDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
 		return ResponseEntity.created(uri).body(usrSrv.studentApplication(studentDto));
 	}

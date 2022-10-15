@@ -11,23 +11,26 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./apply.component.scss'],
 })
 export class ApplyComponent implements OnInit {
-  user!: IJwtResponse | null;
+  jwtResp!: IJwtResponse | null;
   applyForm!: FormGroup;
   loading: boolean = false;
+  btnClicked: boolean = false;
   submissionFailed: boolean = false;
-
+  confirmation: boolean = false
+  
   constructor(private userSrv: UserService, private fb: FormBuilder) {}
-
+  
   ngOnInit(): void {
-    this.userSrv.loggedObs$.pipe(take(1)).subscribe((res) => (this.user = res));
+    this.userSrv.loggedObs$.pipe(take(1)).subscribe((res) => (this.jwtResp = res));
     this.setForm();
   }
-
+  
   setForm() {
+    this.btnClicked = false;
     this.applyForm = this.fb.group({
-      email: [this.user?.email, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
-      firstname: [this.user?.name, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
-      surname: [this.user?.surname, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+      email: [this.jwtResp?.user.email, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+      firstname: [this.jwtResp?.user.name, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
+      surname: [this.jwtResp?.user.surname, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       gender: [null, Validators.required],
       address: [null, Validators.required],
     });
@@ -47,8 +50,19 @@ export class ApplyComponent implements OnInit {
 
     this.userSrv.apply(data).pipe(take(1)).subscribe((res: any) => {
       if (res === true) this.submissionFailed = res;
+      else this.confirmation = true;
       this.loading = false;
     });
+  }
+
+  warning(prop: string, btnClk: boolean) {
+    return this.applyForm.get(prop)!.invalid && btnClk === true;
+  }
+
+  textWarning(prop: string, btnClk: boolean) {
+    if (this.applyForm.get(prop)!.invalid && btnClk === true) return 'warning';
+    else if (this.applyForm.get(prop)!.valid && btnClk === true) return 'success';
+    return '';
   }
   
 }

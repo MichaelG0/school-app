@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+	private Long id;
 	private String name;
 	private String surname;
 	private String email;
@@ -23,12 +24,25 @@ public class UserResponse {
 
 	public static UserResponse buildUserResponse(AppUser user) {
 		return UserResponse.builder()
+				.id(user.getId())
 				.name(user.getName())
 				.surname(user.getSurname())
 				.email(user.getEmail())
 				.gender(user.getGender())
 				.address(user.getAddress())
 				.roles(user.getRoles().stream().map(role -> role.getRoleName().name()).toList())
+				.build();
+	}
+	
+	public static UserResponse buildUserResponse(UserDetailsImpl user) {
+		return UserResponse.builder()
+				.id(user.getId())
+				.name(user.getName())
+				.surname(user.getSurname())
+				.email(user.getUsername())
+				.gender(user.getGender())
+				.address(user.getAddress())
+				.roles(user.getAuthorities().stream().map(role -> role.getAuthority()).toList())
 				.build();
 	}
 	

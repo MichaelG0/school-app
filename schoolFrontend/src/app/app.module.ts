@@ -7,9 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginModalComponent } from './components/login-modal/login-modal.component';
 import { NavComponent } from './components/nav/nav.component';
-import { HeroComponent } from './components/hero/hero.component';
 import { OffcanvasNavComponent } from './components/offcanvas-nav/offcanvas-nav.component';
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,13 @@ import { RegisterModalComponent } from './components/register-modal/register-mod
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -19,10 +19,10 @@ import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.email.EmailService;
-import com.capstone.schoolmanagement.model.StudentConfirmationToken;
 import com.capstone.schoolmanagement.model.users.EGender;
 import com.capstone.schoolmanagement.model.users.Guest;
 import com.capstone.schoolmanagement.model.users.Student;
+import com.capstone.schoolmanagement.model.users.StudentConfirmationToken;
 import com.capstone.schoolmanagement.model.users.StudentDto;
 import com.capstone.schoolmanagement.repos.StudentConfirmationTokenRepo;
 
@@ -53,11 +53,12 @@ public class UserService {
 		return request;
 	}
 
-	public StudentConfirmationToken studentApplication(StudentDto studentDto) {
+	public UserResponse studentApplication(StudentDto studentDto) {
 		// cerco l'utente e se non esiste lancio un errore
 		// genero token che collego all'account
 		// invio email con link di conferma
-		// nel frattempo salvo l'utente come GUEST. Quando il link viene cliccato parte
+		// nel frattempo aggiorno l'utente (che rimane un GUEST)
+		// quando il link viene cliccato parte
 		// la funzione enrolStudent che trasforma il GUEST in STUDENT
 		AppUser usr = usrRepo.findByEmail(studentDto.getEmail())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
@@ -72,11 +73,12 @@ public class UserService {
 		token.setToken(UUID.randomUUID().toString());
 		token.setExpirationDate(LocalDate.now().plusDays(30));
 		token.setUser(usr);
+		studentTokenRepo.save(token);
 
-		String link = "http://localhost:8080/users/enrol?token=" + token.getToken();
+		String link = "http://localhost:4200/" + token.getToken() + "/confirmation";
 		mailSrv.send(usr.getEmail(), buildEmail(usr.getName(), link));
 
-		return studentTokenRepo.save(token);
+		return UserResponse.buildUserResponse(usr);
 	}
 
 	public UserResponse enrolStudent(String token) {
