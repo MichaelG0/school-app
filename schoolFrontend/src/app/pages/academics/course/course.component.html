@@ -1,0 +1,15 @@
+<div class="container">
+  <ng-container *ngIf="course$ | async as course; else loading">
+    <h2>{{ course.name }}</h2>
+    <img [src]="[course.image]" />
+    <p>{{ course.description }}</p>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="text-center">
+      <svg class="spinner big-spin" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
+  </ng-template>
+</div>

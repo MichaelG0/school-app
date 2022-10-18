@@ -1,0 +1,41 @@
+.my-background {
+    position: absolute;
+    background-image: url("../../../assets/library.jpg");
+    height: calc(100vh - 3.6rem);
+    width: 100%;
+    margin-top: -1.5rem;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(.5);
+}
+
+.container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: calc(100vh - 3.6rem);
+    margin-top: -1.5rem;
+    max-width: 1000px;
+
+    >div {
+        width: 100%;
+        background-color: white;
+        padding: 2rem;
+        cursor: pointer;
+        transition: all .5s ease;
+
+        &:hover {
+            transform: scale(1.02);
+        }
+    }
+}
+
+p {
+    margin: 0;
+    text-underline-offset: 3px;
+}
+
+.spacer {
+    min-height: calc(100vh - 108px);
+}

@@ -16,9 +16,11 @@ import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.auth.users.UserRepository;
 import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.ECourse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.EGender;
+import com.capstone.schoolmanagement.model.users.Guest;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.model.users.Teacher;
 import com.capstone.schoolmanagement.repos.CourseRepo;
@@ -51,6 +53,10 @@ public class FirstRunner implements CommandLineRunner {
 		AppRole adminRole = new AppRole();
 		adminRole.setRoleName(ERole.ROLE_ADMIN);
 		roleRepo.save(adminRole);
+		
+		AppRole teacherRole = new AppRole();
+		teacherRole.setRoleName(ERole.ROLE_TEACHER);
+		roleRepo.save(teacherRole);
 
 		AppRole staffRole = new AppRole();
 		staffRole.setRoleName(ERole.ROLE_STAFF);
@@ -65,12 +71,21 @@ public class FirstRunner implements CommandLineRunner {
 		roleRepo.save(guestRole);
 
 		Set<AppRole> adminRoles = new HashSet<AppRole>();
+		adminRoles.add(guestRole);
+		adminRoles.add(teacherRole);
+		adminRoles.add(studentRole);
 		adminRoles.add(adminRole);
 
+		Set<AppRole> teacherRoles = new HashSet<AppRole>();
+		teacherRoles.add(guestRole);
+		teacherRoles.add(teacherRole);
+		
 		Set<AppRole> staffRoles = new HashSet<AppRole>();
+		staffRoles.add(guestRole);
 		staffRoles.add(staffRole);
 
 		Set<AppRole> studentRoles = new HashSet<AppRole>();
+		studentRoles.add(guestRole);
 		studentRoles.add(studentRole);
 
 		Set<AppRole> guestRoles = new HashSet<AppRole>();
@@ -80,17 +95,46 @@ public class FirstRunner implements CommandLineRunner {
 
 		Admin admin = new Admin();
 		admin.setName("Admin");
-		admin.setSurname("Jones");
+		admin.setSurname("Hoppus");
+		admin.setAvatar("https://i.pravatar.cc/300?img=30");
 		admin.setEmail("admin@admin.com");
 		admin.setPassword(encoder.encode("adminadmin"));
 		admin.setRoles(adminRoles);
 		usrRepo.save(admin);
+		
+		Teacher teacherTest = new Teacher();
+		teacherTest.setName("Teacher");
+		teacherTest.setSurname("Barker");
+		teacherTest.setAvatar("https://i.pravatar.cc/300?img=31");
+		teacherTest.setEmail("teacher@teacher.com");
+		teacherTest.setPassword(encoder.encode("teacherteacher"));
+		teacherTest.setRoles(teacherRoles);
+		usrRepo.save(teacherTest);
+		
+		Student studentTest = new Student();
+		studentTest.setName("Student");
+		studentTest.setSurname("Delonge");
+		studentTest.setAvatar("https://i.pravatar.cc/300?img=32");
+		studentTest.setEmail("student@student.com");
+		studentTest.setPassword(encoder.encode("studentstudent"));
+		studentTest.setRoles(studentRoles);
+		usrRepo.save(studentTest);
+		
+		Guest guestTest = new Guest();
+		guestTest.setName("Guest");
+		guestTest.setSurname("Skiba");
+		guestTest.setAvatar("https://i.pravatar.cc/300?img=33");
+		guestTest.setEmail("guest@guest.com");
+		guestTest.setPassword(encoder.encode("guestguest"));
+		guestTest.setRoles(guestRoles);
+		usrRepo.save(guestTest);
 
 		List<Teacher> teachers = new ArrayList<Teacher>();
 		for (int i = 0; i < 2; i++) {
 			Teacher teacher = teacherPrv.getObject();
 			teacher.setName(fkr.name().firstName());
 			teacher.setSurname(fkr.name().lastName());
+			teacher.setAvatar("https://i.pravatar.cc/300?img=2" + i);
 			teacher.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
 			teacher.setEmail(fkr.internet().emailAddress());
 			teacher.setPassword(encoder.encode(fkr.internet().password(8, 10)));
@@ -109,8 +153,15 @@ public class FirstRunner implements CommandLineRunner {
 
 		List<Course> courses = new ArrayList<Course>();
 		for (int i = 0; i < 10; i++) {
+			String description = fkr.lorem().paragraph(3);
+			if (description.length() > 250)
+				description = description.substring(0, 249);
+
 			Course crs = crsPrv.getObject();
-			crs.setName(fkr.university().name());
+			crs.setName(fkr.lorem().sentence(1));
+			crs.setDescription(description);
+			crs.setImage("https://picsum.photos/id/4" + i + "/300");
+			crs.setType((i % 2 == 0) ? ECourse.UNDERGRADUATE : ECourse.GRADUATE);
 			courses.add(crs);
 		}
 		crsRepo.saveAll(courses);
@@ -121,6 +172,7 @@ public class FirstRunner implements CommandLineRunner {
 			student.setName(fkr.name().firstName());
 			student.setSurname(fkr.name().lastName());
 			student.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
+			student.setAvatar("https://i.pravatar.cc/300?img=1" + i);
 			student.setCourse(courses.get(0));
 			student.setKlass(klasses.get(0));
 			student.setEmail(fkr.internet().emailAddress());

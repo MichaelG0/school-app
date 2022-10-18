@@ -14,4 +14,7 @@ public class Course {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String description;
+	private String image;
+	private ECourse type;
 }

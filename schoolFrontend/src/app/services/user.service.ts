@@ -9,6 +9,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ISignUpRequest } from '../interfaces/isign-up-request';
 import { IStudentRequest } from '../interfaces/istudent-request';
 import { IUserResponse } from '../interfaces/iuser-response';
+import { IPageable } from '../interfaces/ipageable';
 
 @Injectable({
   providedIn: 'root',
@@ -101,9 +102,7 @@ export class UserService {
   }
 
   getUser(id: number) {
-    return this.http.get(`${this.apiUrl}/users/${id}`).pipe(
-      catchError(() => of(false))
-    )
+    return this.http.get<IUserResponse>(`${this.apiUrl}/users/${id}`)
   }
 
   // getSpecificUsers(ids: number[]) {
@@ -112,12 +111,20 @@ export class UserService {
   //   );
   // }
 
-  getUsers() {
-    return this.http.get(`${this.apiUrl}/users`)
+  getUsers(page: number = 0, size: number = 20) {
+    return this.http.get<IPageable>(`${this.apiUrl}/users?page=${page}&size=${size}`)
   }
 
   deleteUser(id: number) {
-    return this.http.delete(`${this.apiUrl}/users/${id}`)
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`)
+  }
+
+  addRole(id: number, roleName: string) {
+    return this.http.put<void>(`${this.apiUrl}/users/${id}/add_role`, roleName)
+  }
+
+  removeRole(id: number, roleName: string) {
+    return this.http.put<void>(`${this.apiUrl}/users/${id}/remove_role`, roleName)
   }
 
   autoLogout(at: string) {

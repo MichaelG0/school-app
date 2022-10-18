@@ -10,6 +10,7 @@ import { NavComponent } from './components/nav/nav.component';
 import { OffcanvasNavComponent } from './components/offcanvas-nav/offcanvas-nav.component';
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     LoginModalComponent,
     NavComponent,
     OffcanvasNavComponent,
-    RegisterModalComponent
+    RegisterModalComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.auth.roles.AppRole;
+import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.email.EmailService;
 import com.capstone.schoolmanagement.model.users.EGender;
@@ -96,16 +97,15 @@ public class UserService {
 	}
 
 	public Page<UserResponse> getAllUsersBasicInformations(Optional<Integer> page, Optional<Integer> size) {
-		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "id");
+		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "name");
 		Page<AppUser> usersPage = usrRepo.findAll(pgb);
 
-		List<UserResponse> users = usersPage//
-				.getContent()//
-				.stream()//
-				.map(user -> UserResponse.buildUserResponse(user))//
+		List<UserResponse> users = usersPage.getContent()
+				.stream()
+				.map(user -> UserResponse.buildUserResponse(user))
 				.toList();
 
-		return new PageImpl<UserResponse>(users);
+		return new PageImpl<UserResponse>(users, pgb, usersPage.getTotalElements());
 	}
 
 	public UserResponse getUserBasicInformations(Long id) {
@@ -128,10 +128,19 @@ public class UserService {
 		usrRepo.deleteById(id);
 	}
 
-	public void addRole(Long userId, Long roleId) {
+	public void addRole(Long userId, String roleName) {
 		AppUser usr = usrRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		AppRole role = roleRepo.findById(roleId).orElseThrow(() -> new EntityNotFoundException("Role not found"));
+		AppRole role = roleRepo.findByRoleName(ERole.valueOf(roleName))
+				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
 		usr.getRoles().add(role);
+		usrRepo.save(usr);
+	}
+
+	public void removeRole(Long userId, String roleName) {
+		AppUser usr = usrRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		AppRole role = roleRepo.findByRoleName(ERole.valueOf(roleName))
+				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
+		usr.getRoles().remove(role);
 		usrRepo.save(usr);
 	}
 

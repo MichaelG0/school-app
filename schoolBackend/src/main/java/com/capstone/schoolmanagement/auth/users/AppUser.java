@@ -42,6 +42,7 @@ public abstract class AppUser {
 	@Enumerated(EnumType.STRING)
 	private EGender gender;
 	private String address;
+	private String avatar;
 	
 //	ACCESS DATA
 	@NotBlank

@@ -1,0 +1,24 @@
+button {
+    opacity: .7;
+    border: none;
+
+    i {
+        font-size: 1rem;
+    }
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:disabled {
+        opacity: .3;
+    }
+}
+
+input[type=checkbox] {
+    cursor: pointer;
+}
+
+.user-row{
+    cursor: pointer;
+}

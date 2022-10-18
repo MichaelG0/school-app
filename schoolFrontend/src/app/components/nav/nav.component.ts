@@ -22,12 +22,8 @@ export class NavComponent implements OnInit {
     this.usrSrv.logout();
   }
 
-  dafaultModal() {
-    this.modalSrv.changeProps('Log In', '');
-  }
-
-  applyModal() {
-    this.modalSrv.changeProps('Log In To Apply', '/apply');
+  setModal(title: string, navigateTo: string) {
+    this.modalSrv.changeProps(title, navigateTo);
   }
   
 }

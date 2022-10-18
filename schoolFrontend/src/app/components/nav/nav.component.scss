@@ -54,6 +54,24 @@
     }
 }
 
+.drop-link-menu {
+    visibility: hidden;
+    position: absolute;
+    list-style-type: none;
+    background-color: white;
+    padding: .7rem 4rem 1rem 1.5rem;
+    transform: translate(-1.5rem, .3rem);
+    transition: all .2s ease;
+    opacity: 0;
+    z-index: 1010;
+}
+
+.drop-link:hover .drop-link-menu {
+    visibility: visible;
+    transform: translate(-1.5rem, 0rem);
+    opacity: 1;
+}
+
 #nav-links,
 #src-bar,
 .apply-btn,

@@ -1,20 +1,20 @@
 <div class="container">
-    <div class="container inner-cont pt-1">
-        <div *ngIf="outcome == 'success'">
-            <h3 class="mt-4 mb-3">{{enrolledStudent.name}}, you have successfully enrolled.</h3>
-            <p>Enjoy your studies at Mars University!</p>
-            <a [routerLink]="['/']" routerLinkActive="active">Go to your dashboard</a>
-        </div>
-
-        <div *ngIf="outcome == 'fail'">
-            <h3 class="mt-4 mb-3">Something went wrong.</h3>
-            <a [routerLink]="['/']" routerLinkActive="active">Home</a>
-        </div>
-
-        <div *ngIf="outcome == 'loading'" class="text-center">
-            <svg class="spinner" viewBox="0 0 50 50">
-                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-            </svg>
-        </div>
+  <div class="container inner-cont pt-1">
+    <div *ngIf="outcome == 'success'">
+      <h3 class="mt-4 mb-3">{{ enrolledStudent.name }}, you have successfully enrolled.</h3>
+      <p>Enjoy your studies at Mars University!</p>
+      <a [routerLink]="['/']" routerLinkActive="active">Go to your dashboard</a>
     </div>
+
+    <div *ngIf="outcome == 'fail'">
+      <h3 class="mt-4 mb-3">Something went wrong.</h3>
+      <a [routerLink]="['/']" routerLinkActive="active">Home</a>
+    </div>
+
+    <div *ngIf="outcome == 'loading'" class="text-center">
+      <svg class="spinner big-spin" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
+  </div>
 </div>

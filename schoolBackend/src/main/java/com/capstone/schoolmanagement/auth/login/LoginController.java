@@ -21,7 +21,7 @@ import com.capstone.schoolmanagement.auth.users.UserResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {

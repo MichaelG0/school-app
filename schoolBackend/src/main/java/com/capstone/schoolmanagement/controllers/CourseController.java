@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,11 @@ public class CourseController implements IControllerList<Course, CourseDto> {
 	@GetMapping
 	public ResponseEntity<List<Course>> getAll() {
 		return ResponseEntity.ok(crsSrv.getAll());
+	}
+	
+	@GetMapping("/type/{type}")
+	public ResponseEntity<List<Course>> getByType(@PathVariable String type) {
+		return ResponseEntity.ok(crsSrv.getByType(type));
 	}
 
 	@Override

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { take } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, take } from 'rxjs';
 import { ISignUpRequest } from 'src/app/interfaces/isign-up-request';
+import { LoginModalService } from 'src/app/services/login-modal.service';
 import { UserService } from 'src/app/services/user.service';
 declare var bootstrap: any;
 
@@ -11,14 +13,16 @@ declare var bootstrap: any;
   styleUrls: ['./register-modal.component.scss'],
 })
 export class RegisterModalComponent implements OnInit {
+  modalProps$!: Observable<{ title: string; link: string }>;
   signUpForm!: FormGroup;
   gotEmail: boolean = false;
   btnClicked: boolean = false;
   btnClicked2: boolean = false;
 
-  constructor(private userSrv: UserService, private fb: FormBuilder) {}
+  constructor(private userSrv: UserService, private modalSrv: LoginModalService, private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
+    this.modalProps$ = this.modalSrv.modalProps$;
     this.setForm();
   }
 
@@ -48,6 +52,7 @@ export class RegisterModalComponent implements OnInit {
         const sgnMdlEl = document.querySelector('#exampleModalToggle');
         const signUpModal = bootstrap.Modal.getInstance(sgnMdlEl);
         signUpModal.hide();
+        this.modalProps$.pipe(take(1)).subscribe(res => this.router.navigate([res.link]));
       }
     });
   }

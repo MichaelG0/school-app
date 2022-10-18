@@ -39,7 +39,7 @@ import com.capstone.schoolmanagement.model.users.StudentDto;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController implements IControllerPage<UserResponse, UserDto> {
@@ -101,10 +101,17 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/{userId}/{roleId}")
+	@PutMapping("/{userId}/add_role")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> addRole(@PathVariable Long userId, @PathVariable Long roleId) {
-		usrSrv.addRole(userId, roleId);
+	public ResponseEntity<Void> addRole(@PathVariable Long userId, @RequestBody String roleName) {
+		usrSrv.addRole(userId, roleName);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping("/{userId}/remove_role")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<Void> removeRole(@PathVariable Long userId, @RequestBody String roleName) {
+		usrSrv.removeRole(userId, roleName);
 		return ResponseEntity.ok().build();
 	}
 

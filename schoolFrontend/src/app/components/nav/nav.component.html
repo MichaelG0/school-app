@@ -1,63 +1,81 @@
 <div id="header" class="bg-white border-bottom shadow-sm mb-4">
-    <div class="container">
-        <header class="d-flex align-items-center justify-content-between pt-2 mb-2">
-            <div class="d-flex col-xl-6 col-lg-5 col-md-7 justify-content-between align-items-center">
-                <button id="sandwich" class="btn border-0 p-0 me-sm-2 pe-2" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasNav" aria-controls="offcanvasNav">
-                    <i class="bi bi-list"></i>
-                </button>
+  <div class="container">
+    <header class="d-flex align-items-center justify-content-between pt-2 mb-2">
+      <div class="d-flex col-xl-6 col-lg-5 col-md-7 justify-content-between align-items-center">
+        <button
+          id="sandwich"
+          class="btn border-0 p-0 me-sm-2 pe-2"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasNav"
+          aria-controls="offcanvasNav"
+        >
+          <i class="bi bi-list"></i>
+        </button>
 
-                <div id="logo">
-                    <a [routerLink]="['/']" class="align-items-center text-dark text-decoration-none">
-                        <h3 class="m-0">MarsU</h3>
-                    </a>
-                </div>
+        <div id="logo">
+          <a [routerLink]="['/']" class="align-items-center text-dark text-decoration-none">
+            <h3 class="m-0">MarsU</h3>
+          </a>
+        </div>
 
-                <form id="src-bar" class="w-100 ms-4" role="search">
-                    <input type="search" class="form-control rounded-0 rounded-start" placeholder="Search..."
-                        aria-label="Search">
-                    <button type="button" class="src-btn btn btn-dark me-2"><i class="bi bi-search"></i></button>
-                </form>
-            </div>
+        <form id="src-bar" class="w-100 ms-4" role="search">
+          <input type="search" class="form-control rounded-0 rounded-start" placeholder="Search..." aria-label="Search" />
+          <button type="button" class="src-btn btn btn-dark me-2"><i class="bi bi-search"></i></button>
+        </form>
+      </div>
 
-            <div class="d-flex justify-content-end">
-                <ul id="nav-links" class="nav justify-content-center gap-3 me-4">
-                    <li><a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-                            class="nav-link px-0 link-dark">Home</a></li>
-                    <li><a [routerLink]="['/gg']" routerLinkActive="active"
-                            class="nav-link px-0 link-dark">Academics</a></li>
-                    <li><a [routerLink]="['/g']" routerLinkActive="active" class="nav-link px-0 link-dark">About</a>
-                    </li>
-                </ul>
+      <div class="d-flex justify-content-end">
+        <ul id="nav-links" class="nav justify-content-center gap-3 me-4">
+          <li><a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link px-0 link-dark">Home</a></li>
+          <li class="drop-link"><a [routerLink]="['/academics']" routerLinkActive="active" class="nav-link px-0 link-dark">Academics</a>
+            <ul class="drop-link-menu shadow border">
+              <li><a [routerLink]="['/academics/undergraduate']" routerLinkActive="active" class="nav-link px-0 link-dark">Undergraduate</a></li>
+              <li><a [routerLink]="['/academics/graduate']" routerLinkActive="active" class="nav-link px-0 link-dark">Graduate</a></li>
+            </ul>
+          </li>
+          <li><a [routerLink]="['/g']" routerLinkActive="active" class="nav-link px-0 link-dark">About</a></li>
+        </ul>
 
-                <ng-template #notLogged class="text-nowrap">
-                    <button (click)="dafaultModal()" id="lgn-btn" type="button" class="btn btn-outline-dark px-sm-3 me-sm-2 me-0 px-2"
-                        data-bs-toggle="modal" href="#exampleModalToggle2">Log In
-                    </button>
-                    <button (click)="applyModal()" type="button" class="apply-btn btn btn-dark px-sm-4 px-3" data-bs-toggle="modal"
-                        href="#exampleModalToggle2">Apply
-                    </button>
-                </ng-template>
+        <ng-template #notLogged class="text-nowrap">
+          <button
+            (click)="setModal('Log In', '')"
+            id="lgn-btn"
+            type="button"
+            class="btn btn-outline-dark px-sm-3 me-sm-2 me-0 px-2"
+            data-bs-toggle="modal"
+            href="#exampleModalToggle2"
+          >
+            Log In
+          </button>
+          <button
+            (click)="setModal('Log In To Apply', '/apply')"
+            type="button"
+            class="apply-btn btn btn-dark px-sm-4 px-3"
+            data-bs-toggle="modal"
+            href="#exampleModalToggle2"
+          >
+            Apply
+          </button>
+        </ng-template>
 
-                <div *ngIf="(loggedObs$ | async) as loggedUser; else notLogged" class="dropdown text-end d-flex">
-                    <a class="d-flex link-dark text-decoration-none align-items-center me-sm-2" id="dropdownUser1"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <div id="avatar-box"><img src=""></div>
-                        <span class="ms-2 me-1">{{loggedUser.user.name}}</span>
-                    </a>
-                    <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                        <li><a [routerLink]="['/settings']" class="dropdown-item">Settings</a></li>
-                        <li><a class="dropdown-item">Profile</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a (click)="logout()" class="dropdown-item">Sign out</a></li>
-                    </ul>
-                    <button [routerLink]="['/apply']" type="button" class="apply-btn btn btn-dark px-sm-4 px-3">Apply
-                    </button>
-                </div>
-
-            </div>
-        </header>
-    </div>
+        <div *ngIf="loggedObs$ | async as loggedUser; else notLogged" class="dropdown text-end d-flex">
+          <a class="d-flex link-dark text-decoration-none align-items-center me-sm-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <div id="avatar-box"><img src="" /></div>
+            <span class="ms-2 me-1">{{ loggedUser.user.name }}</span>
+          </a>
+          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+            <li><a [routerLink]="['/settings']" class="dropdown-item">Settings</a></li>
+            <li><a [routerLink]="['/' + loggedUser.user.id + '/profile']" class="dropdown-item">Profile</a></li>
+            <li *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')"><a [routerLink]="['/management']" class="dropdown-item">Manage Staff</a></li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li><a (click)="logout()" class="dropdown-item">Sign out</a></li>
+          </ul>
+          <button [routerLink]="['/apply']" type="button" class="apply-btn btn btn-dark px-sm-4 px-3">Apply</button>
+        </div>
+      </div>
+    </header>
+  </div>
 </div>
