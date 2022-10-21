@@ -27,7 +27,8 @@
 
       <div class="d-flex justify-content-end">
         <ul id="nav-links" class="nav justify-content-center gap-3 me-4">
-          <li><a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link px-0 link-dark">Home</a></li>
+          <li *ngIf="!loggedUser?.user?.roles?.includes('ROLE_STUDENT')"><a [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link px-0 link-dark">Home</a></li>
+          <li *ngIf="loggedUser?.user?.roles?.includes('ROLE_STUDENT')"><a [routerLink]="['/student_dashboard']" routerLinkActive="active" class="nav-link px-0 link-dark">Dashboard</a></li>
           <li class="drop-link"><a [routerLink]="['/academics']" routerLinkActive="active" class="nav-link px-0 link-dark">Academics</a>
             <ul class="drop-link-menu shadow border">
               <li><a [routerLink]="['/academics/undergraduate']" routerLinkActive="active" class="nav-link px-0 link-dark">Undergraduate</a></li>
@@ -59,7 +60,7 @@
           </button>
         </ng-template>
 
-        <div *ngIf="loggedObs$ | async as loggedUser; else notLogged" class="dropdown text-end d-flex">
+        <div *ngIf="loggedUser; else notLogged" class="dropdown text-end d-flex">
           <a class="d-flex link-dark text-decoration-none align-items-center me-sm-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
             <div id="avatar-box"><img src="" /></div>
             <span class="ms-2 me-1">{{ loggedUser.user.name }}</span>

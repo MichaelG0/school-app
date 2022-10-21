@@ -32,9 +32,9 @@ import com.capstone.schoolmanagement.auth.jwt.JwtUtils;
 import com.capstone.schoolmanagement.auth.login.LoginController;
 import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.controllers.IControllerPage;
+import com.capstone.schoolmanagement.dto.StudentConfirmationToken;
+import com.capstone.schoolmanagement.dto.StudentDto;
 import com.capstone.schoolmanagement.model.users.Student;
-import com.capstone.schoolmanagement.model.users.StudentConfirmationToken;
-import com.capstone.schoolmanagement.model.users.StudentDto;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,10 +1,12 @@
 package com.capstone.schoolmanagement.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.ManyToMany;
 import lombok.Data;
 
 @Entity
@@ -17,4 +19,6 @@ public class Course {
 	private String description;
 	private String image;
 	private ECourse type;
+	@ManyToMany
+	private Set<Mmodule> modules;
 }

@@ -3,6 +3,7 @@ package com.capstone.schoolmanagement.runners;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.ObjectProvider;
@@ -18,6 +19,7 @@ import com.capstone.schoolmanagement.auth.users.UserRepository;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.ECourse;
 import com.capstone.schoolmanagement.model.Klass;
+import com.capstone.schoolmanagement.model.Mmodule;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.EGender;
 import com.capstone.schoolmanagement.model.users.Guest;
@@ -25,6 +27,7 @@ import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.model.users.Teacher;
 import com.capstone.schoolmanagement.repos.CourseRepo;
 import com.capstone.schoolmanagement.repos.KlassRepo;
+import com.capstone.schoolmanagement.repos.MmoduleRepo;
 import com.github.javafaker.Faker;
 
 import lombok.RequiredArgsConstructor;
@@ -38,10 +41,12 @@ public class FirstRunner implements CommandLineRunner {
 	private final RoleRepository roleRepo;
 	private final UserRepository usrRepo;
 	private final KlassRepo klsRepo;
+	private final MmoduleRepo moduleRepo;
 	private final CourseRepo crsRepo;
 	private final ObjectProvider<Teacher> teacherPrv;
 	private final ObjectProvider<Student> studentPrv;
 	private final ObjectProvider<Klass> klassPrv;
+	private final ObjectProvider<Mmodule> modulePrv;
 	private final ObjectProvider<Course> crsPrv;
 	private final Faker fkr;
 	private final PasswordEncoder encoder;
@@ -53,7 +58,7 @@ public class FirstRunner implements CommandLineRunner {
 		AppRole adminRole = new AppRole();
 		adminRole.setRoleName(ERole.ROLE_ADMIN);
 		roleRepo.save(adminRole);
-		
+
 		AppRole teacherRole = new AppRole();
 		teacherRole.setRoleName(ERole.ROLE_TEACHER);
 		roleRepo.save(teacherRole);
@@ -79,7 +84,7 @@ public class FirstRunner implements CommandLineRunner {
 		Set<AppRole> teacherRoles = new HashSet<AppRole>();
 		teacherRoles.add(guestRole);
 		teacherRoles.add(teacherRole);
-		
+
 		Set<AppRole> staffRoles = new HashSet<AppRole>();
 		staffRoles.add(guestRole);
 		staffRoles.add(staffRole);
@@ -101,7 +106,7 @@ public class FirstRunner implements CommandLineRunner {
 		admin.setPassword(encoder.encode("adminadmin"));
 		admin.setRoles(adminRoles);
 		usrRepo.save(admin);
-		
+
 		Teacher teacherTest = new Teacher();
 		teacherTest.setName("Teacher");
 		teacherTest.setSurname("Barker");
@@ -110,7 +115,7 @@ public class FirstRunner implements CommandLineRunner {
 		teacherTest.setPassword(encoder.encode("teacherteacher"));
 		teacherTest.setRoles(teacherRoles);
 		usrRepo.save(teacherTest);
-		
+
 		Student studentTest = new Student();
 		studentTest.setName("Student");
 		studentTest.setSurname("Delonge");
@@ -119,7 +124,7 @@ public class FirstRunner implements CommandLineRunner {
 		studentTest.setPassword(encoder.encode("studentstudent"));
 		studentTest.setRoles(studentRoles);
 		usrRepo.save(studentTest);
-		
+
 		Guest guestTest = new Guest();
 		guestTest.setName("Guest");
 		guestTest.setSurname("Skiba");
@@ -151,17 +156,34 @@ public class FirstRunner implements CommandLineRunner {
 		}
 		klsRepo.saveAll(klasses);
 
+		List<Mmodule> modules = new ArrayList<Mmodule>();
+		for (int i = 0; i < 20; i++) {
+			String[] subjects = { "Mathematics", "Science", "Health", "Art", "Music", "Literature", "Composition",
+					"Algebra", "Geography", "Sociology", "Medicine", "Geology", "Physics", "Anthropology", "Genealogy",
+					"Philosophy", "Critical Thinking", "Psychology", "Economics", "Rhetoric" };
+			Mmodule module = modulePrv.getObject();
+			module.setName(subjects[i]);
+			modules.add(module);
+		}
+		moduleRepo.saveAll(modules);
+
 		List<Course> courses = new ArrayList<Course>();
 		for (int i = 0; i < 10; i++) {
 			String description = fkr.lorem().paragraph(3);
 			if (description.length() > 250)
 				description = description.substring(0, 249);
 
+			Set<Mmodule> mdls = new HashSet<Mmodule>();
+			for (int j = 0; j < 5; j++) {
+				mdls.add(moduleRepo.findById(fkr.random().nextLong(19) + 1).get());
+			}
+
 			Course crs = crsPrv.getObject();
-			crs.setName(fkr.lorem().sentence(1));
+			crs.setName(fkr.educator().course());
 			crs.setDescription(description);
 			crs.setImage("https://picsum.photos/id/4" + i + "/300");
 			crs.setType((i % 2 == 0) ? ECourse.UNDERGRADUATE : ECourse.GRADUATE);
+			crs.setModules(mdls);
 			courses.add(crs);
 		}
 		crsRepo.saveAll(courses);

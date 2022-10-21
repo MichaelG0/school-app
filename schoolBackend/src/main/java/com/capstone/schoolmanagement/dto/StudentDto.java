@@ -1,4 +1,4 @@
-package com.capstone.schoolmanagement.model.users;
+package com.capstone.schoolmanagement.dto;
 
 import javax.validation.constraints.NotBlank;
 

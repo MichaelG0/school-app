@@ -4,15 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.Mmodule;
 
 @Configuration
-public class CourseConfig {
+public class MmoduleConfig {
 
 	@Bean
 	@Scope("prototype")
-	public Course course() {
-		return new Course();
+	public Mmodule module() {
+		return new Mmodule();
 	}
 	
 }

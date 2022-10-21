@@ -9,6 +9,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    canActivate: [IsOnlyGuestGuard],
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
   },
   {
@@ -18,25 +19,38 @@ const routes: Routes = [
   },
   {
     path: ':token/confirmation',
-    loadChildren: () => import('./pages/enrolment-confirmation/enrolment-confirmation.module').then(m => m.EnrolmentConfirmationModule),
+    loadChildren: () =>
+      import('./pages/enrolment-confirmation/enrolment-confirmation.module').then(
+        m => m.EnrolmentConfirmationModule
+      ),
   },
-  { path: 'management', loadChildren: () => import('./pages/management/management.module').then(m => m.ManagementModule) },
+  {
+    path: 'management',
+    loadChildren: () => import('./pages/management/management.module').then(m => m.ManagementModule),
+  },
   {
     path: ':id/profile',
     canActivate: [IsOwnerOrStaffGuard],
     loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule),
   },
-  { path: 'academics', loadChildren: () => import('./pages/academics/academics.module').then(m => m.AcademicsModule) },
   {
-    path: 'academics/undergraduate',
-    loadChildren: () => import('./pages/academics/undergraduate/undergraduate.module').then(m => m.UndergraduateModule),
+    path: 'academics',
+    loadChildren: () => import('./pages/academics/academics.module').then(m => m.AcademicsModule),
   },
-  { path: 'academics/graduate', loadChildren: () => import('./pages/academics/graduate/graduate.module').then(m => m.GraduateModule) },
-  { path: 'academics/:id', loadChildren: () => import('./pages/academics/course/course.module').then(m => m.CourseModule) },
+  {
+    path: 'academics/:type/:id',
+    loadChildren: () => import('./pages/academics/course/course.module').then(m => m.CourseModule),
+  },
   {
     path: 'student_dashboard',
     canActivate: [IsStudentGuard],
-    loadChildren: () => import('./pages/student-dashboard/student-dashboard.module').then(m => m.StudentDashboardModule),
+    loadChildren: () =>
+      import('./pages/student-dashboard/student-dashboard.module').then(m => m.StudentDashboardModule),
+  },
+  {
+    path: 'academics/:type',
+    loadChildren: () =>
+      import('./pages/academics/course-list/course-list.module').then(m => m.CourseListModule),
   },
 ];
 

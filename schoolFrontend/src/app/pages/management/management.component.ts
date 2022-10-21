@@ -20,8 +20,8 @@ export class ManagementComponent implements OnInit {
   }
 
   changeRole(id: number, roleName: string, element: HTMLInputElement) {
-    if (element.checked) this.usrSrv.addRole(id, roleName);
-    else this.usrSrv.removeRole(id, roleName);
+    if (element.checked) this.usrSrv.addRole(id, roleName).subscribe();
+    else this.usrSrv.removeRole(id, roleName).subscribe();
   }
 
   paginate(value: number) {

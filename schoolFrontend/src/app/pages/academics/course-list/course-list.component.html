@@ -1,8 +1,12 @@
 <div class="container">
   <ng-container *ngIf="courses$ | async as courses; else loading">
     <div class="grid-cont">
-      <h2 class="mb-4">Graduate Education</h2>
-      <div [routerLink]="['/academics/' + course.id]" *ngFor="let course of courses" class="shadow">
+      <h2 class="mb-4">{{ title | titlecase }} Education</h2>
+      <div
+        [routerLink]="['/academics/' + course.type.toLowerCase() + '/' + course.id]"
+        *ngFor="let course of courses"
+        class="shadow"
+      >
         <img [src]="[course.image]" />
         <h5>{{ course.name }}</h5>
       </div>

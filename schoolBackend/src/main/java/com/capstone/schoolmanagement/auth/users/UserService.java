@@ -19,12 +19,12 @@ import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
+import com.capstone.schoolmanagement.dto.StudentConfirmationToken;
+import com.capstone.schoolmanagement.dto.StudentDto;
 import com.capstone.schoolmanagement.email.EmailService;
 import com.capstone.schoolmanagement.model.users.EGender;
 import com.capstone.schoolmanagement.model.users.Guest;
 import com.capstone.schoolmanagement.model.users.Student;
-import com.capstone.schoolmanagement.model.users.StudentConfirmationToken;
-import com.capstone.schoolmanagement.model.users.StudentDto;
 import com.capstone.schoolmanagement.repos.StudentConfirmationTokenRepo;
 
 import lombok.RequiredArgsConstructor;
