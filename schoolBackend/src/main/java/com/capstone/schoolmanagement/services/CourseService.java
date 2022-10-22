@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.dto.CourseDto;
-import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.ECourse;
 import com.capstone.schoolmanagement.repos.CourseRepo;
 
@@ -19,30 +19,30 @@ import lombok.RequiredArgsConstructor;
 public class CourseService {
 	private final CourseRepo crsRepo;
 
-	public Course create(CourseDto crsDto) {
-		Course crs = new Course();
+	public CourseInfo create(CourseDto crsDto) {
+		CourseInfo crs = new CourseInfo();
 		BeanUtils.copyProperties(crsDto, crs);
 		return crsRepo.save(crs);
 	}
 
-	public List<Course> getAll() {
-		return (List<Course>) crsRepo.findAll();
+	public List<CourseInfo> getAll() {
+		return (List<CourseInfo>) crsRepo.findAll();
 	}
 
-	public List<Course> getByType(String type) {
+	public List<CourseInfo> getByType(String type) {
 		return crsRepo.findByType(ECourse.valueOf(type)).orElseThrow(() -> new EntityNotFoundException("No courses of type " + type));
 	}
 	
-	public Course getById(Long id) {
+	public CourseInfo getById(Long id) {
 		return crsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Course not found"));
 	}
 
-	public Course getByName(String name) {
+	public CourseInfo getByName(String name) {
 		return crsRepo.findByName(name).orElseThrow(() -> new EntityNotFoundException("Course not found"));
 	}
 	
-	public Course update(Long id, CourseDto crsDto) {
-		Course crs = getById(id);
+	public CourseInfo update(Long id, CourseDto crsDto) {
+		CourseInfo crs = getById(id);
 		BeanUtils.copyProperties(crsDto, crs);
 		return crsRepo.save(crs);
 	}

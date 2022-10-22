@@ -11,6 +11,7 @@ import { OffcanvasNavComponent } from './components/offcanvas-nav/offcanvas-nav.
 import { RegisterModalComponent } from './components/register-modal/register-modal.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { FooterComponent } from './components/footer/footer.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FooterComponent } from './components/footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {

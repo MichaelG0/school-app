@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capstone.schoolmanagement.dto.CourseDto;
-import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.services.CourseService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,36 +25,36 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/courses")
 @RequiredArgsConstructor
-public class CourseController implements IControllerList<Course, CourseDto> {
+public class CourseController implements IControllerList<CourseInfo, CourseDto> {
 	private final CourseService crsSrv;
 
 	@Override
 	@PostMapping
-	public ResponseEntity<Course> create(@RequestBody CourseDto crsDto) {
+	public ResponseEntity<CourseInfo> create(@RequestBody CourseDto crsDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
 		return ResponseEntity.created(uri).body(crsSrv.create(crsDto));
 	}
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<Course>> getAll() {
+	public ResponseEntity<List<CourseInfo>> getAll() {
 		return ResponseEntity.ok(crsSrv.getAll());
 	}
 	
 	@GetMapping("/type/{type}")
-	public ResponseEntity<List<Course>> getByType(@PathVariable String type) {
+	public ResponseEntity<List<CourseInfo>> getByType(@PathVariable String type) {
 		return ResponseEntity.ok(crsSrv.getByType(type));
 	}
 
 	@Override
 	@GetMapping("/{id}")
-	public ResponseEntity<Course> getById(@PathVariable Long id) {
+	public ResponseEntity<CourseInfo> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(crsSrv.getById(id));
 	}
 
 	@Override
 	@PutMapping("/{id}")
-	public ResponseEntity<Course> update(@PathVariable Long id, @RequestBody CourseDto crsDto) {
+	public ResponseEntity<CourseInfo> update(@PathVariable Long id, @RequestBody CourseDto crsDto) {
 		return ResponseEntity.ok(crsSrv.update(id, crsDto));
 	}
 

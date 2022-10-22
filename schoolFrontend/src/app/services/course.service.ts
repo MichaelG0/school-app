@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICourse } from '../interfaces/icourse';
+import { ICourseInfo } from '../interfaces/icourse-info';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +11,14 @@ export class CourseService {
   constructor(private http: HttpClient) {}
 
   getCourses() {
-    return this.http.get<ICourse[]>(`${this.apiUrl}/courses`);
+    return this.http.get<ICourseInfo[]>(`${this.apiUrl}/courses`);
   }
 
   getCoursesByType(type: string) {
-    return this.http.get<ICourse[]>(`${this.apiUrl}/courses/type/${type}`);
+    return this.http.get<ICourseInfo[]>(`${this.apiUrl}/courses/type/${type}`);
   }
 
   getCourseById(id: number) {
-    return this.http.get<ICourse>(`${this.apiUrl}/courses/${id}`);
+    return this.http.get<ICourseInfo>(`${this.apiUrl}/courses/${id}`);
   }
 }

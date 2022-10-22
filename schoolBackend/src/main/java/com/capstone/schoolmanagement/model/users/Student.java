@@ -5,6 +5,7 @@ import javax.persistence.ManyToOne;
 
 import com.capstone.schoolmanagement.auth.users.AppUser;
 import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.Klass;
 
 import lombok.Getter;

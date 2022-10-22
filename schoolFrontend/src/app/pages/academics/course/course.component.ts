@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ICourse } from 'src/app/interfaces/icourse';
+import { ICourseInfo } from 'src/app/interfaces/icourse-info';
 import { CourseService } from 'src/app/services/course.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { CourseService } from 'src/app/services/course.service';
   styleUrls: ['./course.component.scss']
 })
 export class CourseComponent implements OnInit {
-  course$!: Observable<ICourse>
+  course$!: Observable<ICourseInfo>
 
   constructor(private crsSrv: CourseService, private route: ActivatedRoute) { }
 

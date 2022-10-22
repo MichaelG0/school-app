@@ -11,7 +11,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of users.content">
-          <th [routerLink]="['/' + user.id + '/profile']" scope="row" class="user-row">{{ user.name }} {{ user.surname }}</th>
+          <th [routerLink]="['/' + user.id + '/profile']" scope="row" class="user-row">
+            {{ user.name }} {{ user.surname }}
+          </th>
           <td *ngFor="let role of roles" class="text-center">
             <input
               #chekElement
@@ -30,8 +32,12 @@
   <div class="d-flex justify-content-center">
     <div class="shadow-sm px-4 py-1 mt-2 d-inline-flex align-items-baseline">
       <small class="text-muted me-4">Page {{ page + 1 }} of {{ users.totalPages }}</small>
-      <button (click)="paginate(-1)" class="btn" [disabled]="page + 1 == 1"><i class="bi bi-chevron-left me-2"></i></button>
-      <button (click)="paginate(1)" class="btn" [disabled]="page + 1 == users.totalPages"><i class="bi bi-chevron-right ms-2"></i></button>
+      <button (click)="paginate(-1)" class="btn" [disabled]="page + 1 == 1">
+        <i class="bi bi-chevron-left me-2"></i>
+      </button>
+      <button (click)="paginate(1)" class="btn" [disabled]="page + 1 == users.totalPages">
+        <i class="bi bi-chevron-right ms-2"></i>
+      </button>
     </div>
   </div>
 </ng-container>

@@ -1,0 +1,38 @@
+.d-flex {
+    margin: .5rem 0;
+
+    >div,
+    >.btn {
+        font-size: .8rem;
+        text-align: center;
+        width: 30px;
+        margin: 0 .4rem;
+        border: none;
+    }
+    
+    >.btn{
+        padding: .35rem;
+        margin-bottom: .5rem;
+        border-radius: 100px;
+    }
+}
+
+.d-flex.flex-column {
+    border-top: 2px solid lightgray;
+    
+    >div {
+        border-right: 2px dotted lightgray;
+        font-size: .7rem;
+        width: 50px;
+        padding: .8rem 0;
+    }
+}
+
+.active-day {
+    background-color: red;
+    color: white;
+}
+
+.big-wrap{
+    display: flex;
+}

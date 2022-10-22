@@ -16,7 +16,7 @@ import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.auth.users.UserRepository;
-import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.ECourse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
@@ -47,7 +47,7 @@ public class FirstRunner implements CommandLineRunner {
 	private final ObjectProvider<Student> studentPrv;
 	private final ObjectProvider<Klass> klassPrv;
 	private final ObjectProvider<Mmodule> modulePrv;
-	private final ObjectProvider<Course> crsPrv;
+	private final ObjectProvider<CourseInfo> crsPrv;
 	private final Faker fkr;
 	private final PasswordEncoder encoder;
 
@@ -167,7 +167,7 @@ public class FirstRunner implements CommandLineRunner {
 		}
 		moduleRepo.saveAll(modules);
 
-		List<Course> courses = new ArrayList<Course>();
+		List<CourseInfo> courses = new ArrayList<CourseInfo>();
 		for (int i = 0; i < 10; i++) {
 			String description = fkr.lorem().paragraph(3);
 			if (description.length() > 250)
@@ -178,7 +178,7 @@ public class FirstRunner implements CommandLineRunner {
 				mdls.add(moduleRepo.findById(fkr.random().nextLong(19) + 1).get());
 			}
 
-			Course crs = crsPrv.getObject();
+			CourseInfo crs = crsPrv.getObject();
 			crs.setName(fkr.educator().course());
 			crs.setDescription(description);
 			crs.setImage("https://picsum.photos/id/4" + i + "/300");
