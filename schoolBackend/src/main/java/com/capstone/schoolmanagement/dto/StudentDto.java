@@ -1,6 +1,7 @@
 package com.capstone.schoolmanagement.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -16,4 +17,6 @@ public class StudentDto {
 	private String gender;
 	@NotBlank
 	private String address;
+	@NotNull
+	private Long courseId;
 }

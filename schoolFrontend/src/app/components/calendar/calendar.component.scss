@@ -1,0 +1,71 @@
+.my-flex {
+    display: flex;
+    margin: .5rem 0;
+
+    >div,
+    >.btn {
+        font-size: .8rem;
+        text-align: center;
+        width: 30px;
+        margin: 0 .4rem;
+        border: none;
+    }
+
+    >.btn {
+        padding: .35rem;
+        margin-bottom: .5rem;
+        border-radius: 100px;
+        transition: all .3s ease;
+
+        &:hover {
+            background-color: red;
+            color: white;
+        }
+    }
+}
+
+.my-flex.flex-column {
+    margin-top: 0;
+
+    >div {
+        text-align: end;
+        border-right: 2px dotted lightgray;
+        font-size: .7rem;
+        width: 50px;
+        padding: .8rem;
+        padding-left: 0;
+        margin-right: 0;
+    }
+}
+
+.schedule-flex {
+    display: flex;
+    border-top: 2px solid lightgray;
+}
+
+#schedule {
+    position: relative;
+    margin-top: 21px;
+    width: 100%;
+
+    >div {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        background-color: rgba(0, 255, 255, 0.25);
+        border: 4px solid aqua;
+    }
+}
+
+.active-day {
+    background-color: red;
+    color: white;
+}
+
+#wrapp {
+    border: 1px solid rgba(0, 0, 0, 0);
+    height: 668px;
+    overflow: hidden;
+}

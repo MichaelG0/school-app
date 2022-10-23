@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICourseInfo } from '../interfaces/icourse-info';
+import { ICourse } from '../interfaces/icourse';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class CourseService {
   private readonly apiUrl = 'http://localhost:8080';
@@ -11,14 +11,14 @@ export class CourseService {
   constructor(private http: HttpClient) {}
 
   getCourses() {
-    return this.http.get<ICourseInfo[]>(`${this.apiUrl}/courses`);
+    return this.http.get<ICourse[]>(`${this.apiUrl}/courses`);
   }
 
-  getCoursesByType(type: string) {
-    return this.http.get<ICourseInfo[]>(`${this.apiUrl}/courses/type/${type}`);
+  getUpcoming() {
+    return this.http.get<ICourse[]>(`${this.apiUrl}/courses/upcoming`);
   }
 
   getCourseById(id: number) {
-    return this.http.get<ICourseInfo>(`${this.apiUrl}/courses/${id}`);
+    return this.http.get<ICourse>(`${this.apiUrl}/courses/${id}`);
   }
 }

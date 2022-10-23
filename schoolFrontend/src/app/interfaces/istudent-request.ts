@@ -4,4 +4,5 @@ export interface IStudentRequest {
     email: string;
     gender: string;
     address: string;
+    courseId: number
 }

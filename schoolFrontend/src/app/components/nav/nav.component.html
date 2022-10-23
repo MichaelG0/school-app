@@ -62,7 +62,7 @@
 
         <div *ngIf="loggedUser; else notLogged" class="dropdown text-end d-flex">
           <a class="d-flex link-dark text-decoration-none align-items-center me-sm-2" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-            <div id="avatar-box"><img src="" /></div>
+            <div id="avatar-box"><img [src]="loggedUser.user.avatar" /></div>
             <span class="ms-2 me-1">{{ loggedUser.user.name }}</span>
           </a>
           <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">

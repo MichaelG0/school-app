@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { StudentDashboardRoutingModule } from './student-dashboard-routing.module';
 import { StudentDashboardComponent } from './student-dashboard.component';
+import { CalendarComponent } from 'src/app/components/calendar/calendar.component';
 
 
 @NgModule({
   declarations: [
-    StudentDashboardComponent
+    StudentDashboardComponent,
+    CalendarComponent
   ],
   imports: [
     CommonModule,

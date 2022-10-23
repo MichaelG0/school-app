@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ICourseInfo } from 'src/app/interfaces/icourse-info';
-import { CourseService } from 'src/app/services/course.service';
+import { CourseInfoService } from 'src/app/services/course-info.service';
 
 @Component({
   selector: 'app-course',
@@ -12,7 +12,7 @@ import { CourseService } from 'src/app/services/course.service';
 export class CourseComponent implements OnInit {
   course$!: Observable<ICourseInfo>
 
-  constructor(private crsSrv: CourseService, private route: ActivatedRoute) { }
+  constructor(private crsSrv: CourseInfoService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     const idStr: string = this.route.snapshot.paramMap.get('id')!;

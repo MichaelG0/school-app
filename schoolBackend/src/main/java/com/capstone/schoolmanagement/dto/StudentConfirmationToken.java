@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import com.capstone.schoolmanagement.auth.users.AppUser;
+import com.capstone.schoolmanagement.model.Course;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -23,4 +24,6 @@ public class StudentConfirmationToken {
 	@JsonIgnore
 	@OneToOne
 	private AppUser user;
+	@OneToOne
+	private Course course;
 }

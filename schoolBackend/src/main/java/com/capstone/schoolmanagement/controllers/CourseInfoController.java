@@ -3,7 +3,9 @@ package com.capstone.schoolmanagement.controllers;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,46 +16,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capstone.schoolmanagement.dto.CourseDto;
-import com.capstone.schoolmanagement.model.Course;
-import com.capstone.schoolmanagement.services.CourseService;
+import com.capstone.schoolmanagement.dto.CourseInfoDto;
+import com.capstone.schoolmanagement.model.CourseInfo;
+import com.capstone.schoolmanagement.services.CourseInfoService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("/courseinfo")
 @RequiredArgsConstructor
-public class CourseController implements IControllerList<Course, CourseDto> {
-	private final CourseService crsSrv;
-	
+public class CourseInfoController implements IControllerList<CourseInfo, CourseInfoDto> {
+	private final CourseInfoService crsSrv;
+
 	@Override
 	@PostMapping
-	public ResponseEntity<Course> create(@RequestBody CourseDto dto) {
+	public ResponseEntity<CourseInfo> create(@RequestBody CourseInfoDto crsDto) {
 		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
-		return ResponseEntity.created(uri).body(crsSrv.create(dto));
+		return ResponseEntity.created(uri).body(crsSrv.create(crsDto));
 	}
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<Course>> getAll() {
+	public ResponseEntity<List<CourseInfo>> getAll() {
 		return ResponseEntity.ok(crsSrv.getAll());
 	}
 	
-	@GetMapping("/upcoming")
-	public ResponseEntity<List<Course>> getAllUpcoming(){
-		return ResponseEntity.ok(crsSrv.getAllUpcoming());
+	@GetMapping("/type/{type}")
+	public ResponseEntity<List<CourseInfo>> getByType(@PathVariable String type) {
+		return ResponseEntity.ok(crsSrv.getByType(type));
 	}
 
 	@Override
 	@GetMapping("/{id}")
-	public ResponseEntity<Course> getById(@PathVariable Long id) {
+	public ResponseEntity<CourseInfo> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(crsSrv.getById(id));
 	}
 
 	@Override
 	@PutMapping("/{id}")
-	public ResponseEntity<Course> update(@PathVariable Long id, @RequestBody CourseDto dto) {
-		return ResponseEntity.ok(crsSrv.update(id, dto));
+	public ResponseEntity<CourseInfo> update(@PathVariable Long id, @RequestBody CourseInfoDto crsDto) {
+		return ResponseEntity.ok(crsSrv.update(id, crsDto));
 	}
 
 	@Override

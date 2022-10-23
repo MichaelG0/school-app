@@ -1,8 +1,19 @@
 <div *ngIf="!confirmation; else confDialog" class="container">
-  <form [formGroup]="applyForm" (ngSubmit)="onSubmit(applyForm)" class="modal-body container inner-cont px-0 py-2">
+  <form
+    [formGroup]="applyForm"
+    (ngSubmit)="onSubmit(applyForm)"
+    class="modal-body container inner-cont px-0 py-2"
+  >
     <h3>Apply</h3>
     <label for="email">Email</label>
-    <input formControlName="email" type="email" class="form-control" placeholder="Email" id="email" readOnly />
+    <input
+      formControlName="email"
+      type="email"
+      class="form-control"
+      placeholder="Email"
+      id="email"
+      readOnly
+    />
     <label for="firstname">Name</label>
     <input
       [ngClass]="textWarning('firstname', btnClicked)"
@@ -12,20 +23,55 @@
       placeholder="Name"
       id="firstname"
     />
-    <small *ngIf="warning('firstname', btnClicked)" class="text-danger">No spaces, numbers or special characters</small>
+    <small *ngIf="warning('firstname', btnClicked)" class="text-danger"
+      >No spaces, numbers or special characters</small
+    >
     <label for="surname">Surname</label>
-    <input [ngClass]="textWarning('surname', btnClicked)" formControlName="surname" type="text" class="form-control" placeholder="Surname" id="surname" />
-    <small *ngIf="warning('surname', btnClicked)" class="text-danger">No spaces, numbers or special characters</small>
+    <input
+      [ngClass]="textWarning('surname', btnClicked)"
+      formControlName="surname"
+      type="text"
+      class="form-control"
+      placeholder="Surname"
+      id="surname"
+    />
+    <small *ngIf="warning('surname', btnClicked)" class="text-danger"
+      >No spaces, numbers or special characters</small
+    >
     <label for="gender">Gender</label>
-    <select [ngClass]="textWarning('gender', btnClicked)" formControlName="gender" class="form-select" id="gender">
+    <select
+      [ngClass]="textWarning('gender', btnClicked)"
+      formControlName="gender"
+      class="form-select"
+      id="gender"
+    >
       <option value="MALE">Male</option>
       <option value="FEMALE">Female</option>
       <option value="OTHER">Other</option>
     </select>
     <small *ngIf="warning('gender', btnClicked)" class="text-danger">Select one</small>
     <label for="address">Address</label>
-    <input [ngClass]="textWarning('address', btnClicked)" formControlName="address" type="text" class="form-control" placeholder="Address" id="address" />
+    <input
+      [ngClass]="textWarning('address', btnClicked)"
+      formControlName="address"
+      type="text"
+      class="form-control"
+      placeholder="Address"
+      id="address"
+    />
     <small *ngIf="warning('address', btnClicked)" class="text-danger">Must specify an address</small>
+    <label for="course">Course you're interested in</label>
+    <select
+      [ngClass]="textWarning('course', btnClicked)"
+      formControlName="course"
+      class="form-select"
+      id="course"
+    >
+      <option *ngFor="let course of upcCourses$ | async" [value]="course.info.id">
+        {{ course.info.name }} ------ (starts: {{course.startDate}}; ends: {{course.endDate}})
+      </option>
+    </select>
+    <small *ngIf="warning('course', btnClicked)" class="text-danger">Select one</small>
 
     <div (click)="btnClicked = true" class="btn-wrp">
       <button class="btn btn-dark px-4" type="submit" [disabled]="applyForm.invalid">

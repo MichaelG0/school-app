@@ -1,0 +1,30 @@
+<div id="wrapp" class="bg-light rounded shadow">
+  <div>
+    <div class="my-flex align-items-baseline justify-content-between mt-3 mb-4 mx-3">
+      <h4>Calendar</h4>
+      <h6>{{ days[3].toLocaleDateString('en-us', { month: 'long' }) }}</h6>
+    </div>
+    <div class="my-flex">
+      <div @roll *ngFor="let day of days" class="text-muted" scope="col">
+        {{ day.toLocaleDateString('en-us', { weekday: 'short' }) }}
+      </div>
+    </div>
+    <div class="my-flex">
+      <button #day @roll (click)="selectDay($event, day)" *ngFor="let day of days" class="btn" scope="col">
+        {{ day.getDate() }}
+      </button>
+    </div>
+  </div>
+
+  <div class="schedule-flex">
+    <div class="my-flex flex-column">
+      <div *ngFor="let hour of hours" class="text-muted">{{ hour }}</div>
+    </div>
+
+    <div id="schedule">
+      <div #sched *ngFor="let scheItem of schedule">
+        {{ scheItem.module.name }}
+      </div>
+    </div>
+  </div>
+</div>

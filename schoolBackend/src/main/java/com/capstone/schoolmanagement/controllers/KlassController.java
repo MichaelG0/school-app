@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capstone.schoolmanagement.dto.KlassDto;
+import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.services.KlassService;
 
@@ -46,6 +47,11 @@ public class KlassController implements IControllerPage<Klass, KlassDto> {
 	@GetMapping("/{id}")
 	public ResponseEntity<Klass> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(klsSrv.getById(id));
+	}
+	
+	@GetMapping("/student/{id}")
+	public ResponseEntity<KlassResponse> getByStudentId(@PathVariable Long id) {
+		return ResponseEntity.ok(klsSrv.getByStudentId(id));
 	}
 
 	@Override

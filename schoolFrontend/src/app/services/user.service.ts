@@ -97,6 +97,15 @@ export class UserService {
 
   enrol(token: string) {
     return this.http.get<IUserResponse>(`${this.apiUrl}/users/enrol?token=${token}`).pipe(
+      tap((res) => {
+        const user: IJwtResponse = {
+          token: JSON.parse(localStorage.getItem('user')!).token,
+          type: 'Bearer',
+          user: res
+        }
+        localStorage.setItem('user', JSON.stringify(user))
+        this.loggedUser.next(user);
+      }),
       catchError(() => of(false))
     )
   }

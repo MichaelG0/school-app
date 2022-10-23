@@ -20,10 +20,9 @@ import javax.validation.constraints.Size;
 
 import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.model.users.EGender;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -50,6 +49,7 @@ public abstract class AppUser {
 	private String email;
 	@NotBlank
 	@Size(min = 8, max = 120)
+	@JsonIgnore
 	private String password;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

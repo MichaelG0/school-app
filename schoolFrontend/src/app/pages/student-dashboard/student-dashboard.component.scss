@@ -1,38 +1,68 @@
-.d-flex {
-    margin: .5rem 0;
-
-    >div,
-    >.btn {
-        font-size: .8rem;
-        text-align: center;
-        width: 30px;
-        margin: 0 .4rem;
-        border: none;
-    }
-    
-    >.btn{
-        padding: .35rem;
-        margin-bottom: .5rem;
-        border-radius: 100px;
-    }
+.container {
+    margin-top: -.7rem;
 }
 
-.d-flex.flex-column {
-    border-top: 2px solid lightgray;
-    
-    >div {
-        border-right: 2px dotted lightgray;
-        font-size: .7rem;
-        width: 50px;
-        padding: .8rem 0;
-    }
-}
-
-.active-day {
-    background-color: red;
-    color: white;
-}
-
-.big-wrap{
+.big-wrap {
     display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 1rem;
+}
+
+#student {
+    margin: 1rem;
+    display: flex;
+    align-items: center;
+
+    p {
+        margin: 0 0 0 .5rem;
+        word-break: keep-all;
+    }
+}
+
+#avatar-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 38px;
+    width: 38px;
+    min-width: 38px;
+    border-radius: 20rem;
+    background: url(../../../assets/avatar.png) center;
+    background-size: 46px;
+    overflow: hidden;
+
+    img {
+        height: inherit;
+    }
+}
+
+.wrapp {
+    border: 1px solid rgba(0, 0, 0, 0);
+    max-height: 668px;
+    width: 15rem;
+    overflow: scroll;
+}
+
+// ============SCROLLBAR============
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+    background: #cfcfcf;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bbbbbb;
 }

@@ -19,22 +19,33 @@ import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
+import com.capstone.schoolmanagement.dto.KlassDto;
 import com.capstone.schoolmanagement.dto.StudentConfirmationToken;
 import com.capstone.schoolmanagement.dto.StudentDto;
 import com.capstone.schoolmanagement.email.EmailService;
+import com.capstone.schoolmanagement.model.Course;
+import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.users.EGender;
 import com.capstone.schoolmanagement.model.users.Guest;
 import com.capstone.schoolmanagement.model.users.Student;
+import com.capstone.schoolmanagement.repos.CourseRepo;
+import com.capstone.schoolmanagement.repos.KlassRepo;
 import com.capstone.schoolmanagement.repos.StudentConfirmationTokenRepo;
+import com.capstone.schoolmanagement.services.KlassService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 	private final UserRepository usrRepo;
 	private final RoleRepository roleRepo;
 	private final StudentConfirmationTokenRepo studentTokenRepo;
+	private final CourseRepo crsRepo;
+	private final KlassRepo klsRepo;
+	private final KlassService klsSrv;
 	private final EmailService mailSrv;
 	private final PasswordEncoder encoder;
 
@@ -44,7 +55,8 @@ public class UserService {
 		AppUser usr = new Guest();
 		BeanUtils.copyProperties(usrDto, usr);
 		usr.setPassword(encoder.encode(usrDto.getPassword()));
-		AppRole role = roleRepo.findById(4l).orElseThrow(() -> new EntityNotFoundException("Role not found"));
+		AppRole role = roleRepo.findByRoleName(ERole.ROLE_GUEST)
+				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
 		usr.getRoles().add(role);
 		usrRepo.save(usr);
 
@@ -65,8 +77,6 @@ public class UserService {
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
 		BeanUtils.copyProperties(studentDto, usr);
 		usr.setGender(EGender.valueOf(studentDto.getGender()));
-		AppRole role = roleRepo.findById(4l).orElseThrow(() -> new EntityNotFoundException("Role not found"));
-		usr.getRoles().add(role);
 		usr = usrRepo.save(usr);
 
 		Optional<StudentConfirmationToken> tokenOpt = studentTokenRepo.getByUserId(usr.getId());
@@ -74,6 +84,8 @@ public class UserService {
 		token.setToken(UUID.randomUUID().toString());
 		token.setExpirationDate(LocalDate.now().plusDays(30));
 		token.setUser(usr);
+		token.setCourse(crsRepo.findById(studentDto.getCourseId())
+				.orElseThrow(() -> new EntityNotFoundException("User not found")));
 		studentTokenRepo.save(token);
 
 		String link = "http://localhost:4200/" + token.getToken() + "/confirmation";
@@ -87,10 +99,22 @@ public class UserService {
 				.orElseThrow(() -> new EntityNotFoundException("Token not found"));
 		AppUser usr = usrRepo.findById(tokenObj.getUser().getId())
 				.orElseThrow(() -> new EntityNotFoundException("User not found"));
+		AppRole role = roleRepo.findByRoleName(ERole.ROLE_STUDENT)
+				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
+		Course course = tokenObj.getCourse();
+		List<Klass> availableKlasses = klsRepo.findByCourse(course)
+				.get()
+				.stream()
+				.filter(kls -> kls.getStudents().size() < 20)
+				.toList();
+		Klass klass = availableKlasses.isEmpty() ? klsSrv.create(new KlassDto(course)) : availableKlasses.get(0);
+
 		Student student = new Student();
 		BeanUtils.copyProperties(usr, student);
-		AppRole role = roleRepo.findById(3l).orElseThrow(() -> new EntityNotFoundException("Role not found"));
 		student.getRoles().add(role);
+		student.setCourse(course);
+		student.setKlass(klass);
+
 		usrRepo.deleteById(usr.getId());
 		student = usrRepo.save(student);
 		return UserResponse.buildUserResponse(student);
@@ -177,7 +201,7 @@ public class UserService {
 				+ "        \n"
 				+ "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Hi " + name
 				+ ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Thank you for registering. Please click on the below link to activate your account: </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\""
-				+ link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 15 minutes. <p>See you soon</p>"
+				+ link + "\">Activate Now</a> </p></blockquote>\n Link will expire in 30 days. <p>See you soon</p>"
 				+ "        \n" + "      </td>\n" + "      <td width=\"10\" valign=\"middle\"><br></td>\n"
 				+ "    </tr>\n" + "    <tr>\n" + "      <td height=\"30\"><br></td>\n" + "    </tr>\n"
 				+ "  </tbody></table><div class=\"yj6qo\"></div><div class=\"adL\">\n" + "\n" + "</div></div>";

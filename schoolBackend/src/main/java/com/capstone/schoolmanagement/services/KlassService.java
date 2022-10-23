@@ -1,6 +1,5 @@
 package com.capstone.schoolmanagement.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,11 +11,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.dto.KlassDto;
+import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.repos.KlassRepo;
 
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KlassService {
@@ -36,9 +37,10 @@ public class KlassService {
 	public Klass getById(Long id) {
 		return klsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
 	}
-
-	public List<Klass> getByTeacherName(String name) {
-		return klsRepo.findByTeacherName(name);
+	
+	public KlassResponse getByStudentId(Long id) {
+		Klass klass = klsRepo.findByStudentsId(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+		return KlassResponse.buildKlassResponse(klass);
 	}
 
 	public Klass update(Long id, KlassDto klsDto) {

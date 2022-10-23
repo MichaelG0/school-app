@@ -3,6 +3,7 @@ export interface IUserResponse {
     name: string;
     surname: string;
     email: string;
+    avatar: string
     gender: string;
     address: string;
     roles: string[]

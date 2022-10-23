@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ICourseInfo } from 'src/app/interfaces/icourse-info';
-import { CourseService } from 'src/app/services/course.service';
+import { CourseInfoService } from 'src/app/services/course-info.service';
 
 @Component({
   selector: 'app-course-list',
@@ -14,7 +14,7 @@ export class CourseListComponent implements OnInit, OnDestroy {
   title!: string;
   courses$!: Observable<ICourseInfo[]>;
 
-  constructor(private crsSrv: CourseService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private crsSrv: CourseInfoService, private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
