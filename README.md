@@ -3,20 +3,20 @@ You can test the app with different user roles. Just login with the credentials 
 
 Guest\
 email: guest@guest.com\
-password: guestguest\
+password: guestguest
 
 Student\
 email: student@student.com\
-password: studentstudent\
+password: studentstudent
 
 Staff\
 email: staff@staff.com\
-password: staffstaff\
+password: staffstaff
 
 Teacher\
 email: teacher@teacher.com\
-password: teacherteacher\
+password: teacherteacher
 
 Admin\
 email: admin@admin.com\
-password adminadmin\
+password adminadmin
