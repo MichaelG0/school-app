@@ -27,9 +27,6 @@ import lombok.Data;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
 public abstract class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
@@ -54,12 +51,5 @@ public abstract class AppUser {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<AppRole> roles = new HashSet<AppRole>();
-
-//	public AppUser(Long id, @NotBlank @Size(max = 100) String email, @NotBlank @Size(min = 3, max = 120) String password) {
-//		super();
-//		this.id = id;
-//		this.email = email;
-//		this.password = password;
-//	}
 
 }

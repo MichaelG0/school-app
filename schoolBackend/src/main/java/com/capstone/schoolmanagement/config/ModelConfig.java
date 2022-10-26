@@ -9,6 +9,11 @@ import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
+import com.capstone.schoolmanagement.model.users.Admin;
+import com.capstone.schoolmanagement.model.users.Guest;
+import com.capstone.schoolmanagement.model.users.Staff;
+import com.capstone.schoolmanagement.model.users.Student;
+import com.capstone.schoolmanagement.model.users.Teacher;
 import com.github.javafaker.Faker;
 
 @Configuration
@@ -17,6 +22,36 @@ public class ModelConfig {
 	@Bean
 	public Faker faker() {
 		return new Faker();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Guest guest() {
+		return new Guest();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Student student() {
+		return new Student();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Staff staff() {
+		return new Staff();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Teacher teacher() {
+		return new Teacher();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Admin admin() {
+		return new Admin();
 	}
 
 	@Bean

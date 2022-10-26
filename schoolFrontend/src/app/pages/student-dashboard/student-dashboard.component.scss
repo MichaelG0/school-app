@@ -6,6 +6,7 @@
     display: flex;
     flex-wrap: wrap-reverse;
     gap: 1rem;
+    
 }
 
 #student {
@@ -39,8 +40,34 @@
 .wrapp {
     border: 1px solid rgba(0, 0, 0, 0);
     max-height: 668px;
+    overflow: hidden;
+}
+
+#class-wrp {
+    min-height: 668px;
     width: 15rem;
+}
+
+#student-wrp {
     overflow: scroll;
+    max-height: 600px;
+    margin: -.5rem 0 .5rem 0
+}
+
+#center {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1rem;
+}
+
+#main {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    >h5{
+        width: 120px;
+    }
 }
 
 // ============SCROLLBAR============

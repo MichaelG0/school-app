@@ -86,14 +86,16 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   styleSchedule() {
-    if (this.schedule.length > 0) {
+    if (this.scheDivs && this.scheDivs.length > 0) {
       let index = 0;
       for (let scheItem of this.schedule) {
         let startTime: number = parseInt(scheItem.startTime.substring(0, 2));
         let offset: number = startTime - 8;
         let height: number = parseInt(scheItem.endTime.substring(0, 2)) - startTime;
-        this.renderer.setStyle(this.scheDivs!.get(index)?.nativeElement, 'margin-top', 42.4 * offset + 'px');
-        this.renderer.setStyle(this.scheDivs!.get(index)?.nativeElement, 'height', 43 * height + 'px');
+        let el = this.scheDivs!.get(index)?.nativeElement
+        this.renderer.setStyle(el, 'margin-top', 42.4 * offset + 'px');
+        this.renderer.setStyle(el, 'height', 42.9 * height + 'px');
+        this.renderer.setStyle(el, 'border', '4px solid ' + scheItem.module.renderColor)
         index++;
       }
     }
@@ -124,9 +126,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   lessonCondition() {
     return (
       this.days[3] >= this.course.startDate &&
-      this.days[3] <= this.course.endDate &&
-      this.days[3].toLocaleDateString('en-us', { weekday: 'short' }) != 'Sun' &&
-      this.days[3].toLocaleDateString('en-us', { weekday: 'short' }) != 'Sat'
+      this.days[3] <= this.course.endDate
     );
   }
 

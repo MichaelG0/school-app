@@ -29,6 +29,7 @@ import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.EGender;
 import com.capstone.schoolmanagement.model.users.Guest;
+import com.capstone.schoolmanagement.model.users.Staff;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.model.users.Teacher;
 import com.capstone.schoolmanagement.repos.CourseInfoRepo;
@@ -53,8 +54,11 @@ public class FirstRunner implements CommandLineRunner {
 	private final CourseInfoRepo crsInfoRepo;
 	private final CourseRepo crsRepo;
 	private final WeeklyScheduleItemRepo wsiRepo;
-	private final ObjectProvider<Teacher> teacherPrv;
+	private final ObjectProvider<Guest> guestPrv;
 	private final ObjectProvider<Student> studentPrv;
+	private final ObjectProvider<Staff> staffPrv;
+	private final ObjectProvider<Teacher> teacherPrv;
+	private final ObjectProvider<Admin> adminPrv;
 	private final ObjectProvider<Klass> klassPrv;
 	private final ObjectProvider<Mmodule> modulePrv;
 	private final ObjectProvider<CourseInfo> crsInfoPrv;
@@ -90,8 +94,6 @@ public class FirstRunner implements CommandLineRunner {
 
 		Set<AppRole> adminRoles = new HashSet<AppRole>();
 		adminRoles.add(guestRole);
-		adminRoles.add(teacherRole);
-		adminRoles.add(studentRole);
 		adminRoles.add(adminRole);
 
 		Set<AppRole> teacherRoles = new HashSet<AppRole>();
@@ -116,8 +118,11 @@ public class FirstRunner implements CommandLineRunner {
 			String[] subjects = { "Mathematics", "Science", "Health", "Art", "Music", "Literature", "Composition",
 					"Algebra", "Geography", "Sociology", "Medicine", "Geology", "Physics", "Anthropology", "Genealogy",
 					"Philosophy", "Critical Thinking", "Psychology", "Economics", "Rhetoric" };
+			String[] colors = { "aqua", "coral", "crimson", "cadetblue", "chartreuse", "cornflowerblue", "chocolate",
+					"darkcyan", "darkgoldenrod", "yellow" };
 			Mmodule module = modulePrv.getObject();
 			module.setName(subjects[i]);
+			module.setRenderColor(colors[i / 2]);
 			modules.add(module);
 		}
 		moduleRepo.saveAll(modules);
@@ -130,7 +135,7 @@ public class FirstRunner implements CommandLineRunner {
 
 			Set<Mmodule> mdls = new HashSet<Mmodule>();
 			for (int j = 0; j < 5; j++) {
-				mdls.add(modules.get(fkr.random().nextInt(19) + 1));
+				mdls.add(modules.get(fkr.random().nextInt(20)));
 			}
 			String name = fkr.educator().course();
 
@@ -187,7 +192,7 @@ public class FirstRunner implements CommandLineRunner {
 		EWeekDay[] weekDays = EWeekDay.values().clone();
 		for (int i = 0; i < 10; i++) {
 			int courseNumm = i == 0 ? i : fkr.random().nextInt(20);
-			
+
 			Klass klass = klassPrv.getObject();
 			klass.setCourse(courses.get(courseNumm));
 			klasses.add(klass);
@@ -200,7 +205,7 @@ public class FirstRunner implements CommandLineRunner {
 				WeeklyScheduleItem wsi = wsiPrv.getObject();
 				wsi.setWeekDay(weekDays[j / 2]);
 				wsi.setStartTime(LocalTime.of(9 + 5 * (j % 2), 0));
-				wsi.setEndTime(LocalTime.of(13 + 5 * (j % 2), 0));
+				wsi.setEndTime(LocalTime.of(13 + (fkr.random().nextInt(4) + 2) * (j % 2), 0));
 				wsi.setKlass(klasses.get(i));
 				wsi.setModule(moduleArr.get(fkr.random().nextInt(modulesLength)));
 				weeklySchedule.add(wsi);
@@ -230,7 +235,7 @@ public class FirstRunner implements CommandLineRunner {
 		usrRepo.saveAll(teachers);
 
 		List<Student> students = new ArrayList<Student>();
-		for (int i = 0; i < 50; i++) {
+		for (int i = 0; i < 150; i++) {
 			int klassNum = fkr.random().nextInt(10);
 
 			Student student = studentPrv.getObject();
@@ -249,7 +254,7 @@ public class FirstRunner implements CommandLineRunner {
 
 		////////////////////////////////////////////////////////////////////////////
 
-		Admin admin = new Admin();
+		Admin admin = adminPrv.getObject();
 		admin.setName("Admin");
 		admin.setSurname("Hoppus");
 		admin.setAvatar("https://i.pravatar.cc/300?img=30");
@@ -258,7 +263,7 @@ public class FirstRunner implements CommandLineRunner {
 		admin.setRoles(adminRoles);
 		usrRepo.save(admin);
 
-		Teacher teacherTest = new Teacher();
+		Teacher teacherTest = teacherPrv.getObject();
 		teacherTest.setName("Teacher");
 		teacherTest.setSurname("Barker");
 		teacherTest.setAvatar("https://i.pravatar.cc/300?img=31");
@@ -271,9 +276,9 @@ public class FirstRunner implements CommandLineRunner {
 		teacherTest.setClasses(testKlss);
 		usrRepo.save(teacherTest);
 
-		Student studentTest = new Student();
+		Student studentTest = studentPrv.getObject();
 		studentTest.setName("Student");
-		studentTest.setSurname("Delonge");
+		studentTest.setSurname("DeLonge");
 		studentTest.setAvatar("https://i.pravatar.cc/300?img=32");
 		studentTest.setEmail("student@student.com");
 		studentTest.setPassword(encoder.encode("studentstudent"));
@@ -281,11 +286,20 @@ public class FirstRunner implements CommandLineRunner {
 		studentTest.setCourse(klasses.get(0).getCourse());
 		studentTest.setKlass(klasses.get(0));
 		usrRepo.save(studentTest);
+		
+		Staff staffTest = staffPrv.getObject();
+		staffTest.setName("Staff");
+		staffTest.setSurname("Raynor");
+		staffTest.setAvatar("https://i.pravatar.cc/300?img=33");
+		staffTest.setEmail("staff@staff.com");
+		staffTest.setPassword(encoder.encode("staffstaff"));
+		staffTest.setRoles(staffRoles);
+		usrRepo.save(staffTest);
 
-		Guest guestTest = new Guest();
+		Guest guestTest = guestPrv.getObject();
 		guestTest.setName("Guest");
 		guestTest.setSurname("Skiba");
-		guestTest.setAvatar("https://i.pravatar.cc/300?img=33");
+		guestTest.setAvatar("https://i.pravatar.cc/300?img=34");
 		guestTest.setEmail("guest@guest.com");
 		guestTest.setPassword(encoder.encode("guestguest"));
 		guestTest.setRoles(guestRoles);

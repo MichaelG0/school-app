@@ -2,7 +2,7 @@
   <div>
     <div class="my-flex align-items-baseline justify-content-between mt-3 mb-4 mx-3">
       <h4>Calendar</h4>
-      <h6>{{ days[3].toLocaleDateString('en-us', { month: 'long' }) }}</h6>
+      <h6>{{ days[3].toLocaleDateString('en-us', { month: 'long', year: 'numeric' }) }}</h6>
     </div>
     <div class="my-flex">
       <div @roll *ngFor="let day of days" class="text-muted" scope="col">
@@ -21,7 +21,7 @@
       <div *ngFor="let hour of hours" class="text-muted">{{ hour }}</div>
     </div>
 
-    <div id="schedule">
+    <div *ngIf="lessonCondition()" id="schedule">
       <div #sched *ngFor="let scheItem of schedule">
         {{ scheItem.module.name }}
       </div>
