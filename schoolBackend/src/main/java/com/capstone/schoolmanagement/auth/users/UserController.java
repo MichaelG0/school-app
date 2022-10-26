@@ -79,13 +79,13 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 	@GetMapping
 	public ResponseEntity<Page<UserResponse>> getAll(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(usrSrv.getAllUsersBasicInformations(page, size));
+		return ResponseEntity.ok(usrSrv.getAll(page, size));
 	}
 
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(usrSrv.getUserBasicInformations(id));
+		return ResponseEntity.ok(usrSrv.getById(id));
 	}
 
 	@Override

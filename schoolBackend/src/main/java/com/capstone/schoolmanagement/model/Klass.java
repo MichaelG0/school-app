@@ -29,4 +29,7 @@ public class Klass {
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
 	private Set<WeeklyScheduleItem> weeklySchedule = new HashSet<WeeklyScheduleItem>();
+	@JsonManagedReference
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
+	private Set<Register> registers = new HashSet<Register>();
 }

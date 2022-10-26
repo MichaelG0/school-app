@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap-reverse;
     gap: 1rem;
-    
+
 }
 
 #student {
@@ -65,9 +65,20 @@
     display: flex;
     justify-content: space-around;
     text-align: center;
-    >h5{
-        width: 120px;
+
+    >* {
+        flex: 1 1 0;
     }
+}
+
+.progress-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 200px;
+    border: 1rem solid aqua;
+    border-radius: 10rem;
 }
 
 // ============SCROLLBAR============

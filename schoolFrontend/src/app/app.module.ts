@@ -12,6 +12,7 @@ import { RegisterModalComponent } from './components/register-modal/register-mod
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { FooterComponent } from './components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CircleProgressComponent } from './components/circle-progress/circle-progress.component';
 
 @NgModule({
   declarations: [

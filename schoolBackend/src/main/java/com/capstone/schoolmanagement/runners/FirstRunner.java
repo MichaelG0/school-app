@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +26,7 @@ import com.capstone.schoolmanagement.model.ECourse;
 import com.capstone.schoolmanagement.model.EWeekDay;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
+import com.capstone.schoolmanagement.model.Register;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.EGender;
@@ -36,6 +38,7 @@ import com.capstone.schoolmanagement.repos.CourseInfoRepo;
 import com.capstone.schoolmanagement.repos.CourseRepo;
 import com.capstone.schoolmanagement.repos.KlassRepo;
 import com.capstone.schoolmanagement.repos.MmoduleRepo;
+import com.capstone.schoolmanagement.repos.RegisterRepo;
 import com.capstone.schoolmanagement.repos.WeeklyScheduleItemRepo;
 import com.github.javafaker.Faker;
 
@@ -54,6 +57,7 @@ public class FirstRunner implements CommandLineRunner {
 	private final CourseInfoRepo crsInfoRepo;
 	private final CourseRepo crsRepo;
 	private final WeeklyScheduleItemRepo wsiRepo;
+	private final RegisterRepo registerRepo;
 	private final ObjectProvider<Guest> guestPrv;
 	private final ObjectProvider<Student> studentPrv;
 	private final ObjectProvider<Staff> staffPrv;
@@ -64,6 +68,7 @@ public class FirstRunner implements CommandLineRunner {
 	private final ObjectProvider<CourseInfo> crsInfoPrv;
 	private final ObjectProvider<Course> crsPrv;
 	private final ObjectProvider<WeeklyScheduleItem> wsiPrv;
+	private final ObjectProvider<Register> registerPrv;
 	private final ObjectProvider<Faker> fkrPrv;
 	private final PasswordEncoder encoder;
 
@@ -235,7 +240,7 @@ public class FirstRunner implements CommandLineRunner {
 		usrRepo.saveAll(teachers);
 
 		List<Student> students = new ArrayList<Student>();
-		for (int i = 0; i < 150; i++) {
+		for (int i = 0; i < 170; i++) {
 			int klassNum = fkr.random().nextInt(10);
 
 			Student student = studentPrv.getObject();
@@ -286,7 +291,7 @@ public class FirstRunner implements CommandLineRunner {
 		studentTest.setCourse(klasses.get(0).getCourse());
 		studentTest.setKlass(klasses.get(0));
 		usrRepo.save(studentTest);
-		
+
 		Staff staffTest = staffPrv.getObject();
 		staffTest.setName("Staff");
 		staffTest.setSurname("Raynor");
@@ -304,6 +309,24 @@ public class FirstRunner implements CommandLineRunner {
 		guestTest.setPassword(encoder.encode("guestguest"));
 		guestTest.setRoles(guestRoles);
 		usrRepo.save(guestTest);
+
+		////////////////////////////////////////////////////////////////////////////
+
+		List<Register> registers = new ArrayList<Register>();
+		for (int i = 0; i < 20; i++) {
+			Klass klass = klasses.get(0);
+			List<Mmodule> mdls = klass.getCourse().getInfo().getModules().stream().toList();
+
+			Register register = registerPrv.getObject();
+			register.setDate(
+					fkr.date().past(30, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			register.setModule(modules.get(fkr.random().nextInt(mdls.size())));
+			register.setKlass(klass);
+			if (i == 0)
+				register.setAbsent(new HashSet<Student>(Arrays.asList(studentTest)));
+			registers.add(register);
+		}
+		registerRepo.saveAll(registers);
 	}
 
 }

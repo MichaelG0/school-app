@@ -120,7 +120,7 @@ public class UserService {
 		return UserResponse.buildUserResponse(student);
 	}
 
-	public Page<UserResponse> getAllUsersBasicInformations(Optional<Integer> page, Optional<Integer> size) {
+	public Page<UserResponse> getAll(Optional<Integer> page, Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "name");
 		Page<AppUser> usersPage = usrRepo.findAll(pgb);
 
@@ -132,7 +132,7 @@ public class UserService {
 		return new PageImpl<UserResponse>(users, pgb, usersPage.getTotalElements());
 	}
 
-	public UserResponse getUserBasicInformations(Long id) {
+	public UserResponse getById(Long id) {
 		AppUser user = usrRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
 		return UserResponse.buildUserResponse(user);
 	}

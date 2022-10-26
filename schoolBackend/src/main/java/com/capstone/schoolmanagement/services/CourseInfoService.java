@@ -17,11 +17,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CourseInfoService {
-//	TODO post/put methods are incomplete 
-
 	private final CourseInfoRepo crsRepo;
 
 	public CourseInfo create(CourseInfoDto crsDto) {
+//		TODO post/put methods are incomplete
 		CourseInfo crs = new CourseInfo();
 		BeanUtils.copyProperties(crsDto, crs);
 		return crsRepo.save(crs);

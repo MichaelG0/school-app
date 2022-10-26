@@ -8,6 +8,7 @@ import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
+import com.capstone.schoolmanagement.model.Register;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.Guest;
@@ -82,6 +83,12 @@ public class ModelConfig {
 	@Scope("prototype")
 	public WeeklyScheduleItem weeklyScheduleItem() {
 		return new WeeklyScheduleItem();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Register register() {
+		return new Register();
 	}
 	
 }

@@ -57,7 +57,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.course = this.datesConv.convertDates(this.klass.course);
-    console.log(this.klass);
+    // console.log(this.klass);
     this.buildWeek();
     this.makeSchedule();
   }
