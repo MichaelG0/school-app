@@ -15,6 +15,7 @@ import lombok.Data;
 public class KlassResponse {
 	private Long id;
 	private Course course;
+	private List<UserBasicResponse> teachers;
 	private List<UserBasicResponse> students;
 	private List<WeeklyScheduleItem> weeklySchedule;
 

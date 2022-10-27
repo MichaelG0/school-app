@@ -8,9 +8,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import com.capstone.schoolmanagement.model.users.Student;
+import com.capstone.schoolmanagement.model.users.Teacher;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -23,6 +26,9 @@ public class Klass {
 	private Long id;
 	@ManyToOne
 	private Course course;
+	@JsonManagedReference
+	@ManyToMany
+	private Set<Teacher> teachers = new HashSet<Teacher>();
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
     private Set<Student> students = new HashSet<Student>();

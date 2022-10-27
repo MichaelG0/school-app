@@ -192,6 +192,27 @@ public class FirstRunner implements CommandLineRunner {
 		}
 		crsRepo.saveAll(courses);
 
+		List<Teacher> teachers = new ArrayList<Teacher>();
+		for (int i = 0; i < 10; i++) {
+			Set<Mmodule> mdls = new HashSet<Mmodule>();
+			mdls.add(modules.get(i * 2));
+			mdls.add(modules.get(i * 2 + 1));
+			for (int j = -1; j < fkr.random().nextInt(2); j++)
+				mdls.add(modules.get(fkr.random().nextInt(20)));
+
+			Teacher teacher = teacherPrv.getObject();
+			teacher.setName(fkr.name().firstName());
+			teacher.setSurname(fkr.name().lastName());
+			teacher.setAvatar("https://i.pravatar.cc/300?img=" + fkr.random().nextInt(70));
+			teacher.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
+			teacher.setEmail(fkr.internet().emailAddress());
+			teacher.setPassword(encoder.encode(fkr.internet().password(8, 10)));
+			teacher.setModules(mdls);
+			teacher.setRoles(staffRoles);
+			teachers.add(teacher);
+		}
+		usrRepo.saveAll(teachers);
+
 		List<Klass> klasses = new ArrayList<Klass>();
 		List<WeeklyScheduleItem> weeklySchedule = new ArrayList<WeeklyScheduleItem>();
 		EWeekDay[] weekDays = EWeekDay.values().clone();
@@ -202,42 +223,32 @@ public class FirstRunner implements CommandLineRunner {
 			klass.setCourse(courses.get(courseNumm));
 			klasses.add(klass);
 
-			for (int j = 0; j < 10; j++) {
-				Set<Mmodule> moduleSet = klasses.get(i).getCourse().getInfo().getModules();
-				List<Mmodule> moduleArr = moduleSet.stream().toList();
-				int modulesLength = moduleArr.size();
+			Set<Mmodule> moduleSet = klass.getCourse().getInfo().getModules();
+			List<Mmodule> moduleArr = moduleSet.stream().toList();
+			int modulesLength = moduleArr.size();
 
+			List<Teacher> tcrs = new ArrayList<Teacher>();
+			for (int j = 0; j < modulesLength; j++) {
+				final int index = j;
+				List<Teacher> filteredTeachers = teachers.stream()
+						.filter(tcr -> tcr.getModules().contains(moduleArr.get(index)))
+						.toList();
+				tcrs.add(filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size())));
+			}
+			klass.setTeachers(new HashSet<Teacher>(tcrs));
+
+			for (int j = 0; j < 10; j++) {
 				WeeklyScheduleItem wsi = wsiPrv.getObject();
 				wsi.setWeekDay(weekDays[j / 2]);
 				wsi.setStartTime(LocalTime.of(9 + 5 * (j % 2), 0));
 				wsi.setEndTime(LocalTime.of(13 + (fkr.random().nextInt(4) + 2) * (j % 2), 0));
-				wsi.setKlass(klasses.get(i));
+				wsi.setKlass(klass);
 				wsi.setModule(moduleArr.get(fkr.random().nextInt(modulesLength)));
 				weeklySchedule.add(wsi);
 			}
 		}
 		klsRepo.saveAll(klasses);
 		wsiRepo.saveAll(weeklySchedule);
-
-		List<Teacher> teachers = new ArrayList<Teacher>();
-		for (int i = 0; i < 10; i++) {
-			Set<Klass> klss = new HashSet<Klass>();
-			for (int j = 0; j < 5; j++) {
-				klss.add(klasses.get(fkr.random().nextInt(10)));
-			}
-
-			Teacher teacher = teacherPrv.getObject();
-			teacher.setName(fkr.name().firstName());
-			teacher.setSurname(fkr.name().lastName());
-			teacher.setAvatar("https://i.pravatar.cc/300?img=" + fkr.random().nextInt(70));
-			teacher.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
-			teacher.setEmail(fkr.internet().emailAddress());
-			teacher.setPassword(encoder.encode(fkr.internet().password(8, 10)));
-			teacher.setRoles(staffRoles);
-			teacher.setClasses(klss);
-			teachers.add(teacher);
-		}
-		usrRepo.saveAll(teachers);
 
 		List<Student> students = new ArrayList<Student>();
 		for (int i = 0; i < 170; i++) {
@@ -275,10 +286,8 @@ public class FirstRunner implements CommandLineRunner {
 		teacherTest.setEmail("teacher@teacher.com");
 		teacherTest.setPassword(encoder.encode("teacherteacher"));
 		teacherTest.setRoles(teacherRoles);
-		Set<Klass> testKlss = new HashSet<Klass>();
-		for (int j = 0; j < 5; j++)
-			testKlss.add(klasses.get(fkr.random().nextInt(10)));
-		teacherTest.setClasses(testKlss);
+		teacherTest.setModules(new HashSet<Mmodule>(modules));
+		teacherTest.setKlasses(new HashSet<Klass>(klasses));
 		usrRepo.save(teacherTest);
 
 		Student studentTest = studentPrv.getObject();
