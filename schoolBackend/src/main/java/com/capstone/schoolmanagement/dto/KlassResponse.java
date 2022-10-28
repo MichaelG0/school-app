@@ -1,7 +1,7 @@
 package com.capstone.schoolmanagement.dto;
 
 import java.util.List;
-
+import java.util.Optional;
 import com.capstone.schoolmanagement.auth.users.UserBasicResponse;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.Klass;
@@ -15,7 +15,7 @@ import lombok.Data;
 public class KlassResponse {
 	private Long id;
 	private Course course;
-	private List<UserBasicResponse> teachers;
+	private List<TeacherBasicResponse> teachers;
 	private List<UserBasicResponse> students;
 	private List<WeeklyScheduleItem> weeklySchedule;
 
@@ -23,6 +23,10 @@ public class KlassResponse {
 		return KlassResponse.builder()
 				.id(klass.getId())
 				.course(klass.getCourse())
+				.teachers(klass.getTeachers()
+						.stream()
+						.map(teacher -> TeacherBasicResponse.buildBasicTeacherResponse(teacher))
+						.toList())
 				.students(klass.getStudents()
 						.stream()
 						.map(student -> UserBasicResponse.buildBasicUserResponse(student))
@@ -30,4 +34,5 @@ public class KlassResponse {
 				.weeklySchedule(klass.getWeeklySchedule().stream().toList())
 				.build();
 	}
+
 }

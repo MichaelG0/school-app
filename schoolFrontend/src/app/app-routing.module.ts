@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'apply',
-    canActivate: [IsOnlyGuestGuard],
+    canActivate: [AuthGuard, IsOnlyGuestGuard],
     loadChildren: () => import('./pages/apply/apply.module').then(m => m.ApplyModule),
   },
   {

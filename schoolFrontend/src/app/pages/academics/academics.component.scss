@@ -20,6 +20,8 @@
     max-width: 1000px;
 
     >div {
+        display: flex;
+        flex-direction: column;
         width: 100%;
         background-color: white;
         padding: 2rem;
@@ -28,6 +30,14 @@
 
         &:hover {
             transform: scale(1.02);
+        }
+
+        >p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 }

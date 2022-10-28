@@ -4,11 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import com.capstone.schoolmanagement.model.Assignment;
+import com.capstone.schoolmanagement.model.CompletedAssignment;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
 import com.capstone.schoolmanagement.model.Register;
+import com.capstone.schoolmanagement.model.TeacherModulesPerKlass;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.Guest;
@@ -89,6 +92,24 @@ public class ModelConfig {
 	@Scope("prototype")
 	public Register register() {
 		return new Register();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public TeacherModulesPerKlass techerModulesPerKlass() {
+		return new TeacherModulesPerKlass();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public Assignment assignment() {
+		return new Assignment();
+	}
+	
+	@Bean
+	@Scope("prototype")
+	public CompletedAssignment completedAssignment() {
+		return new CompletedAssignment();
 	}
 	
 }

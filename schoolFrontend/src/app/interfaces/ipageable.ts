@@ -1,7 +1,5 @@
-import { IUserResponse } from './iuser-response';
-
-export interface IPageable {
-  content: IUserResponse[];
+export interface IPageable<T> {
+  content: T[];
   empty: boolean;
   first: boolean;
   last: boolean;

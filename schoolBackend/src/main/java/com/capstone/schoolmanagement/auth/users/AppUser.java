@@ -39,17 +39,16 @@ public abstract class AppUser {
 	private EGender gender;
 	private String address;
 	private String avatar;
-	
+
 //	ACCESS DATA
 	@NotBlank
 	@Size(max = 100)
 	private String email;
 	@NotBlank
-	@Size(min = 8, max = 120)
 	@JsonIgnore
+	@Size(min = 8, max = 120)
 	private String password;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<AppRole> roles = new HashSet<AppRole>();
-
 }

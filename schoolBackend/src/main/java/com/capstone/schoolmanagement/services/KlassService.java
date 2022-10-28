@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.capstone.schoolmanagement.dto.KlassDto;
 import com.capstone.schoolmanagement.dto.KlassResponse;
@@ -17,6 +18,7 @@ import com.capstone.schoolmanagement.repos.KlassRepo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,7 +39,7 @@ public class KlassService {
 	public Klass getById(Long id) {
 		return klsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
 	}
-	
+
 	public KlassResponse getByStudentId(Long id) {
 		Klass klass = klsRepo.findByStudentsId(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
 		return KlassResponse.buildKlassResponse(klass);
@@ -54,5 +56,5 @@ public class KlassService {
 			throw new EntityNotFoundException("Class not found");
 		klsRepo.deleteById(id);
 	}
-	
+
 }

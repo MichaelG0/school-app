@@ -30,7 +30,7 @@ const roll = trigger('roll', [rollTra]);
   animations: [roll],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  unsubscribe$ = new Subject<void>();
   scheduleSubscription?: Subscription;
   @Input() klass!: IKlass;
   course!: ICourseDatesConverted;

@@ -121,7 +121,7 @@ export class UserService {
   // }
 
   getUsers(page: number = 0, size: number = 20) {
-    return this.http.get<IPageable>(`${this.apiUrl}/users?page=${page}&size=${size}`)
+    return this.http.get<IPageable<IUserResponse>>(`${this.apiUrl}/users?page=${page}&size=${size}`)
   }
 
   deleteUser(id: number) {

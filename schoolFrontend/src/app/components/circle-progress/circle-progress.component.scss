@@ -11,9 +11,9 @@ p {
 
 svg {
     transform: rotate(-90deg);
-    stroke-dasharray: 440;
+    stroke-dasharray: 377;
     // (2PI * r)
-    stroke-dashoffset: 440;
+    stroke-dashoffset: 377;
 
     circle {
         stroke: #428bca;

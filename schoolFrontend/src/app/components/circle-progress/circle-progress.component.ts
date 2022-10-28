@@ -7,19 +7,20 @@ import { Observable, take } from 'rxjs';
   styleUrls: ['./circle-progress.component.scss'],
 })
 export class CircleProgressComponent implements OnInit, AfterViewInit {
-  @Input() attendance$!: Observable<number>;
-  attendance!: number;
-  @ViewChild('percentage') percentage!: ElementRef;
+  @Input() percentage$!: Observable<number>;
+  percentage!: number;
+  @ViewChild('circle') circle!: ElementRef;
 
   constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.attendance$.pipe(take(1)).subscribe((res: number) => {
-      this.attendance = res;
+    this.percentage$.pipe(take(1)).subscribe((res: number) => {
+      this.percentage = res;
       let offset: string = 440 - (res * 440 / 100) + ''
-      this.renderer.setAttribute(this.percentage.nativeElement, 'stroke-dashoffset', offset);
+      this.renderer.setAttribute(this.circle.nativeElement, 'stroke-dashoffset', offset);
     });
   }
+  
 }

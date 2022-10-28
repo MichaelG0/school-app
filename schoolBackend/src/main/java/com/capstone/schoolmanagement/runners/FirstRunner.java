@@ -20,6 +20,8 @@ import com.capstone.schoolmanagement.auth.roles.AppRole;
 import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.auth.users.UserRepository;
+import com.capstone.schoolmanagement.model.Assignment;
+import com.capstone.schoolmanagement.model.CompletedAssignment;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.CourseInfo;
 import com.capstone.schoolmanagement.model.ECourse;
@@ -27,6 +29,7 @@ import com.capstone.schoolmanagement.model.EWeekDay;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
 import com.capstone.schoolmanagement.model.Register;
+import com.capstone.schoolmanagement.model.TeacherModulesPerKlass;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
 import com.capstone.schoolmanagement.model.users.Admin;
 import com.capstone.schoolmanagement.model.users.EGender;
@@ -34,6 +37,8 @@ import com.capstone.schoolmanagement.model.users.Guest;
 import com.capstone.schoolmanagement.model.users.Staff;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.model.users.Teacher;
+import com.capstone.schoolmanagement.repos.AssignmentRepo;
+import com.capstone.schoolmanagement.repos.CompletedAssignmentRepo;
 import com.capstone.schoolmanagement.repos.CourseInfoRepo;
 import com.capstone.schoolmanagement.repos.CourseRepo;
 import com.capstone.schoolmanagement.repos.KlassRepo;
@@ -57,6 +62,8 @@ public class FirstRunner implements CommandLineRunner {
 	private final CourseInfoRepo crsInfoRepo;
 	private final CourseRepo crsRepo;
 	private final WeeklyScheduleItemRepo wsiRepo;
+	private final AssignmentRepo assRepo;
+	private final CompletedAssignmentRepo complAssRepo;
 	private final RegisterRepo registerRepo;
 	private final ObjectProvider<Guest> guestPrv;
 	private final ObjectProvider<Student> studentPrv;
@@ -69,6 +76,9 @@ public class FirstRunner implements CommandLineRunner {
 	private final ObjectProvider<Course> crsPrv;
 	private final ObjectProvider<WeeklyScheduleItem> wsiPrv;
 	private final ObjectProvider<Register> registerPrv;
+	private final ObjectProvider<TeacherModulesPerKlass> teacherMPKPrv;
+	private final ObjectProvider<Assignment> assPrv;
+	private final ObjectProvider<CompletedAssignment> complAssPrv;
 	private final ObjectProvider<Faker> fkrPrv;
 	private final PasswordEncoder encoder;
 
@@ -227,15 +237,22 @@ public class FirstRunner implements CommandLineRunner {
 			List<Mmodule> moduleArr = moduleSet.stream().toList();
 			int modulesLength = moduleArr.size();
 
-			List<Teacher> tcrs = new ArrayList<Teacher>();
+			List<TeacherModulesPerKlass> tcrMPKList = new ArrayList<TeacherModulesPerKlass>();
 			for (int j = 0; j < modulesLength; j++) {
 				final int index = j;
+				Mmodule taughtModule = moduleArr.get(index);
 				List<Teacher> filteredTeachers = teachers.stream()
-						.filter(tcr -> tcr.getModules().contains(moduleArr.get(index)))
+						.filter(tcr -> tcr.getModules().contains(taughtModule))
 						.toList();
-				tcrs.add(filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size())));
+				Teacher chosenTcr = filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size()));
+
+				TeacherModulesPerKlass tcrMPK = teacherMPKPrv.getObject();
+				tcrMPK.setKlass(klass);
+				tcrMPK.setTeacher(chosenTcr);
+				tcrMPK.setModule(taughtModule);
+				tcrMPKList.add(tcrMPK);
 			}
-			klass.setTeachers(new HashSet<Teacher>(tcrs));
+			klass.setTeachers(tcrMPKList);
 
 			for (int j = 0; j < 10; j++) {
 				WeeklyScheduleItem wsi = wsiPrv.getObject();
@@ -251,7 +268,7 @@ public class FirstRunner implements CommandLineRunner {
 		wsiRepo.saveAll(weeklySchedule);
 
 		List<Student> students = new ArrayList<Student>();
-		for (int i = 0; i < 170; i++) {
+		for (int i = 0; i < 100; i++) {
 			int klassNum = fkr.random().nextInt(10);
 
 			Student student = studentPrv.getObject();
@@ -270,6 +287,8 @@ public class FirstRunner implements CommandLineRunner {
 
 		////////////////////////////////////////////////////////////////////////////
 
+		Klass klass = klasses.get(0);
+
 		Admin admin = adminPrv.getObject();
 		admin.setName("Admin");
 		admin.setSurname("Hoppus");
@@ -287,8 +306,11 @@ public class FirstRunner implements CommandLineRunner {
 		teacherTest.setPassword(encoder.encode("teacherteacher"));
 		teacherTest.setRoles(teacherRoles);
 		teacherTest.setModules(new HashSet<Mmodule>(modules));
-		teacherTest.setKlasses(new HashSet<Klass>(klasses));
 		usrRepo.save(teacherTest);
+
+		TeacherModulesPerKlass tcrMPK = klass.getTeachers().get(0);
+		tcrMPK.setTeacher(teacherTest);
+		klsRepo.save(klass);
 
 		Student studentTest = studentPrv.getObject();
 		studentTest.setName("Student");
@@ -297,8 +319,8 @@ public class FirstRunner implements CommandLineRunner {
 		studentTest.setEmail("student@student.com");
 		studentTest.setPassword(encoder.encode("studentstudent"));
 		studentTest.setRoles(studentRoles);
-		studentTest.setCourse(klasses.get(0).getCourse());
-		studentTest.setKlass(klasses.get(0));
+		studentTest.setCourse(klass.getCourse());
+		studentTest.setKlass(klass);
 		usrRepo.save(studentTest);
 
 		Staff staffTest = staffPrv.getObject();
@@ -323,7 +345,6 @@ public class FirstRunner implements CommandLineRunner {
 
 		List<Register> registers = new ArrayList<Register>();
 		for (int i = 0; i < 20; i++) {
-			Klass klass = klasses.get(0);
 			List<Mmodule> mdls = klass.getCourse().getInfo().getModules().stream().toList();
 
 			Register register = registerPrv.getObject();
@@ -336,6 +357,35 @@ public class FirstRunner implements CommandLineRunner {
 			registers.add(register);
 		}
 		registerRepo.saveAll(registers);
+
+		List<Assignment> assignments = new ArrayList<Assignment>();
+		List<Mmodule> mdls = klass.getCourse().getInfo().getModules().stream().toList();
+		int mdlsSize = mdls.size();
+		for (int i = 0; i < 20; i++) {
+			Assignment ass = assPrv.getObject();
+			ass.setIssueDate(
+					fkr.date().past(15, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setDueDate(
+					fkr.date().future(15, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setTitle(fkr.lorem().sentence());
+			ass.setCaption(fkr.lorem().paragraph(10));
+			ass.setKlass(klass);
+			ass.setModule(mdls.get(fkr.random().nextInt(mdlsSize)));
+			assignments.add(ass);
+		}
+		assRepo.saveAll(assignments);
+
+		List<CompletedAssignment> complAsss = new ArrayList<CompletedAssignment>();
+		for (int i = 0; i < 12; i++) {
+			CompletedAssignment ass = complAssPrv.getObject();
+			ass.setSubmittedDate(LocalDate.now());
+			ass.setStudent(studentTest);
+			ass.setFile(fkr.file().mimeType().getBytes());
+			ass.setGrade(fkr.random().nextInt(5) + 6);
+			ass.setAssignment(assignments.get(i));
+			complAsss.add(ass);
+		}
+		complAssRepo.saveAll(complAsss);
 	}
 
 }

@@ -10,7 +10,7 @@ import { CourseInfoService } from 'src/app/services/course-info.service';
   styleUrls: ['./course-list.component.scss'],
 })
 export class CourseListComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  unsubscribe$ = new Subject<void>();
   title!: string;
   courses$!: Observable<ICourseInfo[]>;
 

@@ -39,7 +39,8 @@ public class KlassController implements IControllerPage<Klass, KlassDto> {
 
 	@Override
 	@GetMapping
-	public ResponseEntity<Page<Klass>> getAll(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+	public ResponseEntity<Page<Klass>> getAll(@RequestParam Optional<Integer> page,
+			@RequestParam Optional<Integer> size) {
 		return ResponseEntity.ok(klsSrv.getAll(page, size));
 	}
 
@@ -48,7 +49,7 @@ public class KlassController implements IControllerPage<Klass, KlassDto> {
 	public ResponseEntity<Klass> getById(@PathVariable Long id) {
 		return ResponseEntity.ok(klsSrv.getById(id));
 	}
-	
+
 	@GetMapping("/student/{id}")
 	public ResponseEntity<KlassResponse> getByStudentId(@PathVariable Long id) {
 		return ResponseEntity.ok(klsSrv.getByStudentId(id));
@@ -59,12 +60,12 @@ public class KlassController implements IControllerPage<Klass, KlassDto> {
 	public ResponseEntity<Klass> update(@PathVariable Long id, @RequestBody KlassDto klsDto) {
 		return ResponseEntity.ok(klsSrv.update(id, klsDto));
 	}
-	
+
 	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		klsSrv.delete(id);
 		return ResponseEntity.ok().build();
 	}
-	
+
 }

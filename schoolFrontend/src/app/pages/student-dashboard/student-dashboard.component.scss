@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
 
-    p {
+    p, a {
         margin: 0 0 0 .5rem;
         word-break: keep-all;
     }
@@ -37,15 +37,14 @@
     }
 }
 
-.wrapp {
+.fake-border {
     border: 1px solid rgba(0, 0, 0, 0);
-    max-height: 668px;
-    overflow: hidden;
 }
 
 #class-wrp {
-    min-height: 668px;
+    height: 668px;
     width: 15rem;
+    overflow: hidden;
 }
 
 #student-wrp {
@@ -79,6 +78,15 @@
     height: 200px;
     border: 1rem solid aqua;
     border-radius: 10rem;
+}
+
+#assignments {
+    min-height: 281.4px;
+}
+
+#assignments-placeholder {
+    padding-top: 75px;
+    min-height: 321.4px;
 }
 
 // ============SCROLLBAR============
