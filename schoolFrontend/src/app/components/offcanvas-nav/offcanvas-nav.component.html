@@ -22,7 +22,7 @@
     </form>
 
     <ul class="nav d-block me-4">
-      <li *ngIf="!loggedUser?.user?.roles?.includes('ROLE_STUDENT')">
+      <li>
         <a
           (click)="closeOffcanvas()"
           [routerLink]="['/']"
@@ -32,8 +32,12 @@
           >Home</a
         >
       </li>
-      <li *ngIf="loggedUser?.user?.roles?.includes('ROLE_STUDENT')">
-        <a [routerLink]="['/student_dashboard']" routerLinkActive="active" class="nav-link px-0 link-dark"
+      <li *ngIf="roles && (roles.includes('ROLE_STUDENT') || roles.includes('ROLE_TEACHER'))">
+        <a
+          (click)="closeOffcanvas()"
+          [routerLink]="dashboardCondition()"
+          routerLinkActive="active"
+          class="nav-link px-0 link-dark"
           >Dashboard</a
         >
       </li>
@@ -57,7 +61,7 @@
       </li>
       <li
         *ngIf="
-          loggedUser && loggedUser.user.roles.length <= 1 && loggedUser.user.roles.includes('ROLE_GUEST')
+          roles && roles.length <= 1 && roles.includes('ROLE_GUEST')
         "
       >
         <a

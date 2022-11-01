@@ -23,8 +23,8 @@ public class CompletedAssignment {
 	private LocalDate submittedDate;
 	@ManyToOne
 	private Student student;
-	private byte[] file;
-	private int grade;
+	private String link;
+	private float grade;
 	@JsonBackReference
 	@ManyToOne
 	private Assignment assignment;

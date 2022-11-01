@@ -1,25 +1,28 @@
 <ng-container *ngIf="klass; else loading">
   <div class="container">
     <div class="big-wrap">
-      <div>
-        <div id="class-wrp" class="bg-light rounded shadow fake-border">
-          <h4 class="mt-3 mb-4 mx-3">My Class</h4>
-          <div id="student-wrp">
-            <div id="student" *ngFor="let teacher of klass!.teachers">
-              <div id="avatar-box">
-                <img [src]="teacher.avatar" alt="" />
-              </div>
-              <a class="color fw-bold">{{ teacher.name }} {{ teacher.surname }} - {{ teacher.module }}</a>
+      <div id="class-wrp" class="bg-light rounded shadow fake-border">
+        <h4 class="mt-3 mb-4 mx-3">My Class</h4>
+        <div id="student-wrp">
+          <div id="student" *ngFor="let teacher of klass!.teachers">
+            <div id="avatar-box">
+              <img [src]="teacher.avatar" alt="" />
             </div>
-            <div id="student" *ngFor="let student of klass!.students">
-              <div id="avatar-box">
-                <img [src]="student.avatar" alt="" />
-              </div>
-              <p>{{ student.name }} {{ student.surname }}</p>
+            <a class="color fw-bold"
+              >{{ teacher.name }} {{ teacher.surname
+              }}<span *ngFor="let module of teacher.modules"> - {{ module }}</span></a
+            >
+          </div>
+          <div id="student" *ngFor="let student of klass!.students">
+            <div id="avatar-box">
+              <img [src]="student.avatar" alt="" />
             </div>
+            <p>{{ student.name }} {{ student.surname }}</p>
           </div>
         </div>
       </div>
+
+      <app-calendar [klass]="klass" class="bg-light rounded shadow fake-border"></app-calendar>
 
       <div id="center">
         <div class="bg-light rounded shadow fake-border">
@@ -30,7 +33,10 @@
               <h5>Attendance</h5>
               <app-circle-progress [percentage$]="attendance$"></app-circle-progress>
             </div>
-            <h5>Grades</h5>
+            <div>
+              <h5>Grades</h5>
+              <app-circle-progress [percentage$]="completedAssignments$"></app-circle-progress>
+            </div>
           </div>
         </div>
 
@@ -38,7 +44,29 @@
           <h4 class="mt-3 mb-4 mx-3">Assignments</h4>
           <div *ngIf="assignments$ | async as assignments; else loading" class="mx-3">
             <div id="assignments">
-              <p *ngFor="let assignment of assignments.content">{{ assignment.title }}</p>
+              <div *ngFor="let assignment of assignments.content" class="ass-item text-reset">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  disabled
+                  [checked]="complAssIds && complAssIds.includes(assignment.id)"
+                />
+                <a [routerLink]="['/' + klass.id + '/assignment/' + assignment.id]" class="text-dark">
+                  <div [class.assignment-done]="complAssIds && complAssIds.includes(assignment.id)">
+                    <p class="text-primary">{{ assignment.module }} -</p>
+                    <b> {{ assignment.title }}</b>
+                  </div>
+                  <p
+                    *ngIf="complAssIds && complAssIds.includes(assignment.id); else todo"
+                    class="text-muted"
+                  >
+                    <i class="bi bi-bookmark-check"></i> Submitted
+                  </p>
+                  <ng-template #todo>
+                    <p class="text-muted"><i class="bi bi-flag"></i> Due {{ assignment.dueDate }}</p>
+                  </ng-template>
+                </a>
+              </div>
             </div>
             <div class="d-flex justify-content-center">
               <div class="px-4 pb-1 d-inline-flex align-items-baseline">
@@ -46,7 +74,11 @@
                 <button (click)="paginate(-1)" class="btn pag-btn" [disabled]="page + 1 == 1">
                   <i class="bi bi-chevron-left me-2"></i>
                 </button>
-                <button (click)="paginate(1)" class="btn pag-btn" [disabled]="page + 1 == assignments.totalPages">
+                <button
+                  (click)="paginate(1)"
+                  class="btn pag-btn"
+                  [disabled]="page + 1 == assignments.totalPages"
+                >
                   <i class="bi bi-chevron-right ms-2"></i>
                 </button>
               </div>
@@ -59,11 +91,20 @@
                 <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
               </svg>
             </div>
+            <div class="d-flex justify-content-center">
+              <div class="px-4 pb-1 d-inline-flex align-items-baseline">
+                <small class="text-muted me-4">Page {{ page + 1 }} of ?</small>
+                <button class="btn pag-btn" disabled>
+                  <i class="bi bi-chevron-left me-2"></i>
+                </button>
+                <button class="btn pag-btn" disabled>
+                  <i class="bi bi-chevron-right ms-2"></i>
+                </button>
+              </div>
+            </div>
           </ng-template>
         </div>
       </div>
-
-      <app-calendar [klass]="klass"></app-calendar>
     </div>
   </div>
 </ng-container>

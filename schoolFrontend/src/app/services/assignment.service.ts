@@ -11,9 +11,16 @@ export class AssignmentService {
 
   constructor(private http: HttpClient) {}
 
+  getById(id: number) {
+    return this.http.get<IAssignment>(
+      `${this.apiUrl}/assignments/${id}`
+    );
+  }
+
   getByKlassId(klassId: number, page: number = 0, size: number = 20) {
     return this.http.get<IPageable<IAssignment>>(
       `${this.apiUrl}/assignments/class/${klassId}?page=${page}&size=${size}`
     );
   }
+  
 }

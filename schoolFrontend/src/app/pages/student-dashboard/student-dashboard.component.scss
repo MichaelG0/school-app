@@ -1,5 +1,6 @@
 .container {
     margin-top: -.7rem;
+    padding: 0;
 }
 
 .big-wrap {
@@ -14,7 +15,8 @@
     display: flex;
     align-items: center;
 
-    p, a {
+    p,
+    a {
         margin: 0 0 0 .5rem;
         word-break: keep-all;
     }
@@ -42,21 +44,23 @@
 }
 
 #class-wrp {
-    height: 668px;
-    width: 15rem;
+    position: relative;
+    flex: 1 1 13.5rem;
     overflow: hidden;
+    height: 668px;
 }
 
 #student-wrp {
+    position: absolute;
     overflow: scroll;
-    max-height: 600px;
+    max-height: 90%;
     margin: -.5rem 0 .5rem 0
 }
 
 #center {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex: 100 1 43%;
     gap: 1rem;
 }
 
@@ -82,11 +86,108 @@
 
 #assignments {
     min-height: 281.4px;
+
+    .ass-item {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin-bottom: .8rem;
+
+        >a {
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &:hover {
+                opacity: .7;
+            }
+        }
+
+        .form-check-input:disabled {
+            padding: 8px;
+            border-radius: .4rem;
+            opacity: 1;
+        }
+
+        * {
+            display: inline;
+            margin: 0;
+        }
+
+        .text-muted {
+            display: block;
+            font-size: .8rem;
+            font-weight: 500;
+        }
+    }
+}
+
+.assignment-done {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    opacity: .5;
+
+    b {
+        font-weight: 400;
+    }
 }
 
 #assignments-placeholder {
     padding-top: 75px;
-    min-height: 321.4px;
+    min-height: 281.4px;
+}
+
+app-calendar {
+    flex: 1 1 18.5rem;
+    align-self: stretch;
+}
+
+// ============MEDIA QUERY============
+
+@media screen and (min-width: 425px) {
+    #assignments>.ass-item>a {
+        max-width: 355px;
+    }
+}
+
+@media screen and (min-width: 528px) {
+    #assignments>.ass-item>a {
+        max-width: 476px;
+    }
+    #class-wrp {
+        height: auto;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #assignments>.ass-item>a {
+        max-width: 648px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    #assignments>.ass-item>a {
+        max-width: 355px;
+    }
+    app-calendar {
+        order: 1;
+    }
+    #class-wrp {
+        flex-grow: 25;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #assignments>.ass-item>a {
+        max-width: 520px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    #assignments>.ass-item>a {
+        max-width: 690px;
+    }
 }
 
 // ============SCROLLBAR============

@@ -3,5 +3,5 @@ export interface ITeacherBasicResponse {
   name: string;
   surname: string;
   avatar: string;
-  module: string;
+  modules: string[];
 }

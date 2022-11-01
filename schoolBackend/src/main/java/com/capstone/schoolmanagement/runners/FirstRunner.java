@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -246,11 +247,21 @@ public class FirstRunner implements CommandLineRunner {
 						.toList();
 				Teacher chosenTcr = filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size()));
 
-				TeacherModulesPerKlass tcrMPK = teacherMPKPrv.getObject();
-				tcrMPK.setKlass(klass);
-				tcrMPK.setTeacher(chosenTcr);
-				tcrMPK.setModule(taughtModule);
-				tcrMPKList.add(tcrMPK);
+				Optional<TeacherModulesPerKlass> tcrMPKOpt = tcrMPKList.stream()
+						.filter(tcrMPKItem -> tcrMPKItem.getTeacher().equals(chosenTcr))
+						.findFirst();
+				if (tcrMPKOpt.isPresent()) {
+					TeacherModulesPerKlass tcrMPK = tcrMPKOpt.get();
+					tcrMPK.getModules().add(taughtModule);
+				} else {
+					TeacherModulesPerKlass tcrMPK = teacherMPKPrv.getObject();
+					tcrMPK.setKlass(klass);
+					tcrMPK.setTeacher(chosenTcr);
+					Set<Mmodule> taughtMdls = new HashSet<Mmodule>();
+					taughtMdls.add(taughtModule);
+					tcrMPK.setModules(taughtMdls);
+					tcrMPKList.add(tcrMPK);
+				}
 			}
 			klass.setTeachers(tcrMPKList);
 
@@ -308,9 +319,11 @@ public class FirstRunner implements CommandLineRunner {
 		teacherTest.setModules(new HashSet<Mmodule>(modules));
 		usrRepo.save(teacherTest);
 
-		TeacherModulesPerKlass tcrMPK = klass.getTeachers().get(0);
-		tcrMPK.setTeacher(teacherTest);
-		klsRepo.save(klass);
+		klass.getTeachers().get(0).setTeacher(teacherTest);
+		for (int i = 0; i < 4; i++) {
+			klasses.get(fkr.random().nextInt(10)).getTeachers().get(0).setTeacher(teacherTest);
+		}
+		klsRepo.saveAll(klasses);
 
 		Student studentTest = studentPrv.getObject();
 		studentTest.setName("Student");
@@ -361,13 +374,14 @@ public class FirstRunner implements CommandLineRunner {
 		List<Assignment> assignments = new ArrayList<Assignment>();
 		List<Mmodule> mdls = klass.getCourse().getInfo().getModules().stream().toList();
 		int mdlsSize = mdls.size();
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 19; i++) {
 			Assignment ass = assPrv.getObject();
 			ass.setIssueDate(
-					fkr.date().past(15, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-			ass.setDueDate(
-					fkr.date().future(15, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-			ass.setTitle(fkr.lorem().sentence());
+					fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setDueDate(i % 3 == 0
+					? fkr.date().past(5, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+					: fkr.date().future(15, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setTitle(fkr.lorem().sentence(2, 2).replace('.', ' '));
 			ass.setCaption(fkr.lorem().paragraph(10));
 			ass.setKlass(klass);
 			ass.setModule(mdls.get(fkr.random().nextInt(mdlsSize)));
@@ -376,12 +390,13 @@ public class FirstRunner implements CommandLineRunner {
 		assRepo.saveAll(assignments);
 
 		List<CompletedAssignment> complAsss = new ArrayList<CompletedAssignment>();
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 6; i++) {
 			CompletedAssignment ass = complAssPrv.getObject();
 			ass.setSubmittedDate(LocalDate.now());
 			ass.setStudent(studentTest);
-			ass.setFile(fkr.file().mimeType().getBytes());
-			ass.setGrade(fkr.random().nextInt(5) + 6);
+			ass.setLink(fkr.internet().url());
+			if (i % 2 == 0)
+				ass.setGrade(fkr.random().nextInt(5) + 6);
 			ass.setAssignment(assignments.get(i));
 			complAsss.add(ass);
 		}

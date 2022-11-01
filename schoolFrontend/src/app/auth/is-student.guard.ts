@@ -14,7 +14,7 @@ export class IsStudentGuard implements CanActivate {
     return this.userSrv.loggedObs$.pipe(
       take(1),
       map((res: IJwtResponse | null) => {
-        if (res) if (res.user.roles.includes('ROLE_STUDENT')) return true;
+        if (res && res.user.roles.includes('ROLE_STUDENT')) return true;
         return this.router.createUrlTree(['/']);
       })
     );

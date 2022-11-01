@@ -13,24 +13,23 @@ import lombok.Data;
 public class AssignmentResponse {
 	private Long id;
 	private LocalDate issueDate;
-	private LocalDate dueDate;
+	private String dueDate;
 	private String title;
 	private String caption;
+	private Long klassId;
 	private String module;
-//	private List<CompletedAssignmentResponse> completedAssignments;
 
 	public static AssignmentResponse buildAssignmentResponse(Assignment assignment) {
+		LocalDate dueDate = assignment.getDueDate();
+		
 		return AssignmentResponse.builder()
 				.id(assignment.getId())
 				.issueDate(assignment.getIssueDate())
-				.dueDate(assignment.getDueDate())
+				.dueDate(dueDate.isBefore(LocalDate.now()) ? "Expired" : dueDate.toString())
 				.title(assignment.getTitle())
 				.caption(assignment.getCaption())
+				.klassId(assignment.getKlass().getId())
 				.module(assignment.getModule().getName())
-//				.completedAssignments(assignment.getCompletedAssignments()
-//						.stream()
-//						.map(complAss -> CompletedAssignmentResponse.buildCompletedAssignmentResponse(complAss))
-//						.toList())
 				.build();
 	}
 }

@@ -32,7 +32,7 @@
 
       <div class="d-flex justify-content-end">
         <ul id="nav-links" class="nav justify-content-center gap-3 me-4">
-          <li *ngIf="!loggedUser?.user?.roles?.includes('ROLE_STUDENT')">
+          <li>
             <a
               [routerLink]="['/']"
               routerLinkActive="active"
@@ -41,9 +41,9 @@
               >Home</a
             >
           </li>
-          <li *ngIf="loggedUser?.user?.roles?.includes('ROLE_STUDENT')">
+          <li *ngIf="roles && (roles.includes('ROLE_STUDENT') || roles.includes('ROLE_TEACHER'))">
             <a
-              [routerLink]="['/student_dashboard']"
+              [routerLink]="dashboardCondition()"
               routerLinkActive="active"
               class="nav-link px-0 link-dark"
               >Dashboard</a
@@ -79,7 +79,7 @@
 
         <ng-template #notLogged class="text-nowrap">
           <button
-            (click)="setModal('Log In', '')"
+            (click)="setModal('Log In', rtr.url)"
             id="lgn-btn"
             type="button"
             class="btn btn-outline-dark px-sm-3 me-sm-2 me-0 px-2"
@@ -114,7 +114,7 @@
             <li>
               <a [routerLink]="['/' + loggedUser.user.id + '/profile']" class="dropdown-item">Profile</a>
             </li>
-            <li *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">
+            <li *ngIf="roles && roles.includes('ROLE_ADMIN')">
               <a [routerLink]="['/management']" class="dropdown-item">Manage Staff</a>
             </li>
             <li>
@@ -123,7 +123,7 @@
             <li><a (click)="logout()" class="dropdown-item">Sign out</a></li>
           </ul>
           <button
-            *ngIf="loggedUser.user.roles.length <= 1 && loggedUser.user.roles.includes('ROLE_GUEST')"
+            *ngIf="roles && roles.length <= 1 && roles.includes('ROLE_GUEST')"
             [routerLink]="['/apply']"
             type="button"
             class="apply-btn btn btn-dark px-sm-4 px-3"

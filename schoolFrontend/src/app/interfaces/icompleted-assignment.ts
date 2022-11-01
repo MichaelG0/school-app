@@ -4,6 +4,6 @@ export interface ICompletedAssignment {
   id: number;
   submittedDate: string;
   student: IUserBasicResponse;
-  file: string;
+  link: string;
   grade: number;
 }

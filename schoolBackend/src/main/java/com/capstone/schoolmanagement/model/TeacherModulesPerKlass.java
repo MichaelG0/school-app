@@ -1,15 +1,17 @@
 package com.capstone.schoolmanagement.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 import com.capstone.schoolmanagement.model.users.Teacher;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +27,6 @@ public class TeacherModulesPerKlass {
 	private Klass klass;
 	@ManyToOne
 	private Teacher teacher;
-	@ManyToOne
-	private Mmodule module;
+	@ManyToMany
+	private Set<Mmodule> modules = new HashSet<Mmodule>();
 }

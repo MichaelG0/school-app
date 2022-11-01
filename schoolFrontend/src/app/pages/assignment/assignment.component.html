@@ -1,0 +1,43 @@
+<div *ngIf="!confirmation; else confDialog" class="container">
+  <form
+    *ngIf="assignment | async as assignment; else pageLoading"
+    [formGroup]="linkForm"
+    (ngSubmit)="onSubmit(linkForm)"
+    class="modal-body container inner-cont shadow rounded"
+  >
+    <h3>{{ assignment.title }}</h3>
+    <h5 class="text-primary">{{ assignment.module }}</h5>
+    <p>{{ assignment.caption }}</p>
+    <p>Due: {{ assignment.dueDate }}</p>
+    <h5>Grade: {{ complAssignment && complAssignment.grade > 0 ? complAssignment!.grade : '' }}</h5>
+
+    <label for="link" class="mt-4">Assignment Link</label>
+    <input formControlName="link" type="url" class="form-control" placeholder="Link" id="link" />
+
+    <div class="btn-wrp">
+      <button class="btn btn-dark px-4" type="submit" [disabled]="linkForm.invalid">
+        <span *ngIf="!loading"><i class="bi bi-cloud-arrow-up"></i> Upload</span>
+        <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
+          <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+        </svg>
+      </button>
+    </div>
+  </form>
+
+  <ng-template #pageLoading>
+    <div class="text-center">
+      <svg class="spinner big-spin" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #confDialog>
+  <div class="container">
+    <div class="container inner-cont pt-1">
+      <h3 class="mt-4 mb-3">Assignment submitted successfully.</h3>
+      <a [routerLink]="['/student_dashboard']">Back to your dashboard</a>
+    </div>
+  </div>
+</ng-template>

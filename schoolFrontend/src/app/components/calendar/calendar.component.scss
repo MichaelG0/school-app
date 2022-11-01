@@ -1,3 +1,26 @@
+#wrapp {
+    overflow: hidden;
+}
+
+#head {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+    height: 148px;
+
+    h4,
+    h6 {
+        white-space: nowrap;
+    }
+
+    #roller {
+        position: absolute;
+        align-self: center;
+        top: 70px;
+    }
+}
+
 .my-flex {
     display: flex;
     margin: .5rem 0;
@@ -14,7 +37,7 @@
     >.btn {
         padding: .35rem;
         margin-bottom: .5rem;
-        border-radius: 100px;
+        border-radius: 10rem;
         transition: all .3s ease;
 
         &:hover {
@@ -62,10 +85,4 @@
 .active-day {
     background-color: red;
     color: white;
-}
-
-#wrapp {
-    border: 1px solid rgba(0, 0, 0, 0);
-    height: 668px;
-    overflow: hidden;
 }

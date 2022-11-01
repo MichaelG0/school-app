@@ -36,6 +36,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   course!: ICourseDatesConverted;
   schedule: IWeeklyScheduleItem[] = [];
   days!: Date[];
+  daysLength: number = 15
   hours = [
     '8 am',
     '9 am',
@@ -63,9 +64,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.renderer.addClass(this.dayDivs.get(3)!.nativeElement, 'active-day');
+    let dayNum = Math.trunc(this.daysLength/2)
+    this.renderer.addClass(this.dayDivs.get(dayNum)!.nativeElement, 'active-day');
     this.dayDivs.changes.pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
-      this.renderer.addClass(res.get(3)!.nativeElement, 'active-day');
+      this.renderer.addClass(res.get(dayNum)!.nativeElement, 'active-day');
     });
     this.styleSchedule();
     this.styleScheduleSubs();
@@ -73,14 +75,15 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   buildWeek(date: Date = new Date()) {
     let week: Date[] = [];
-    for (let i = 0; i < 7; i++) {
-      week[i] = this.addDays(date, i - 3);
+    let daysOffset = Math.trunc(this.daysLength/2)
+    for (let i = 0; i < this.daysLength; i++) {
+      week[i] = this.addDays(date, i - daysOffset);
     }
     this.days = week;
   }
 
   makeSchedule() {
-    const weekDay = this.days[3].toLocaleDateString('en-us', { weekday: 'short' }).toUpperCase();
+    const weekDay = this.days[Math.trunc(this.daysLength/2)].toLocaleDateString('en-us', { weekday: 'short' }).toUpperCase();
     const schedule = this.klass.weeklySchedule.filter(x => x.weekDay == weekDay);
     this.schedule = schedule;
   }
@@ -124,9 +127,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   lessonCondition() {
+    let dayNum = Math.trunc(this.daysLength/2)
     return (
-      this.days[3] >= this.course.startDate &&
-      this.days[3] <= this.course.endDate
+      this.days[dayNum] >= this.course.startDate &&
+      this.days[dayNum] <= this.course.endDate
     );
   }
 

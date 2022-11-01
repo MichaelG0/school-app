@@ -4,5 +4,6 @@ export interface IAssignment {
   dueDate: string;
   title: string;
   caption: string;
+  klassId: number;
   module: string;
 }

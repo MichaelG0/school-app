@@ -30,8 +30,8 @@ export class LoginModalComponent implements OnInit {
     this.btnClicked = false;
     this.loginFailed = false;
     this.loginForm = this.fb.group({
-      email: ['student@student.com', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
-      password: ['studentstudent', [Validators.required, Validators.minLength(8)]],
+      email: ['teacher@teacher.com', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+      password: ['teacherteacher', [Validators.required, Validators.minLength(8)]],
     });
   }
 

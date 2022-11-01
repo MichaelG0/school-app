@@ -31,7 +31,6 @@ public class Assignment {
 	private String title;
 	@Column(columnDefinition = "TEXT")
 	private String caption;
-	@JsonBackReference
 	@ManyToOne
 	private Klass klass;
 	@ManyToOne

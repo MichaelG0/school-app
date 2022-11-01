@@ -1,4 +1,6 @@
-package com.capstone.schoolmanagement.dto;
+package com.capstone.schoolmanagement.dto.users;
+
+import java.util.List;
 
 import com.capstone.schoolmanagement.model.TeacherModulesPerKlass;
 import com.capstone.schoolmanagement.model.users.Teacher;
@@ -13,7 +15,7 @@ public class TeacherBasicResponse {
 	private String name;
 	private String surname;
 	private String avatar;
-	private String module;
+	private List<String> modules;
 	
 	public static TeacherBasicResponse buildBasicTeacherResponse(TeacherModulesPerKlass teacherMPK) {
 		Teacher teacher = teacherMPK.getTeacher();
@@ -22,7 +24,7 @@ public class TeacherBasicResponse {
 				.name(teacher.getName())
 				.surname(teacher.getSurname())
 				.avatar(teacher.getAvatar())
-				.module(teacherMPK.getModule().getName())
+				.modules(teacherMPK.getModules().stream().map(mdl -> mdl.getName()).toList())
 				.build();
 	}
 	

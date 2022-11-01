@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.capstone.schoolmanagement.auth.users.AppUser;
+import com.capstone.schoolmanagement.auth.users.UserResponse;
 import com.capstone.schoolmanagement.dto.AssignmentResponse;
 import com.capstone.schoolmanagement.model.Assignment;
 import com.capstone.schoolmanagement.repos.AssignmentRepo;
@@ -20,10 +22,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AssignmentService {
 	private final AssignmentRepo assRepo;
+	
+	public AssignmentResponse getById(Long id) {
+		Assignment assignment = assRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		return AssignmentResponse.buildAssignmentResponse(assignment);
+	}
 
 	public Page<AssignmentResponse> getByKlassId(Long klassId, Optional<Integer> page, Optional<Integer> size) {
-		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.DESC, "id");
-		Page<Assignment> assPage = assRepo.findByKlassId(klassId, pgb)
+		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "dueDate");
+		Page<Assignment> assPage = assRepo.findUpcomingByKlassId(klassId, pgb)
 				.orElseThrow(() -> new EntityNotFoundException("Assignments not found by klass id" + klassId));
 
 		List<AssignmentResponse> assList = assPage.stream()

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Observable, take } from 'rxjs';
+import { IComplAssignBasicResponseWithAverageGrade } from 'src/app/interfaces/icompl-assign-basic-response-with-average-grade';
 
 @Component({
   selector: 'app-circle-progress',
@@ -7,7 +8,7 @@ import { Observable, take } from 'rxjs';
   styleUrls: ['./circle-progress.component.scss'],
 })
 export class CircleProgressComponent implements OnInit, AfterViewInit {
-  @Input() percentage$!: Observable<number>;
+  @Input() percentage$!: Observable<number | IComplAssignBasicResponseWithAverageGrade>;
   percentage!: number;
   @ViewChild('circle') circle!: ElementRef;
 
@@ -16,9 +17,9 @@ export class CircleProgressComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.percentage$.pipe(take(1)).subscribe((res: number) => {
-      this.percentage = res;
-      let offset: string = 440 - (res * 440 / 100) + ''
+    this.percentage$.pipe(take(1)).subscribe((res: number | IComplAssignBasicResponseWithAverageGrade) => {
+      this.percentage = typeof res == 'number' ? res : res.averageGrade;
+      let offset: string = 377 - (this.percentage * 377 / 100) + ''
       this.renderer.setAttribute(this.circle.nativeElement, 'stroke-dashoffset', offset);
     });
   }

@@ -4,7 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.capstone.schoolmanagement.model.Assignment;
@@ -12,6 +14,10 @@ import com.capstone.schoolmanagement.model.Assignment;
 @Repository
 public interface AssignmentRepo extends PagingAndSortingRepository<Assignment, Long> {
 
-	public Optional<Page<Assignment>> findByKlassId(Long klassId, Pageable pgb);
+	@Query("SELECT a FROM Assignment a WHERE a.klass.id = :klassId AND a.dueDate >= CURRENT_DATE")
+	public Optional<Page<Assignment>> findUpcomingByKlassId(@Param("klassId") Long klassId, Pageable pgb);
+	
+	@Query("SELECT a FROM Assignment a WHERE a.klass.id = :klassId AND a.dueDate < CURRENT_DATE")
+	public Optional<Page<Assignment>> findPastByKlassId(@Param("klassId") Long klassId, Pageable pgb);
 	
 }

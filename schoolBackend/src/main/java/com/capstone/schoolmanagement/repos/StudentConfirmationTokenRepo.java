@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.capstone.schoolmanagement.dto.StudentConfirmationToken;
+import com.capstone.schoolmanagement.dto.users.StudentConfirmationToken;
 
 @Repository
 public interface StudentConfirmationTokenRepo extends CrudRepository<StudentConfirmationToken, UUID> {

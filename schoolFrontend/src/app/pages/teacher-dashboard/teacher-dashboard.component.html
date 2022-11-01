@@ -1,0 +1,27 @@
+<div *ngIf="teacherMPKList$ | async as tcrMPKList; else loading" class="container">
+  <div class="container inner-cont p-0">
+    <h3>My Classes</h3>
+    <div class="border-end"></div>
+    <div>
+      <div *ngFor="let tcrMPK of tcrMPKList" [routerLink]="['/teacher_dashboard' + tcrMPK.klassId]" class="tcr-mpk shadow rounded mb-3">
+        <h5 class="bg-dark bg-gradient text-white m-0 p-4 rounded-top">
+          Class: {{ tcrMPK.klassId }}, {{ tcrMPK.klassCourse }}
+        </h5>
+        <p class="m-0 px-4 py-2">
+          Taught modules:
+          <span *ngFor="let module of tcrMPK.modules; let isLast = last">
+            {{ module }}<span *ngIf="!isLast">, </span>
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="text-center">
+    <svg class="spinner big-spin" viewBox="0 0 50 50">
+      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+    </svg>
+  </div>
+</ng-template>

@@ -3,6 +3,7 @@ package com.capstone.schoolmanagement.dto;
 import java.util.List;
 import java.util.Optional;
 import com.capstone.schoolmanagement.auth.users.UserBasicResponse;
+import com.capstone.schoolmanagement.dto.users.TeacherBasicResponse;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;

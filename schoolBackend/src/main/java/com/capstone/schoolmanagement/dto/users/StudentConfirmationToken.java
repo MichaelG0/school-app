@@ -1,4 +1,4 @@
-package com.capstone.schoolmanagement.dto;
+package com.capstone.schoolmanagement.dto.users;
 
 import java.time.LocalDate;
 import javax.persistence.Entity;
