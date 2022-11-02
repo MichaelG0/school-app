@@ -3,8 +3,8 @@
     <h3>My Classes</h3>
     <div class="border-end"></div>
     <div>
-      <div *ngFor="let tcrMPK of tcrMPKList" [routerLink]="['/teacher_dashboard' + tcrMPK.klassId]" class="tcr-mpk shadow rounded mb-3">
-        <h5 class="bg-dark bg-gradient text-white m-0 p-4 rounded-top">
+      <div *ngFor="let tcrMPK of tcrMPKList" [routerLink]="['/teacher_dashboard/' + tcrMPK.klassId]" class="tcr-mpk shadow rounded mb-3">
+        <h5 class="bg-warning bg-gradient text-white m-0 p-4 rounded-top">
           Class: {{ tcrMPK.klassId }}, {{ tcrMPK.klassCourse }}
         </h5>
         <p class="m-0 px-4 py-2">

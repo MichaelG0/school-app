@@ -6,11 +6,20 @@ import { IKlass } from '../interfaces/iklass';
   providedIn: 'root',
 })
 export class KlassService {
-  private readonly apiUrl = 'http://localhost:8080';
+  private readonly apiUrl = 'http://localhost:8080/classes';
 
   constructor(private http: HttpClient) {}
 
-  getKlassByStudentId(id: number) {
-    return this.http.get<IKlass>(`${this.apiUrl}/classes/student/${id}`);
+  getKlassByStudentId(studentId: number) {
+    return this.http.get<IKlass>(`${this.apiUrl}/student/${studentId}`);
   }
+
+  getKlassesByTeacherId(teacherId: number) {
+    return this.http.get<IKlass[]>(`${this.apiUrl}/teacher/${teacherId}`);
+  }
+
+  getById(id: number) {
+    return this.http.get<IKlass>(`${this.apiUrl}/${id}`);
+  }
+
 }

@@ -372,9 +372,12 @@ public class FirstRunner implements CommandLineRunner {
 		registerRepo.saveAll(registers);
 
 		List<Assignment> assignments = new ArrayList<Assignment>();
-		List<Mmodule> mdls = klass.getCourse().getInfo().getModules().stream().toList();
-		int mdlsSize = mdls.size();
-		for (int i = 0; i < 19; i++) {
+		List<TeacherModulesPerKlass> tcrMPKs = klass.getTeachers().stream().toList();
+		int tcrMPKsSize = tcrMPKs.size();
+		for (int i = 0; i < 100; i++) {
+			TeacherModulesPerKlass tcrMPK = tcrMPKs.get(fkr.random().nextInt(tcrMPKsSize));
+			List<Mmodule> mdls = tcrMPK.getModules().stream().toList();
+			
 			Assignment ass = assPrv.getObject();
 			ass.setIssueDate(
 					fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -384,20 +387,24 @@ public class FirstRunner implements CommandLineRunner {
 			ass.setTitle(fkr.lorem().sentence(2, 2).replace('.', ' '));
 			ass.setCaption(fkr.lorem().paragraph(10));
 			ass.setKlass(klass);
-			ass.setModule(mdls.get(fkr.random().nextInt(mdlsSize)));
+			ass.setTeacher(tcrMPK.getTeacher());
+			ass.setModule(mdls.get(fkr.random().nextInt(mdls.size())));
 			assignments.add(ass);
 		}
 		assRepo.saveAll(assignments);
 
 		List<CompletedAssignment> complAsss = new ArrayList<CompletedAssignment>();
-		for (int i = 0; i < 6; i++) {
+		List<Student> klass1Stds = students.stream().filter(std -> std.getKlass().equals(klass)).toList();
+		int klass1StdsSize = klass1Stds.size();
+		int assignmentsSize = assignments.size();
+		for (int i = 0; i < 100; i++) {
 			CompletedAssignment ass = complAssPrv.getObject();
-			ass.setSubmittedDate(LocalDate.now());
-			ass.setStudent(studentTest);
+			ass.setSubmittedDate(fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setStudent(i % 3 == 0 ? studentTest : klass1Stds.get(fkr.random().nextInt(klass1StdsSize)));
 			ass.setLink(fkr.internet().url());
 			if (i % 2 == 0)
 				ass.setGrade(fkr.random().nextInt(5) + 6);
-			ass.setAssignment(assignments.get(i));
+			ass.setAssignment(assignments.get(fkr.random().nextInt(assignmentsSize)));
 			complAsss.add(ass);
 		}
 		complAssRepo.saveAll(complAsss);

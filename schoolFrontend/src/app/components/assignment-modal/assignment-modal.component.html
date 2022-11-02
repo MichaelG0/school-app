@@ -1,0 +1,44 @@
+<div
+  (show.bs.modal)="setForm()"
+  class="modal fade"
+  id="assignmentModalToggle"
+  aria-hidden="true"
+  aria-labelledby="assignmentModalToggleLabel"
+  tabindex="-1"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="assignmentModalToggleLabel">New Assignment</h3>
+      </div>
+      <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit(assignmentForm)" class="modal-body">
+        <label for="title">Title</label>
+        <input formControlName="title" type="text" id="title" class="form-control" placeholder="Title" />
+        <label for="caption">Caption</label>
+        <textarea
+          formControlName="caption"
+          id="caption"
+          class="form-control"
+          cols="30"
+          rows="8"
+          placeholder="Type assignment description here..."
+        ></textarea>
+        <label for="module">Module</label>
+        <select formControlName="module" class="form-select" id="module">
+          <option *ngFor="let module of taughtModules$ | async" [value]="module">{{ module }}</option>
+        </select>
+        <label for="due">Due</label>
+        <input formControlName="due" type="date" id="due" class="form-control" />
+        <small *ngIf="submissionFailed" class="text-danger">All fields must be filled. Date can't be a past date</small>
+        <div class="btn-wrp">
+          <button class="btn btn-dark px-4" type="submit" [disabled]="assignmentForm.invalid">
+            <span *ngIf="!loading">Submit</span>
+            <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

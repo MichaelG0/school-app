@@ -1,16 +1,19 @@
 package com.capstone.schoolmanagement.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.capstone.schoolmanagement.auth.users.UserResponse;
 import com.capstone.schoolmanagement.dto.KlassDto;
 import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
@@ -23,16 +26,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class KlassService {
 	private final KlassRepo klsRepo;
-
+	
 	public Klass create(KlassDto klsDto) {
-		Klass kls = new Klass();
-		BeanUtils.copyProperties(klsDto, kls);
-		return klsRepo.save(kls);
+		Klass klass = new Klass();
+		BeanUtils.copyProperties(klsDto, klass);
+		return klsRepo.save(klass);
 	}
 
-	public Page<Klass> getAll(Optional<Integer> page, Optional<Integer> size) {
+	public Page<KlassResponse> getAll(Optional<Integer> page, Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "id");
-		return klsRepo.findAll(pgb);
+		Page<Klass> klassesPage = klsRepo.findAll(pgb);
+		List<KlassResponse> klasses = klassesPage.stream().map(kls -> KlassResponse.buildKlassResponse(kls)).toList();
+		return new PageImpl<KlassResponse>(klasses, pgb, klassesPage.getTotalElements());
 	}
 
 	public Klass getById(Long id) {
@@ -43,11 +48,17 @@ public class KlassService {
 		Klass klass = klsRepo.findByStudentsId(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
 		return KlassResponse.buildKlassResponse(klass);
 	}
+	
+	public List<KlassResponse> getByTeacherId(Long id) {
+		List<Klass> klasses = klsRepo.findByTeachersTeacherId(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+		return klasses.stream().map(klass -> KlassResponse.buildKlassResponse(klass)).toList();
+	}
 
-	public Klass update(Long id, KlassDto klsDto) {
-		Klass kls = getById(id);
-		BeanUtils.copyProperties(klsDto, kls);
-		return klsRepo.save(kls);
+	public KlassResponse update(Long id, KlassDto klsDto) {
+		Klass klass = klsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Class not found"));
+		BeanUtils.copyProperties(klsDto, klass);
+		klsRepo.save(klass);
+		return KlassResponse.buildKlassResponse(klass);
 	}
 
 	public void delete(Long id) {

@@ -23,4 +23,10 @@ public class TeacherModulesPerKlassController {
 	public ResponseEntity<List<TeacherModulesPerKlassResponse>> getByTeacherId(@PathVariable Long teacherId) {
 		return ResponseEntity.ok(tcrSrv.getByTeacherId(teacherId));
 	}
+	
+	@GetMapping("{teacherId}/{klassId}")
+	public ResponseEntity<TeacherModulesPerKlassResponse> getByTeacherAndKlassIds(@PathVariable Long teacherId, @PathVariable Long klassId) {
+		return ResponseEntity.ok(tcrSrv.getByTeacherAndKlassIds(teacherId, klassId));
+	}
+	
 }

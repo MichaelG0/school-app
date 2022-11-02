@@ -1,0 +1,18 @@
+<h4 class="mt-3 mb-4 mx-3">My Class</h4>
+<div id="student-wrp">
+  <div id="student" *ngFor="let teacher of klass!.teachers">
+    <div id="avatar-box">
+      <img [src]="teacher.avatar" alt="" />
+    </div>
+    <a class="color fw-bold">
+      {{ teacher.name }} {{ teacher.surname
+      }}<span *ngFor="let module of teacher.modules"> - {{ module }}</span>
+    </a>
+  </div>
+  <div id="student" *ngFor="let student of klass!.students">
+    <div id="avatar-box">
+      <img [src]="student.avatar" alt="" />
+    </div>
+    <p>{{ student.name }} {{ student.surname }}</p>
+  </div>
+</div>

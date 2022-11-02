@@ -13,5 +13,9 @@ export class TeacherModulePerKlassService {
   getByTeacherId(teacherId: number) {
     return this.http.get<ITeacherMPK[]>(`${this.apiUrl}/${teacherId}`);
   }
+
+  getByTeacherAndKlassIds(teacherId: number, klassId: number) {
+    return this.http.get<ITeacherMPK>(`${this.apiUrl}/${teacherId}/${klassId}`);
+  }
   
 }

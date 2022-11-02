@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.capstone.schoolmanagement.model.users.Teacher;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -34,8 +34,10 @@ public class Assignment {
 	@ManyToOne
 	private Klass klass;
 	@ManyToOne
+	private Teacher teacher;
+	@ManyToOne
 	private Mmodule module;
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assignment")
-	private Set<CompletedAssignment> completedAssignments = new HashSet<CompletedAssignment>();
+	private Set<CompletedAssignment> completedAssignments = new HashSet<CompletedAssignment>();	
 }

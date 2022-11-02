@@ -41,7 +41,7 @@ export class StudentDashboardComponent implements OnInit {
       .subscribe(res => {
         this.klass = res;
         this.attendance$ = this.rgsSrv.getAttendance(this.loggedUser!.user.id, this.klass.id);
-        this.assignments$ = this.assSrv.getByKlassId(this.klass.id, this.page, 5);
+        this.assignments$ = this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5);
       });
     this.completedAssignments$ = this.complAssSrv
       .getBasicByStudentId(this.loggedUser!.user.id)
@@ -50,7 +50,7 @@ export class StudentDashboardComponent implements OnInit {
 
   paginate(value: number) {
     this.page += value;
-    this.assignments$ = this.assSrv.getByKlassId(this.klass.id, this.page, 5);
+    this.assignments$ = this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5);
   }
   
 }

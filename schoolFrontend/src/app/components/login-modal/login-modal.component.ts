@@ -30,7 +30,7 @@ export class LoginModalComponent implements OnInit {
     this.btnClicked = false;
     this.loginFailed = false;
     this.loginForm = this.fb.group({
-      email: ['teacher@teacher.com', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+      email: ['teacher@teacher.com', [Validators.required, Validators.email]],
       password: ['teacherteacher', [Validators.required, Validators.minLength(8)]],
     });
   }
@@ -57,4 +57,5 @@ export class LoginModalComponent implements OnInit {
         this.loading = false;
       });
   }
+
 }

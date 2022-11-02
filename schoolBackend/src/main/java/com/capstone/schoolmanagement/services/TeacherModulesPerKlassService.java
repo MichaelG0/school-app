@@ -22,4 +22,11 @@ public class TeacherModulesPerKlassService {
 				.orElseThrow(() -> new EntityNotFoundException("TeacherModulesPerKlassResponse not found"));
 		return teacherMPKList.stream().map(tcrMPK -> TeacherModulesPerKlassResponse.buildResponse(tcrMPK)).toList();
 	}
+	
+	public TeacherModulesPerKlassResponse getByTeacherAndKlassIds(Long teacherId, Long klassId) {
+		TeacherModulesPerKlass teacherMPK = tcrMPKRepo.findByTeacherIdAndKlassId(teacherId, klassId)
+				.orElseThrow(() -> new EntityNotFoundException("TeacherModulesPerKlassResponse not found"));
+		return TeacherModulesPerKlassResponse.buildResponse(teacherMPK);
+	}
+	
 }

@@ -12,5 +12,7 @@ import com.capstone.schoolmanagement.model.TeacherModulesPerKlass;
 public interface TeacherModulesPerKlassRepo extends CrudRepository<TeacherModulesPerKlass, Long> {
 	
 	public Optional<List<TeacherModulesPerKlass>> findByTeacherId(Long teacherId);
+	
+	public Optional<TeacherModulesPerKlass> findByTeacherIdAndKlassId(Long teacherId, Long klassId);
 
 }

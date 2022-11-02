@@ -5,6 +5,7 @@ import { IsOnlyGuestGuard } from './auth/is-only-guest.guard';
 import { IsOwnerOrStaffGuard } from './auth/is-owner-or-staff.guard';
 import { IsStudentInThisKlassGuard } from './auth/is-student-in-this-klass.guard';
 import { IsStudentGuard } from './auth/is-student.guard';
+import { IsTeacherInThisKlassGuard } from './auth/is-teacher-in-this-klass.guard';
 import { IsTeacherGuard } from './auth/is-teacher.guard';
 
 const routes: Routes = [
@@ -63,6 +64,11 @@ const routes: Routes = [
     canActivate: [IsTeacherGuard],
     loadChildren: () =>
       import('./pages/teacher-dashboard/teacher-dashboard.module').then(m => m.TeacherDashboardModule),
+  },
+  {
+    path: 'teacher_dashboard/:klassId',
+    canActivate: [IsTeacherInThisKlassGuard],
+    loadChildren: () => import('./pages/teacher-dashboard/klass/klass.module').then(m => m.KlassModule),
   },
 ];
 

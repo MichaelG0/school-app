@@ -12,7 +12,7 @@ import { RegisterModalComponent } from './components/register-modal/register-mod
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { FooterComponent } from './components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CircleProgressComponent } from './components/circle-progress/circle-progress.component';
+import { KlassListModule } from './components/klass-list/klass-list.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,8 @@ import { CircleProgressComponent } from './components/circle-progress/circle-pro
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    KlassListModule
   ],
   providers: [
     {

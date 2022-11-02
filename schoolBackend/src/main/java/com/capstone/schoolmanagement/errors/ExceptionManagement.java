@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionManagement {
 	
 	@ExceptionHandler(EntityNotFoundException.class)
-	protected ResponseEntity<String> gestisciEntityNotFoundException(EntityNotFoundException e){
+	protected ResponseEntity<String> manageEntityNotFoundException(EntityNotFoundException e){
 		return new ResponseEntity<String>(e.getMessage() + " --- from ExceptionManagement", HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(EntityExistsException.class)
-	protected ResponseEntity<String> gestisciEntityExistsException(EntityExistsException e) {
+	protected ResponseEntity<String> manageEntityExistsException(EntityExistsException e) {
 		return new ResponseEntity<String>(e.getMessage()  + " --- from ExceptionManagement", HttpStatus.FOUND);
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	protected ResponseEntity<String> manageIllegalArgumentException(IllegalArgumentException e) {
+		return new ResponseEntity<String>(e.getMessage()  + " --- from ExceptionManagement", HttpStatus.BAD_REQUEST);
 	}
 	
 }

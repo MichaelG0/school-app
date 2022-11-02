@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IComplAssignBasicResponseWithAverageGrade } from '../interfaces/icompl-assign-basic-response-with-average-grade';
 import { ICompletedAssignment } from '../interfaces/icompleted-assignment';
 import { ICompletedAssignmentDto } from '../interfaces/icompleted-assignment-dto';
+import { IPageable } from '../interfaces/ipageable';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,13 @@ export class CompletedAssignmentService {
   }
 
   getByStudentAndAssignmentIds(studentId: number, assignmentId: number) {
-    return this.http.get<ICompletedAssignment>(`${this.apiUrl}/${studentId}/${assignmentId}`)
+    return this.http.get<ICompletedAssignment>(`${this.apiUrl}/${studentId}/${assignmentId}`);
   }
+
+  getByKlassAndTeacherIds(klassId: number, teacherId: number, page: number = 0, size: number = 20) {
+    return this.http.get<IPageable<ICompletedAssignment>>(
+      `${this.apiUrl}/class/${klassId}/${teacherId}?page=${page}&size=${size}`
+    );
+  }
+
 }

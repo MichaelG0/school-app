@@ -1,0 +1,94 @@
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { map, Observable, take } from 'rxjs';
+import { IAssignment } from 'src/app/interfaces/iassignment';
+import { IAssignmentDto } from 'src/app/interfaces/iassignment-dto';
+import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
+import { IKlass } from 'src/app/interfaces/iklass';
+import { IPageable } from 'src/app/interfaces/ipageable';
+import { ITeacherMPK } from 'src/app/interfaces/iteacher-mpk';
+import { AssignmentService } from 'src/app/services/assignment.service';
+import { TeacherModulePerKlassService } from 'src/app/services/teacher-module-per-klass.service';
+declare var bootstrap: any;
+
+@Component({
+  selector: 'app-assignment-modal',
+  templateUrl: './assignment-modal.component.html',
+  styleUrls: ['./assignment-modal.component.scss'],
+})
+export class AssignmentModalComponent implements OnInit {
+  @Input() klass!: IKlass;
+  @Input() loggedUser!: IJwtResponse | null;
+  @Input() assignments$!: Observable<IPageable<IAssignment>>;
+  @Output() updatedAss = new EventEmitter<void>();
+  taughtModules$!: Observable<string[]>;
+  assignmentForm!: FormGroup;
+  submissionFailed: boolean = false;
+  loading: boolean = false;
+
+  constructor(
+    private assSrv: AssignmentService,
+    private tcrMPKSrv: TeacherModulePerKlassService,
+    private fb: FormBuilder,
+    private renderer: Renderer2
+  ) {}
+
+  ngOnInit(): void {
+    this.taughtModules$ = this.tcrMPKSrv
+      .getByTeacherAndKlassIds(this.loggedUser!.user.id, this.klass.id)
+      .pipe(map((res: ITeacherMPK) => res.modules));
+    this.setForm();
+  }
+
+  setForm() {
+    this.submissionFailed = false;
+    this.assignmentForm = this.fb.group({
+      title: ['', [Validators.required, Validators.nullValidator]],
+      caption: ['', [Validators.required, Validators.nullValidator]],
+      module: ['', [Validators.required, Validators.nullValidator]],
+      due: ['', [Validators.required, Validators.nullValidator]],
+    });
+  }
+
+  onSubmit(form: FormGroup) {
+    if (!form.valid) return;
+
+    this.loading = true;
+    const data: IAssignmentDto = {
+      title: form.value.title,
+      caption: form.value.caption,
+      moduleName: form.value.module,
+      dueDate: form.value.due,
+      klassId: this.klass.id,
+      teacherId: this.loggedUser!.user.id,
+    };
+
+    this.assSrv
+      .create(data)
+      .pipe(take(1))
+      .subscribe(res => {
+        if (res) {
+          this.updateAssignments();
+          const assMdlEl = document.querySelector('#assignmentModalToggle');
+          const assModal = bootstrap.Modal.getInstance(assMdlEl);
+          assModal.hide();
+          this.successAlert();
+        } else this.submissionFailed = true;
+        this.loading = false;
+      });
+  }
+
+  updateAssignments() {
+    this.updatedAss.emit();
+  }
+
+  successAlert() {
+    const alert = this.renderer.createElement('div');
+    this.renderer.setProperty(
+      alert,
+      'innerHTML',
+      `<div class="alert alert-success" role="alert">Assignment issued successfully</div>`
+    );
+    this.renderer.appendChild(document.body, alert);
+  }
+}

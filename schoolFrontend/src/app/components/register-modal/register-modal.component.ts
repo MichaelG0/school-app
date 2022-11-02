@@ -31,7 +31,7 @@ export class RegisterModalComponent implements OnInit {
     this.btnClicked = false;
     this.btnClicked2 = false;
     this.signUpForm = this.fb.group({
-      email: ['', [Validators.required,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+      email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       surname: ['', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       password: ['', [Validators.required, Validators.minLength(8)]],

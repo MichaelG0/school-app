@@ -1,0 +1,16 @@
+.modal-dialog {
+    max-width: 800px;
+}
+
+.modal-body {
+
+    input,
+    textarea,
+    select {
+        margin: .5rem 0;
+    }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+}

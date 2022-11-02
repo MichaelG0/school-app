@@ -16,20 +16,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CompletedAssignmentResponse {
 	private Long id;
+	private String title;
 	private LocalDate submittedDate;
 	private UserBasicResponse student;
 	private String link;
 	private float grade;
-	private Long assignmentId;
 
 	public static CompletedAssignmentResponse buildCompletedAssignmentResponse(CompletedAssignment assignment) {
 		return CompletedAssignmentResponse.builder()
 				.id(assignment.getId())
+				.title(assignment.getAssignment().getTitle())
 				.submittedDate(assignment.getSubmittedDate())
 				.student(UserBasicResponse.buildBasicUserResponse(assignment.getStudent()))
 				.link(assignment.getLink())
 				.grade(assignment.getGrade())
-				.assignmentId(assignment.getAssignment().getId())
 				.build();
 	}
 	
