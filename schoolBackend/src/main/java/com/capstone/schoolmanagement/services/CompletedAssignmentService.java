@@ -69,7 +69,7 @@ public class CompletedAssignmentService {
 
 	public Page<CompletedAssignmentResponse> getByKlassAndTeacherIds(Long klassId, Long teacherId, Optional<Integer> page,
 			Optional<Integer> size) {
-		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "submittedDate");
+		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.DESC, "submittedDate");
 		Page<CompletedAssignment> assPage = complAssRepo.findByKlassAndTeacherIds(klassId, teacherId, pgb)
 				.orElseThrow(() -> new EntityNotFoundException("Assignments not found"));
 		List<CompletedAssignmentResponse> assList = assPage.stream()

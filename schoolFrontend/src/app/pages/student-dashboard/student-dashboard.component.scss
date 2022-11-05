@@ -63,7 +63,7 @@
             text-overflow: ellipsis;
 
             &:hover {
-                opacity: .7;
+                filter: brightness(.7);
             }
         }
 

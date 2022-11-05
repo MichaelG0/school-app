@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
-import { LoginModalService } from 'src/app/services/login-modal.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class NavComponent implements OnInit, OnDestroy {
   roles!: null | string[];
   rtr!: Router;
 
-  constructor(private usrSrv: UserService, private modalSrv: LoginModalService, private router: Router) {}
+  constructor(private usrSrv: UserService, private modalSrv: ModalService, private router: Router) {}
 
   ngOnInit(): void {
     this.usrSrv.loggedObs$.pipe(takeUntil(this.unsub$)).subscribe(res => {

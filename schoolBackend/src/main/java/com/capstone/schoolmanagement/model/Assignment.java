@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,6 +39,6 @@ public class Assignment {
 	@ManyToOne
 	private Mmodule module;
 	@JsonManagedReference
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assignment")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "assignment", cascade = CascadeType.ALL)
 	private Set<CompletedAssignment> completedAssignments = new HashSet<CompletedAssignment>();	
 }

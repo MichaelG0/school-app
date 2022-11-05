@@ -13,6 +13,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { FooterComponent } from './components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KlassListModule } from './components/klass-list/klass-list.module';
+import { DeleteAssignmentComponent } from './components/delete-assignment/delete-assignment.component';
 
 @NgModule({
   declarations: [

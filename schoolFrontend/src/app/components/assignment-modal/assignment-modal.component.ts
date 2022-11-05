@@ -1,6 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer2,
+} from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable, Subject, take, takeUntil } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
 import { IAssignmentDto } from 'src/app/interfaces/iassignment-dto';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
@@ -8,19 +17,24 @@ import { IKlass } from 'src/app/interfaces/iklass';
 import { IPageable } from 'src/app/interfaces/ipageable';
 import { ITeacherMPK } from 'src/app/interfaces/iteacher-mpk';
 import { AssignmentService } from 'src/app/services/assignment.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { TeacherModulePerKlassService } from 'src/app/services/teacher-module-per-klass.service';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-assignment-modal',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './assignment-modal.component.html',
   styleUrls: ['./assignment-modal.component.scss'],
 })
-export class AssignmentModalComponent implements OnInit {
+export class AssignmentModalComponent implements OnInit, OnDestroy {
+  unsub$ = new Subject<void>();
   @Input() klass!: IKlass;
   @Input() loggedUser!: IJwtResponse | null;
   @Input() assignments$!: Observable<IPageable<IAssignment>>;
   @Output() updatedAss = new EventEmitter<void>();
+  modalTitle$!: Observable<string>;
+  assToUpdate!: IAssignment | null;
   taughtModules$!: Observable<string[]>;
   assignmentForm!: FormGroup;
   submissionFailed: boolean = false;
@@ -29,11 +43,25 @@ export class AssignmentModalComponent implements OnInit {
   constructor(
     private assSrv: AssignmentService,
     private tcrMPKSrv: TeacherModulePerKlassService,
+    private mdlSrv: ModalService,
     private fb: FormBuilder,
     private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
+    this.modalTitle$ = this.mdlSrv.assignment$.pipe(map(res => res.modalTitle));
+    this.mdlSrv.assignment$.pipe(takeUntil(this.unsub$)).subscribe(res => {
+      this.assToUpdate = res.assignment;
+      if (res.assignment) {
+        this.assignmentForm.patchValue({
+          title: this.assToUpdate!.title,
+          caption: this.assToUpdate!.caption,
+          module: this.assToUpdate!.module,
+          due: this.assToUpdate!.dueDate,
+        });
+        this.renderer.setProperty(document.querySelector('#submit-btn'), 'disabled', false);
+      }
+    });
     this.taughtModules$ = this.tcrMPKSrv
       .getByTeacherAndKlassIds(this.loggedUser!.user.id, this.klass.id)
       .pipe(map((res: ITeacherMPK) => res.modules));
@@ -63,19 +91,34 @@ export class AssignmentModalComponent implements OnInit {
       teacherId: this.loggedUser!.user.id,
     };
 
-    this.assSrv
-      .create(data)
-      .pipe(take(1))
-      .subscribe(res => {
-        if (res) {
-          this.updateAssignments();
-          const assMdlEl = document.querySelector('#assignmentModalToggle');
-          const assModal = bootstrap.Modal.getInstance(assMdlEl);
-          assModal.hide();
-          this.successAlert();
-        } else this.submissionFailed = true;
-        this.loading = false;
-      });
+    if (this.assToUpdate)
+      this.assSrv
+        .update(this.assToUpdate.id, data)
+        .pipe(take(1))
+        .subscribe(res => {
+          if (res) {
+            this.updateAssignments();
+            const assMdlEl = document.querySelector('#assignmentModalToggle');
+            const assModal = bootstrap.Modal.getInstance(assMdlEl);
+            assModal.hide();
+            this.successAlert();
+          } else this.submissionFailed = true;
+          this.loading = false;
+        });
+    else
+      this.assSrv
+        .create(data)
+        .pipe(take(1))
+        .subscribe(res => {
+          if (res) {
+            this.updateAssignments();
+            const assMdlEl = document.querySelector('#assignmentModalToggle');
+            const assModal = bootstrap.Modal.getInstance(assMdlEl);
+            assModal.hide();
+            this.successAlert();
+          } else this.submissionFailed = true;
+          this.loading = false;
+        });
   }
 
   updateAssignments() {
@@ -90,5 +133,10 @@ export class AssignmentModalComponent implements OnInit {
       `<div class="alert alert-success" role="alert">Assignment issued successfully</div>`
     );
     this.renderer.appendChild(document.body, alert);
+  }
+
+  ngOnDestroy(): void {
+    this.unsub$.next();
+    this.unsub$.complete();
   }
 }

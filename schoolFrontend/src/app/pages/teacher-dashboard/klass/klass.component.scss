@@ -42,16 +42,34 @@ app-klass-list {
     .ass-item {
         display: flex;
         align-items: center;
-        gap: .5rem;
         margin-bottom: .8rem;
 
-        >a {
+        >a, .issued {
+            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            cursor: default;
 
             &:hover {
-                opacity: .7;
+                filter: brightness(.7);
+
+                &+.icons {
+                    display: block;
+                }
+            }
+        }
+
+        >.icons {
+            display: none;
+            white-space: nowrap;
+
+            &:hover {
+                display: block;
+            }
+
+            a:hover {
+                filter: brightness(.7);
             }
         }
 
@@ -103,6 +121,7 @@ app-klass-list {
     width: 3rem;
     height: 3rem;
     text-shadow: 3px 3px rgba(0, 0, 0, 0.5);
+
     &:hover {
         background-color: #0a58ca;
     }

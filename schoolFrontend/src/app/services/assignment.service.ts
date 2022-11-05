@@ -32,4 +32,13 @@ export class AssignmentService {
       `${this.apiUrl}/class/${klassId}/${teacherId}?page=${page}&size=${size}`
     );
   }
+
+  update(id: number, assignment: IAssignmentDto) {
+    return this.http.put(this.apiUrl + '/' + id, assignment)
+  }
+
+  delete(id: number) {
+    return this.http.delete<void>(this.apiUrl + '/' + id).pipe(catchError(() => of(false)));
+  }
+
 }

@@ -4,14 +4,14 @@
       <app-klass-list [klass]="klass" class="bg-light rounded shadow fake-border"></app-klass-list>
 
       <div id="ass-grid">
-        <!-- ------------------ASS----------------- -->
+        <!-- ------------------ASSIGNMENTS----------------- -->
         <div class="ass-wrap bg-light rounded shadow fake-border">
           <h4 class="my-3 mx-3">Issued Assignments</h4>
           <div *ngIf="assignments$ | async as assignments; else loading" class="mx-3">
             <div class="assignments">
               <div *ngFor="let assignment of assignments.content" class="ass-item text-reset">
                 <input type="checkbox" class="form-check-input" disabled />
-                <a [routerLink]="['/' + klass.id + '/assignment/' + assignment.id]" class="text-dark">
+                <div class="issued text-dark px-2">
                   <div>
                     <p class="text-primary">{{ assignment.module }} -</p>
                     <b> {{ assignment.title }}</b>
@@ -19,8 +19,25 @@
                   <div>
                     <p class="text-muted"><i class="bi bi-flag"></i> Due {{ assignment.dueDate }}</p>
                   </div>
-                </a>
+                </div>
+                <div class="icons py-2">
+                  <a
+                    class="link-info"
+                    (click)="setAssignmentToUpdate('Update Assignment', assignment)"
+                    data-bs-toggle="modal"
+                    href="#assignmentModalToggle"
+                    ><i class="bi bi-pencil-square me-2"></i
+                  ></a>
+                  <a
+                    (click)="setAssignmentToDeleteId(assignment.id)"
+                    data-bs-toggle="modal"
+                    href="#deleteAssignmentModal"
+                    class="link-info"
+                    ><i class="bi bi-trash2"></i
+                  ></a>
+                </div>
               </div>
+              <app-delete-assignment (updatedAss)="updateAll()"></app-delete-assignment>
             </div>
             <div class="d-flex justify-content-center">
               <div class="px-4 pb-1 d-inline-flex align-items-baseline">
@@ -39,13 +56,18 @@
             </div>
           </div>
 
-          <a id="new-ass" data-bs-toggle="modal" href="#assignmentModalToggle"><i class="bi bi-plus"></i></a>
+          <a
+            (click)="setAssignmentToUpdate('New Assignment')"
+            id="new-ass"
+            data-bs-toggle="modal"
+            href="#assignmentModalToggle"
+            ><i class="bi bi-plus"></i
+          ></a>
           <app-assignment-modal
             [klass]="klass"
             [loggedUser]="loggedUser"
             [assignments$]="assignments$"
-            (updatedAss)="update()"
-            class="position-absolute"
+            (updatedAss)="updateAll()"
           ></app-assignment-modal>
 
           <ng-template #loading>
@@ -67,7 +89,7 @@
             </div>
           </ng-template>
         </div>
-        <!-- ------------------ASS----------------- -->
+        <!-- ------------------ASSIGNMENTS----------------- -->
         <!-- ------------------COMPL ASS----------------- -->
         <div class="ass-wrap bg-light rounded shadow fake-border">
           <h4 class="my-3 mx-3">Submitted</h4>

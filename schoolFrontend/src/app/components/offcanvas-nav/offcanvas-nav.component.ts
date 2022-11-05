@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
-import { LoginModalService } from 'src/app/services/login-modal.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
 declare var bootstrap: any;
 
@@ -15,7 +15,7 @@ export class OffcanvasNavComponent implements OnInit, OnDestroy {
   loggedUser!: null | IJwtResponse;
   roles!: null | string[];
 
-  constructor(private usrSrv: UserService, private modalSrv: LoginModalService) {}
+  constructor(private usrSrv: UserService, private modalSrv: ModalService) {}
 
   ngOnInit(): void {
     this.usrSrv.loggedObs$.pipe(takeUntil(this.unsub$)).subscribe(res => {

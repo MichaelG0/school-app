@@ -1,0 +1,27 @@
+<div
+  class="modal fade"
+  id="deleteAssignmentModal"
+  aria-hidden="true"
+  aria-labelledby="deleteAssignmentModalLabel"
+  tabindex="-1"
+>
+  <div id="delete-ass" class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header d-block text-center">
+        <i class="bi bi-exclamation-circle-fill"></i>
+        <h3 class="modal-title mt-3 mb-2" id="deleteAssignmentModalLabel">Delete Assignment?</h3>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="assingmentId$ | async as assId" class="d-flex gap-2">
+          <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button (click)="deleteAssignment(assId)" class="btn btn-danger" type="button">
+            <span *ngIf="!loading">Delete</span>
+            <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

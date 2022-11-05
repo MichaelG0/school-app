@@ -6,10 +6,10 @@
   aria-labelledby="assignmentModalToggleLabel"
   tabindex="-1"
 >
-  <div class="modal-dialog modal-dialog-centered">
+  <div id="new-ass" class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="assignmentModalToggleLabel">New Assignment</h3>
+        <h3 class="modal-title" id="assignmentModalToggleLabel">{{ modalTitle$ | async }}</h3>
       </div>
       <form [formGroup]="assignmentForm" (ngSubmit)="onSubmit(assignmentForm)" class="modal-body">
         <label for="title">Title</label>
@@ -29,9 +29,16 @@
         </select>
         <label for="due">Due</label>
         <input formControlName="due" type="date" id="due" class="form-control" />
-        <small *ngIf="submissionFailed" class="text-danger">All fields must be filled. Date can't be a past date</small>
+        <small *ngIf="submissionFailed" class="text-danger"
+          >All fields must be filled. Date can't be a past date
+        </small>
         <div class="btn-wrp">
-          <button class="btn btn-dark px-4" type="submit" [disabled]="assignmentForm.invalid">
+          <button
+            id="submit-btn"
+            class="btn btn-dark px-4"
+            type="submit"
+            [disabled]="assignmentForm.invalid"
+          >
             <span *ngIf="!loading">Submit</span>
             <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
               <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
 import { ILoginRequest } from 'src/app/interfaces/ilogin-request';
-import { LoginModalService } from 'src/app/services/login-modal.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
 declare var bootstrap: any;
 
@@ -19,7 +19,7 @@ export class LoginModalComponent implements OnInit {
   loginFailed: boolean = false;
   loading: boolean = false;
 
-  constructor(private userSrv: UserService, private modalSrv: LoginModalService, private fb: FormBuilder, private router: Router) {}
+  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.modalProps$ = this.modalSrv.modalProps$;

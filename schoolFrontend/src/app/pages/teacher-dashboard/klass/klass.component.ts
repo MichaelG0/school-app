@@ -9,6 +9,7 @@ import { IPageable } from 'src/app/interfaces/ipageable';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { CompletedAssignmentService } from 'src/app/services/completed-assignment.service';
 import { KlassService } from 'src/app/services/klass.service';
+import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -29,6 +30,7 @@ export class KlassComponent implements OnInit {
     private klsSrv: KlassService,
     private assSrv: AssignmentService,
     private complAssSrv: CompletedAssignmentService,
+    private mdlSrv: ModalService,
     private route: ActivatedRoute
   ) {}
 
@@ -55,9 +57,19 @@ export class KlassComponent implements OnInit {
     this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
   }
 
-  update() {
+  updateAll() {
     this.page = 0
+    this.page2 = 0;
     this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
+    this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
+  }
+
+  setAssignmentToDeleteId(id: number) {
+    this.mdlSrv.setAssignmnetId(id)
+  }
+
+  setAssignmentToUpdate(modalTitle: string, assignment: IAssignment | null = null) {
+    this.mdlSrv.setAssignment(modalTitle, assignment)
   }
 
 }
