@@ -7,13 +7,15 @@ import { KlassListModule } from 'src/app/components/klass-list/klass-list.module
 import { AssignmentModalComponent } from 'src/app/components/assignment-modal/assignment-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DeleteAssignmentComponent } from 'src/app/components/delete-assignment/delete-assignment.component';
+import { GradeModalComponent } from 'src/app/components/grade-modal/grade-modal.component';
 
 
 @NgModule({
   declarations: [
     KlassComponent,
     AssignmentModalComponent,
-    DeleteAssignmentComponent
+    DeleteAssignmentComponent,
+    GradeModalComponent
   ],
   imports: [
     CommonModule,

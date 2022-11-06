@@ -6,12 +6,17 @@
       <div id="ass-grid">
         <!-- ------------------ASSIGNMENTS----------------- -->
         <div class="ass-wrap bg-light rounded shadow fake-border">
-          <h4 class="my-3 mx-3">Issued Assignments</h4>
+          <div class="d-flex justify-content-between align-items-baseline my-3 mx-3">
+            <h4>Issued Assignments</h4>
+            <a (click)="switchPage()" class="color">
+              <small *ngIf="upcoming; else past">Past</small>
+              <ng-template #past><small>Upcoming</small></ng-template>
+            </a>
+          </div>
           <div *ngIf="assignments$ | async as assignments; else loading" class="mx-3">
             <div class="assignments">
               <div *ngFor="let assignment of assignments.content" class="ass-item text-reset">
-                <input type="checkbox" class="form-check-input" disabled />
-                <div class="issued text-dark px-2">
+                <div class="issued text-dark pe-2">
                   <div>
                     <p class="text-primary">{{ assignment.module }} -</p>
                     <b> {{ assignment.title }}</b>
@@ -20,7 +25,7 @@
                     <p class="text-muted"><i class="bi bi-flag"></i> Due {{ assignment.dueDate }}</p>
                   </div>
                 </div>
-                <div class="icons py-2">
+                <div *ngIf="upcoming" class="icons py-2">
                   <a
                     class="link-info"
                     (click)="setAssignmentToUpdate('Update Assignment', assignment)"
@@ -68,6 +73,7 @@
             [loggedUser]="loggedUser"
             [assignments$]="assignments$"
             (updatedAss)="updateAll()"
+            class="position-absolute"
           ></app-assignment-modal>
 
           <ng-template #loading>
@@ -96,8 +102,14 @@
           <div *ngIf="complAssignments$ | async as complAssignments; else loading" class="mx-3">
             <div class="assignments">
               <div *ngFor="let complAss of complAssignments.content" class="ass-item text-reset">
-                <a [routerLink]="['/' + klass.id + '/assignment/' + complAss.id]" class="text-dark">
-                  <div>
+                <input type="checkbox" class="form-check-input" [checked]="complAss.grade" disabled />
+                <a
+                  (click)="setCompletedAssignment(complAss)"
+                  data-bs-toggle="modal"
+                  href="#gradeModalToggle"
+                  class="text-dark px-2"
+                >
+                  <div [class.assignment-assessed]="complAss.grade">
                     <p class="text-primary">{{ complAss.student.name }} {{ complAss.student.surname }} -</p>
                     <b> {{ complAss.title }}</b>
                   </div>
@@ -108,6 +120,7 @@
                   </div>
                 </a>
               </div>
+              <app-grade-modal (updatedAss)="updateAll()"></app-grade-modal>
             </div>
             <div class="d-flex justify-content-center">
               <div class="px-4 pb-1 d-inline-flex align-items-baseline">

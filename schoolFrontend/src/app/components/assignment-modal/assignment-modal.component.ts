@@ -59,7 +59,7 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
           module: this.assToUpdate!.module,
           due: this.assToUpdate!.dueDate,
         });
-        this.renderer.setProperty(document.querySelector('#submit-btn'), 'disabled', false);
+        this.renderer.setProperty(document.querySelector('#ass-btn'), 'disabled', false);
       }
     });
     this.taughtModules$ = this.tcrMPKSrv
@@ -139,4 +139,5 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
     this.unsub$.next();
     this.unsub$.complete();
   }
+
 }

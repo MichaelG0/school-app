@@ -24,6 +24,7 @@ export class StudentDashboardComponent implements OnInit {
   complAssIds!: number[];
   assignments$!: Observable<IPageable<IAssignment>>;
   page: number = 0;
+  upcoming: boolean = true;
 
   constructor(
     private klsSrv: KlassService,
@@ -41,16 +42,23 @@ export class StudentDashboardComponent implements OnInit {
       .subscribe(res => {
         this.klass = res;
         this.attendance$ = this.rgsSrv.getAttendance(this.loggedUser!.user.id, this.klass.id);
-        this.assignments$ = this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5);
+        this.paginate();
       });
     this.completedAssignments$ = this.complAssSrv
       .getBasicByStudentId(this.loggedUser!.user.id)
       .pipe(tap(res => (this.complAssIds = res.completedAssignments.map(x => x.assignmentId))));
   }
 
-  paginate(value: number) {
-    this.page += value;
-    this.assignments$ = this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5);
+  switchPage() {
+    this.upcoming = !this.upcoming;
+    let value = -this.page;
+    this.paginate(value);
   }
-  
+
+  paginate(value: number = 0) {
+    this.page += value;
+    this.assignments$ = this.upcoming
+      ? this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5)
+      : this.assSrv.getPastByKlassId(this.klass.id, this.page, 5);
+  }
 }

@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/assignments")
 @RequiredArgsConstructor
-public class AssignmentsController implements IControllerPage<AssignmentResponse, AssignmentDto> {
+public class AssignmentController implements IControllerPage<AssignmentResponse, AssignmentDto> {
 	private final AssignmentService assSrv;
 
 	@Override
@@ -49,16 +49,28 @@ public class AssignmentsController implements IControllerPage<AssignmentResponse
 		return ResponseEntity.ok(assSrv.getById(id));
 	}
 
-	@GetMapping("/class/{klassId}")
+	@GetMapping("/class/{klassId}/upcoming")
 	public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassId(@PathVariable Long klassId,
 			@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
 		return ResponseEntity.ok(assSrv.getUpcomingByKlassId(klassId, page, size));
 	}
+	
+	@GetMapping("/class/{klassId}/past")
+	public ResponseEntity<Page<AssignmentResponse>> getPastByKlassId(@PathVariable Long klassId,
+			@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+		return ResponseEntity.ok(assSrv.getPastByKlassId(klassId, page, size));
+	}
 
-	@GetMapping("/class/{klassId}/{teacherId}")
-	public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassAndModuleIds(@PathVariable Long klassId,
+	@GetMapping("/class/{klassId}/{teacherId}/upcoming")
+	public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassAndTeacherIds(@PathVariable Long klassId,
 			@PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(assSrv.getUpcomingByKlassAndModuleIds(klassId, teacherId, page, size));
+		return ResponseEntity.ok(assSrv.getUpcomingByKlassAndTeacherIds(klassId, teacherId, page, size));
+	}
+	
+	@GetMapping("/class/{klassId}/{teacherId}/past")
+	public ResponseEntity<Page<AssignmentResponse>> getPastByKlassAndTeacherIds(@PathVariable Long klassId,
+			@PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+		return ResponseEntity.ok(assSrv.getPastByKlassAndTeacherIds(klassId, teacherId, page, size));
 	}
 
 	@Override

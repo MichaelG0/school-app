@@ -23,4 +23,7 @@ public interface AssignmentRepo extends PagingAndSortingRepository<Assignment, L
 	@Query("SELECT a FROM Assignment a WHERE a.klass.id = :klassId AND a.teacher.id = :teacherId AND a.dueDate >= CURRENT_DATE")
 	public Optional<Page<Assignment>> findUpcomingByKlassAndTeacherIds(@Param("klassId") Long klassId, @Param("teacherId") Long teacherId, Pageable pgb);
 	
+	@Query("SELECT a FROM Assignment a WHERE a.klass.id = :klassId AND a.teacher.id = :teacherId AND a.dueDate < CURRENT_DATE")
+	public Optional<Page<Assignment>> findPastByKlassAndTeacherIds(@Param("klassId") Long klassId, @Param("teacherId") Long teacherId, Pageable pgb);
+	
 }

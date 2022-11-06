@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,6 +76,11 @@ public class CompletedAssignmentController
 	public ResponseEntity<Void> delete(Long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@PutMapping("/{id}/assess")
+	public ResponseEntity<CompletedAssignmentResponse> assignGrade(@PathVariable Long id, @RequestBody float grade) {
+		return ResponseEntity.ok(assSrv.assignGrade(id, grade));
 	}
 
 }

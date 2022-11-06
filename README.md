@@ -1,23 +1,23 @@
 # school-app
 You can test the app with different user roles. Just login with any of the credentials below.
 
-### Guest
+#### Guest
 email: guest@guest.com\
 password: guestguest
 
-### Student
+#### Student
 email: student@student.com\
 password: studentstudent
 
-### Staff
+#### Staff
 email: staff@staff.com\
 password: staffstaff
 
-### Teacher
+#### Teacher
 email: teacher@teacher.com\
 password: teacherteacher
 
-### Admin
+#### Admin
 email: admin@admin.com\
 password adminadmin
 

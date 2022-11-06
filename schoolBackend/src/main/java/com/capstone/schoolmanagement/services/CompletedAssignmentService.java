@@ -51,7 +51,7 @@ public class CompletedAssignmentService {
 	public ComplAssignBasicResponseWithAverageGrade getBasicByStudentId(Long studentId) {
 		List<CompletedAssignment> asss = complAssRepo.findByStudentId(studentId)
 				.orElseThrow(
-						() -> new EntityNotFoundException("Completed assignment not found by user id" + studentId));
+						() -> new EntityNotFoundException("Completed Assignment not found by user id" + studentId));
 		OptionalDouble averageOpt = asss.stream()
 				.map(ass -> ass.getGrade())
 				.filter(grade -> grade >= 1)
@@ -67,8 +67,8 @@ public class CompletedAssignmentService {
 				: new CompletedAssignmentResponse();
 	}
 
-	public Page<CompletedAssignmentResponse> getByKlassAndTeacherIds(Long klassId, Long teacherId, Optional<Integer> page,
-			Optional<Integer> size) {
+	public Page<CompletedAssignmentResponse> getByKlassAndTeacherIds(Long klassId, Long teacherId,
+			Optional<Integer> page, Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.DESC, "submittedDate");
 		Page<CompletedAssignment> assPage = complAssRepo.findByKlassAndTeacherIds(klassId, teacherId, pgb)
 				.orElseThrow(() -> new EntityNotFoundException("Assignments not found"));
@@ -76,6 +76,14 @@ public class CompletedAssignmentService {
 				.map(ass -> CompletedAssignmentResponse.buildCompletedAssignmentResponse(ass))
 				.toList();
 		return new PageImpl<CompletedAssignmentResponse>(assList, pgb, assPage.getTotalElements());
+	}
+
+	public CompletedAssignmentResponse assignGrade(Long id, float grade) {
+		CompletedAssignment ass = complAssRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("Completed Assignment not found"));
+		ass.setGrade(grade);
+		complAssRepo.save(ass);
+		return CompletedAssignmentResponse.buildCompletedAssignmentResponse(ass);
 	}
 
 }

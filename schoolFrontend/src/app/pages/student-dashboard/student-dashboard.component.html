@@ -26,7 +26,13 @@
         </div>
 
         <div class="bg-light rounded shadow fake-border">
-          <h4 class="mt-3 mb-4 mx-3">Assignments</h4>
+          <div class="d-flex justify-content-between align-items-baseline my-3 mx-3">
+            <h4>Assignments</h4>
+            <a (click)="switchPage()" class="color">
+              <small *ngIf="upcoming; else past">Past</small>
+              <ng-template #past><small>Upcoming</small></ng-template>
+            </a>
+          </div>
           <div *ngIf="assignments$ | async as assignments; else loading" class="mx-3">
             <div id="assignments">
               <div *ngFor="let assignment of assignments.content" class="ass-item text-reset">

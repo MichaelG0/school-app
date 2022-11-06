@@ -31,4 +31,8 @@ export class CompletedAssignmentService {
     );
   }
 
+  assignGrade(id: number, grade: number) {
+    return this.http.put<ICompletedAssignment>(`${this.apiUrl}/${id}/assess`, grade);
+  }
+  
 }

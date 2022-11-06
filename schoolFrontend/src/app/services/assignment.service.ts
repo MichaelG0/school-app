@@ -23,18 +23,30 @@ export class AssignmentService {
 
   getUpcomingByKlassId(klassId: number, page: number = 0, size: number = 20) {
     return this.http.get<IPageable<IAssignment>>(
-      `${this.apiUrl}/class/${klassId}?page=${page}&size=${size}`
+      `${this.apiUrl}/class/${klassId}/upcoming?page=${page}&size=${size}`
+    );
+  }
+
+  getPastByKlassId(klassId: number, page: number = 0, size: number = 20) {
+    return this.http.get<IPageable<IAssignment>>(
+      `${this.apiUrl}/class/${klassId}/past?page=${page}&size=${size}`
     );
   }
 
   getUpcomingByKlassAndTeacherIds(klassId: number, teacherId: number, page: number = 0, size: number = 20) {
     return this.http.get<IPageable<IAssignment>>(
-      `${this.apiUrl}/class/${klassId}/${teacherId}?page=${page}&size=${size}`
+      `${this.apiUrl}/class/${klassId}/${teacherId}/upcoming?page=${page}&size=${size}`
+    );
+  }
+
+  getPastByKlassAndTeacherIds(klassId: number, teacherId: number, page: number = 0, size: number = 20) {
+    return this.http.get<IPageable<IAssignment>>(
+      `${this.apiUrl}/class/${klassId}/${teacherId}/past?page=${page}&size=${size}`
     );
   }
 
   update(id: number, assignment: IAssignmentDto) {
-    return this.http.put(this.apiUrl + '/' + id, assignment)
+    return this.http.put<IAssignment>(this.apiUrl + '/' + id, assignment)
   }
 
   delete(id: number) {

@@ -1,0 +1,50 @@
+<div
+  (show.bs.modal)="setForm()"
+  class="modal fade"
+  id="gradeModalToggle"
+  aria-hidden="true"
+  aria-labelledby="gradeModalToggleLabel"
+  tabindex="-1"
+>
+  <div id="new-ass" class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="gradeForm" (ngSubmit)="onSubmit(gradeForm)" class="modal-body pt-2">
+        <ng-container *ngIf="complAssignment$ | async as complAss">
+          <div class="modal-header">
+            <h3 class="modal-title text-center" id="gradeModalToggleLabel">
+              {{ complAss.title }}
+            </h3>
+          </div>
+          <h6>Assignment Link</h6>
+          <a [href]="['http://' + complAss.link]" target="_blank" class="d-block mb-3">
+            {{ complAss.link }}
+          </a>
+          <label for="grade">Grade</label>
+          <input
+            formControlName="grade"
+            type="number"
+            id="grade"
+            class="form-control"
+            placeholder="Grade"
+            min="1"
+            max="10"
+            step=".1"
+          />
+        </ng-container>
+        <div class="btn-wrp">
+          <button
+            id="grade-btn"
+            class="submit-btn btn btn-dark px-4"
+            type="submit"
+            [disabled]="gradeForm.invalid"
+          >
+            <span *ngIf="!loading">Submit</span>
+            <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

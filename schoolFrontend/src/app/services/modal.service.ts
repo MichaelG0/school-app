@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IAssignment } from '../interfaces/iassignment';
+import { ICompletedAssignment } from '../interfaces/icompleted-assignment';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,9 @@ export class ModalService {
   });
   assignment$ = this.assignment.asObservable();
 
+  private complAss = new BehaviorSubject<ICompletedAssignment | null>(null);
+  complAss$ = this.complAss.asObservable();
+
   constructor() {}
 
   changeProps(title: string, link: string) {
@@ -34,4 +38,9 @@ export class ModalService {
   setAssignment(modalTitle: string, assignment: IAssignment | null) {
     this.assignment.next({ modalTitle, assignment });
   }
+
+  setCompletedAssignment(complAss: ICompletedAssignment) {
+    this.complAss.next(complAss);
+  }
+  
 }

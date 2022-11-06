@@ -18,12 +18,13 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./klass.component.scss'],
 })
 export class KlassComponent implements OnInit {
-  loggedUser!: IJwtResponse | null
+  loggedUser!: IJwtResponse | null;
   klass!: IKlass;
   assignments$!: Observable<IPageable<IAssignment>>;
   complAssignments$!: Observable<IPageable<ICompletedAssignment>>;
   page: number = 0;
   page2: number = 0;
+  upcoming: boolean = true;
 
   constructor(
     private usrSrv: UserService,
@@ -35,41 +36,52 @@ export class KlassComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => this.loggedUser = res)
+    this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => (this.loggedUser = res));
     const id = parseInt(this.route.snapshot.paramMap.get('klassId')!);
     this.klsSrv
       .getById(id)
       .pipe(take(1))
       .subscribe(res => {
         this.klass = res;
-        this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
-        this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9)
+        this.paginate();
+        this.paginate2();
       });
   }
 
-  paginate(value: number) {
-    this.page += value;
-    this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
+  switchPage() {
+    this.upcoming = !this.upcoming;
+    let value = -this.page;
+    this.paginate(value);
   }
 
-  paginate2(value: number) {
+  paginate(value: number = 0) {
+    this.page += value;
+    this.assignments$ = this.upcoming
+      ? this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9)
+      : this.assSrv.getPastByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
+  }
+
+  paginate2(value: number = 0) {
     this.page2 += value;
     this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
   }
 
   updateAll() {
-    this.page = 0
+    this.page = 0;
     this.page2 = 0;
     this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
     this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
   }
 
   setAssignmentToDeleteId(id: number) {
-    this.mdlSrv.setAssignmnetId(id)
+    this.mdlSrv.setAssignmnetId(id);
   }
 
   setAssignmentToUpdate(modalTitle: string, assignment: IAssignment | null = null) {
-    this.mdlSrv.setAssignment(modalTitle, assignment)
+    this.mdlSrv.setAssignment(modalTitle, assignment);
   }
 
+  setCompletedAssignment(complAss: ICompletedAssignment) {
+    this.mdlSrv.setCompletedAssignment(complAss);
+  }
 }

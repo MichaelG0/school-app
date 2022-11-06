@@ -28,4 +28,11 @@ public class CompletedAssignment {
 	@JsonBackReference
 	@ManyToOne
 	private Assignment assignment;
+
+	public void setGrade(float grade) {
+		if (grade < 1 || grade > 10)
+			throw new IllegalArgumentException("Grade must be a float number between 1 and 10");
+		this.grade = (float) (Math.floor(grade * 10.0) / 10.0);
+	}
+
 }

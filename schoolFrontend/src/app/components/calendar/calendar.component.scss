@@ -40,8 +40,8 @@
         border-radius: 10rem;
         transition: all .3s ease;
 
-        &:hover {
-            background-color: red;
+        &:hover:not(.active-day) {
+            background-color: rgb(255, 110, 110);
             color: white;
         }
     }
