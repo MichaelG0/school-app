@@ -1,4 +1,4 @@
-#student-wrp {
+.klass-member-wrp {
     position: absolute;
     overflow: scroll;
     max-height: 90%;
@@ -6,19 +6,19 @@
     margin: -.5rem 0 .5rem 0
 }
 
-#student {
+.klass-member {
     margin: 1rem;
     display: flex;
     align-items: center;
 
     p,
-    a {
+    .teacher-text-wrp {
         margin: 0 0 0 .5rem;
         word-break: keep-all;
     }
 }
 
-#avatar-box {
+.avatar-box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,6 +32,16 @@
 
     img {
         height: inherit;
+    }
+}
+
+.teacher-text-wrp {
+    display: flex;
+    flex-direction: column;
+
+    .module {
+        color: var(--bs-body-color);
+        font-size: .9rem;
     }
 }
 

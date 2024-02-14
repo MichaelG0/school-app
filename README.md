@@ -21,7 +21,7 @@ password: teacherteacher
 email: admin@admin.com\
 password adminadmin
 
-To check student application, you need to install maildev and run it.\
+To test student application, you need to install maildev and run it.\
 Open Git Bash and run:
 ```
 npm i maildev
