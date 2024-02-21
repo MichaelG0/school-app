@@ -10,17 +10,19 @@ import { UserService } from '../services/user.service';
 export class IsStaffGuard implements CanActivate {
   constructor(private userSrv: UserService, private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.userSrv.loggedObs$.pipe(
       take(1),
       map((res: IJwtResponse | null) => {
         if (res) {
-          const roles = res.user.roles
-          if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_TEACHER') || roles.includes('ROLE_STAFF')) return true;
+          const roles = res.user.roles;
+          if (roles.includes('ROLE_ADMIN') || roles.includes('ROLE_STAFF')) return true;
         }
         return this.router.createUrlTree(['/']);
       })
     );
   }
-  
 }

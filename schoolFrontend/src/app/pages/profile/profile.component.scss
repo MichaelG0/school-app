@@ -1,3 +1,17 @@
-.inner-cont{
-    max-width: 800px;
+.inner-cont {
+  max-width: 800px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 3rem 1rem;
+  margin: 0 -3rem;
+
+  td {
+    vertical-align: top;
+  }
+
+  .head {
+    word-break: keep-all;
+  }
 }

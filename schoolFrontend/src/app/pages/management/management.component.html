@@ -1,11 +1,11 @@
 <ng-container *ngIf="users$ | async as users; else loading">
-  <div class="container">
-    <table class="table table-striped table-hover shadow-sm">
+  <div class="container shadow-sm">
+    <table class="m-0 table table-striped table-hover">
       <thead>
         <tr>
           <th scope="col">Name</th>
           <th *ngFor="let role of roles" scope="col" class="text-center">
-            {{ role }}
+            {{ role.displayName }}
           </th>
         </tr>
       </thead>
@@ -16,27 +16,36 @@
           </th>
           <td *ngFor="let role of roles" class="text-center">
             <input
-              #chekElement
-              (change)="changeRole(user.id, 'ROLE_' + role.toUpperCase(), chekElement)"
-              class="form-check-input"
               type="checkbox"
-              value=""
-              [checked]="user.roles.includes('ROLE_' + role.toUpperCase())"
+              class="form-check-input"
+              (change)="toggleRole(user, role.name)"
+              [checked]="user.roles.includes(role.name)"
+              [disabled]="
+                role.name == 'ROLE_ADMIN' && !(loggedObs$ | async)?.user?.roles?.includes('ROLE_ADMIN')
+              "
             />
           </td>
         </tr>
       </tbody>
     </table>
-  </div>
 
-  <div class="d-flex justify-content-center">
-    <div class="shadow-sm px-4 py-1 mt-2 d-inline-flex align-items-baseline">
-      <small class="text-muted me-4">Page {{ page + 1 }} of {{ users.totalPages }}</small>
+    <div class="py-2 d-flex justify-content-end align-items-baseline">
+      <small class="me-3 text-muted">Page {{ page + 1 }} of {{ users.totalPages }}</small>
+      <button (click)="goToPage(0)" class="btn pag-btn" [disabled]="page + 1 == 1">
+        <i class="bi bi-chevron-bar-left"></i>
+      </button>
       <button (click)="paginate(-1)" class="btn pag-btn" [disabled]="page + 1 == 1">
-        <i class="bi bi-chevron-left me-2"></i>
+        <i class="bi bi-chevron-left"></i>
       </button>
       <button (click)="paginate(1)" class="btn pag-btn" [disabled]="page + 1 == users.totalPages">
-        <i class="bi bi-chevron-right ms-2"></i>
+        <i class="bi bi-chevron-right"></i>
+      </button>
+      <button
+        (click)="goToPage(users.totalPages - 1)"
+        class="btn pag-btn"
+        [disabled]="page + 1 == users.totalPages"
+      >
+        <i class="bi bi-chevron-bar-right"></i>
       </button>
     </div>
   </div>

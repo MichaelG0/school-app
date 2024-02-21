@@ -6,85 +6,89 @@ $my-red: #dc3545;
 
 // ===========================GENERAL===========================
 
+body {
+  background-color: rgba(var(--bs-light-rgb));
+}
+
 .my-body {
-    min-height: calc(100vh - 132px);
+  min-height: calc(100vh - 132px);
 }
 
 a {
-    cursor: pointer !important;
-    text-decoration: none;
+  cursor: pointer !important;
+  text-decoration: none;
 }
 
 b {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 * {
-    word-break: break-word;
+  word-break: break-word;
 }
 
 .inner-cont {
-    max-width: 700px;
+  max-width: 700px;
 }
 
 // ===========================BUTTONS===========================
 
 .btn {
-    &:focus {
-        box-shadow: none !important;
-    }
+  &:focus {
+    box-shadow: none !important;
+  }
 }
 
 .btn-dark {
-    color: #fff !important;
+  color: #fff !important;
+  background-color: #1c1f23 !important;
+  border-color: #1a1e21 !important;
+
+  &:hover {
+    background-color: $l-black !important;
+    border-color: $l-black !important;
+  }
+
+  &:active {
     background-color: #1c1f23 !important;
     border-color: #1a1e21 !important;
-
-    &:hover {
-        background-color: $l-black  !important;
-        border-color: $l-black  !important;
-    }
-
-    &:active {
-        background-color: #1c1f23 !important;
-        border-color: #1a1e21 !important;
-    }
+  }
 }
 
 .btn-outline-dark {
-    &:hover {
-        background-color: #1c1f23 !important;
-        border-color: #1a1e21 !important;
-    }
+  &:hover {
+    background-color: #1c1f23 !important;
+    border-color: #1a1e21 !important;
+  }
 
-    &:active {
-        color: #fff !important;
-        background-color: $l-black  !important;
-        border-color: $l-black  !important;
-    }
+  &:active {
+    color: #fff !important;
+    background-color: $l-black !important;
+    border-color: $l-black !important;
+  }
 }
 
 .btn-link {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 // ===========================PAGINATION===========================
 
 .pag-btn {
-    opacity: .7;
-    border: none;
+  opacity: 0.7;
+  border: none;
 
-    i {
-        font-size: 1rem;
-    }
+  i {
+    font-size: 1rem;
+  }
 
-    &:hover {
-        opacity: 1;
-    }
+  &:hover {
+    opacity: 1;
+  }
 
-    &:disabled {
-        opacity: .3;
-    }
+  &:disabled {
+    opacity: 0.3;
+  }
 }
 
 // ===========================FORM===========================
@@ -92,155 +96,156 @@ b {
 input,
 select,
 textarea {
-    box-shadow: none !important;
-    font-size: .93rem !important;
+  box-shadow: none !important;
+  font-size: 0.93rem !important;
 
-    &:focus:not(.warning, .success) {
-        border-color: #2b30359c !important;
-    }
+  &:focus:not(.warning, .success) {
+    border-color: #2b30359c !important;
+  }
 }
 
 textarea {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 // ===========================MODAL===========================
 
 .warning {
-    border-color: $my-red;
+  border-color: $my-red;
 
-    &:focus {
-        border-color: $my-red;
-    }
+  &:focus {
+    border-color: $my-red;
+  }
 }
 
 .success {
-    border-color: $my-green;
+  border-color: $my-green;
 
-    &:focus {
-        border-color: $my-green;
-    }
+  &:focus {
+    border-color: $my-green;
+  }
 }
 
 .text-success {
-    color: $my-green  !important;
+  color: $my-green !important;
 }
 
 .modal-dialog {
-    max-width: 400px;
-    margin: 0 auto;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .modal-header {
-    border: none;
-    justify-content: center;
+  border: none;
+  justify-content: center;
 }
 
 .modal-body {
-    padding: 20px;
-    text-align: left;
+  padding: 20px;
+  text-align: left;
 
-    input {
-        margin-top: 15px;
+  input {
+    margin-top: 15px;
 
-        &:first-of-type {
-            margin-top: 10px;
-        }
+    &:first-of-type {
+      margin-top: 10px;
     }
+  }
 
-    .btn-wrp {
-        width: 100%;
-        margin: 20px 0;
+  .btn-wrp {
+    width: 100%;
+    margin: 20px 0;
 
-        button {
-            width: 100%;
-        }
+    button {
+      width: 100%;
     }
+  }
 }
 
 .modal-footer {
-    justify-content: center;
+  justify-content: center;
 }
-
 
 // ===========================SPINNER===========================
 
 .spinner {
-    animation: rotate 2s linear infinite;
-    width: 1.6rem;
-    margin-top: -5px;
+  animation: rotate 2s linear infinite;
+  width: 1.6rem;
+  margin-top: -5px;
 
-    .path {
-        stroke: #fff;
-        stroke-linecap: round;
-        animation: dash 1.5s ease-in-out infinite;
-    }
-
+  .path {
+    stroke: #fff;
+    stroke-linecap: round;
+    animation: dash 1.5s ease-in-out infinite;
+  }
 }
 
 .big-spin {
-    width: 4rem;
-    margin-top: 30px;
+  width: 4rem;
+  margin-top: 30px;
 
-    .path {
-        stroke: aqua;
-    }
+  .path {
+    stroke: aqua;
+  }
 }
 
 @keyframes rotate {
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes dash {
-    0% {
-        stroke-dasharray: 1, 150;
-        stroke-dashoffset: 0;
-    }
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
 
-    50% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -35;
-    }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
 
-    100% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -124;
-    }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -124;
+  }
 }
 
 // ===========================ALERT===========================
 
 .alert {
-    position: fixed;
-    top: 4.2rem;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 300px;
-    max-width: 90%;
-    opacity: 0;
-    z-index: 1080;
-    animation: alert 3s;
+  position: fixed;
+  top: 4.2rem;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 300px;
+  max-width: 90%;
+  opacity: 0;
+  z-index: 1080;
+  animation: alert 3s;
 }
 
 @keyframes alert {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    15%, 80% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  15%,
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 // ===========================VIDEO===========================
 
 video {
-    max-width: 100%;
+  max-width: 100%;
 }

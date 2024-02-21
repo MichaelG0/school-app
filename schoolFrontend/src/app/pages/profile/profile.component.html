@@ -1,20 +1,20 @@
 <div class="container">
   <ng-container *ngIf="user$ | async as user; else loading">
     <ng-container *ngIf="loggedObs$ | async as loggedUser">
-      <div class="container inner-cont shadow-sm p-3">
+      <div class="container inner-cont bg-white rounded shadow p-3">
         <h4 class="mb-4">{{ user.name }} {{ user.surname }}</h4>
-        <div class="d-flex">
-          <div class="me-5 text-muted">
-            <p *ngFor="let prop of props">{{ prop }}</p>
-            <p *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">Roles:</p>
-          </div>
-          <div>
-            <p>{{ user.email || '[empty]' }}</p>
-            <p>{{ user.gender || '[empty]' }}</p>
-            <p>{{ user.address || '[empty]' }}</p>
-            <p *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">{{ user.roles || '[empty]' }}</p>
-          </div>
-        </div>
+        <table>
+          <tbody>
+            <tr *ngFor="let prop of props">
+              <td class="head text-muted">{{ prop.displayName }}</td>
+              <td>{{ user[prop.name] || '[empty]' }}</td>
+            </tr>
+            <tr *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">
+              <td class="text-muted">Roles:</td>
+              <td>{{ user.roles || '[empty]' }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </ng-container>
   </ng-container>

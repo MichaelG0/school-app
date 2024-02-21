@@ -10,9 +10,16 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./management.component.scss'],
 })
 export class ManagementComponent implements OnInit {
+  loggedObs$ = this.usrSrv.loggedObs$;
   users$!: Observable<IPageable<IUserResponse>>;
-  roles: string[] = ['Guest', 'Student', 'Staff', 'Teacher', 'Admin'];
-  page: number = 0
+  roles: { name: string; displayName: string }[] = [
+    { name: 'ROLE_GUEST', displayName: 'Guest' },
+    { name: 'ROLE_STUDENT', displayName: 'Student' },
+    { name: 'ROLE_STAFF', displayName: 'Staff' },
+    { name: 'ROLE_TEACHER', displayName: 'Teacher' },
+    { name: 'ROLE_ADMIN', displayName: 'Admin' },
+  ];
+  page = 0;
 
   constructor(private usrSrv: UserService) {}
 
@@ -20,14 +27,18 @@ export class ManagementComponent implements OnInit {
     this.users$ = this.usrSrv.getUsers(this.page, 12);
   }
 
-  changeRole(id: number, roleName: string, element: HTMLInputElement) {
-    if (element.checked) this.usrSrv.addRole(id, roleName).subscribe();
-    else this.usrSrv.removeRole(id, roleName).subscribe();
+  toggleRole(user: IUserResponse, roleName: string) {
+    if (user.roles.includes(roleName)) this.usrSrv.removeRole(user.id, roleName).subscribe();
+    else this.usrSrv.addRole(user.id, roleName).subscribe();
   }
 
   paginate(value: number) {
-    this.page += value
+    this.page += value;
     this.users$ = this.usrSrv.getUsers(this.page, 12);
   }
 
+  goToPage(value: number) {
+    this.page = value;
+    this.users$ = this.usrSrv.getUsers(this.page, 12);
+  }
 }

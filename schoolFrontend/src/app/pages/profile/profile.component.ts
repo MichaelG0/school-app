@@ -11,18 +11,23 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  loggedObs$!: Observable<IJwtResponse | null>
+  loggedObs$!: Observable<IJwtResponse | null>;
   user$!: Observable<IUserResponse>;
-  props: string[] = ['Email:', 'Gender:', 'Address:'];
+  props: { name: keyof IUserResponse; displayName: string }[] = [
+    { name: 'gender', displayName: 'Gender:' },
+    { name: 'bio', displayName: 'Bio:' },
+    { name: 'email', displayName: 'Email:' },
+    { name: 'phone', displayName: 'Phone:' },
+    { name: 'address', displayName: 'Address:' },
+  ];
 
   constructor(private usrSrv: UserService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     const idStr: string = this.route.snapshot.paramMap.get('id')!;
-    const id: number = parseInt(idStr)
+    const id: number = parseInt(idStr);
     this.user$ = this.usrSrv.getUser(id);
 
-    this.loggedObs$ = this.usrSrv.loggedObs$
+    this.loggedObs$ = this.usrSrv.loggedObs$;
   }
-
 }

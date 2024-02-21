@@ -1,11 +1,11 @@
 <ng-container *ngIf="klass; else loading">
   <div class="container">
     <div class="big-wrap">
-      <app-klass-list [klass]="klass" class="bg-light rounded shadow fake-border"></app-klass-list>
+      <app-klass-list [klass]="klass" class="bg-white rounded shadow fake-border"></app-klass-list>
 
       <div id="ass-grid">
         <!-- ------------------ASSIGNMENTS----------------- -->
-        <div class="ass-wrap bg-light rounded shadow fake-border">
+        <div class="ass-wrap bg-white rounded shadow fake-border">
           <div class="d-flex justify-content-between align-items-baseline my-3 mx-3">
             <h4>Issued Assignments</h4>
             <a (click)="switchPage()" class="color">
@@ -97,7 +97,7 @@
         </div>
         <!-- ------------------ASSIGNMENTS----------------- -->
         <!-- ------------------COMPL ASS----------------- -->
-        <div class="ass-wrap bg-light rounded shadow fake-border">
+        <div class="ass-wrap bg-white rounded shadow fake-border">
           <h4 class="my-3 mx-3">Submitted</h4>
           <div *ngIf="complAssignments$ | async as complAssignments; else loading" class="mx-3">
             <div class="assignments">

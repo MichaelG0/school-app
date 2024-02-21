@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 import { IsOnlyGuestGuard } from './auth/is-only-guest.guard';
 import { IsOwnerOrStaffGuard } from './auth/is-owner-or-staff.guard';
+import { IsStaffGuard } from './auth/is-staff.guard';
 import { IsStudentInThisKlassGuard } from './auth/is-student-in-this-klass.guard';
 import { IsStudentGuard } from './auth/is-student.guard';
 import { IsTeacherInThisKlassGuard } from './auth/is-teacher-in-this-klass.guard';
@@ -28,6 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'management',
+    canActivate: [IsStaffGuard],
     loadChildren: () => import('./pages/management/management.module').then(m => m.ManagementModule),
   },
   {
