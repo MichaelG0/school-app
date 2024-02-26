@@ -1,13 +1,15 @@
-import { transition, style, animate, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
   QueryList,
   Renderer2,
+  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -16,28 +18,36 @@ import { IKlass } from 'src/app/interfaces/iklass';
 import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
 import { DatesConverterService } from 'src/app/services/dates-converter.service';
 
-const rollTra = transition(':enter', [
-  //
-  style({ opacity: 0 }),
-  animate('1s ease', style({ opacity: 1 })),
-]);
-const roll = trigger('roll', [rollTra]);
-
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
-  animations: [roll],
+  animations: [
+    trigger('slideIn', [
+      transition(
+        ':enter',
+        [
+          style({ transform: 'translateX({{ translateX }}%)' }),
+          animate('300ms ease-in-out', style({ transform: 'translateX(0)' })),
+        ],
+        { params: { translateX: 0 } }
+      ),
+    ]),
+  ],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
-  unsubscribe$ = new Subject<void>();
-  scheduleSubscription?: Subscription;
   @Input() klass!: IKlass;
+  @ViewChild('wrapp') readonly wrapp!: ElementRef<HTMLElement>;
+  @ViewChild('roller') readonly roller!: ElementRef<HTMLElement>;
+  @ViewChildren('sched') readonly scheDivs?: QueryList<ElementRef>;
+  readonly unsub$ = new Subject<void>();
+  scheduleSubscription?: Subscription;
   course!: ICourseDatesConverted;
   schedule: IWeeklyScheduleItem[] = [];
   days!: Date[];
-  daysLength: number = 15
-  hours = [
+  readonly daysLength = 15; // keep this an odd number
+  readonly selectedDayIndex = this.daysLength / 2 - 0.5;
+  readonly hours = [
     '8 am',
     '9 am',
     '10 am',
@@ -51,91 +61,176 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     '6 pm',
     '7 pm',
   ];
-  @ViewChildren('day') dayDivs!: QueryList<ElementRef>;
-  @ViewChildren('sched') scheDivs?: QueryList<ElementRef>;
+  translateX = 0;
+  showMonthDropdown = false;
 
   constructor(private renderer: Renderer2, private datesConv: DatesConverterService) {}
 
   ngOnInit(): void {
     this.course = this.datesConv.convertDates(this.klass.course);
     // console.log(this.klass);
-    this.buildWeek();
+    this.buildCalendar();
     this.makeSchedule();
   }
 
   ngAfterViewInit(): void {
-    let dayNum = Math.trunc(this.daysLength/2)
-    this.renderer.addClass(this.dayDivs.get(dayNum)!.nativeElement, 'active-day');
-    this.dayDivs.changes.pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
-      this.renderer.addClass(res.get(dayNum)!.nativeElement, 'active-day');
-    });
     this.styleSchedule();
-    this.styleScheduleSubs();
+    this.scheduleSubscription = this.scheDivs!.changes.pipe(takeUntil(this.unsub$)).subscribe(() => {
+      this.styleSchedule();
+    });
   }
 
-  buildWeek(date: Date = new Date()) {
-    let week: Date[] = [];
-    let daysOffset = Math.trunc(this.daysLength/2)
+  private buildCalendar(date: Date = new Date()) {
+    let days: Date[] = [];
     for (let i = 0; i < this.daysLength; i++) {
-      week[i] = this.addDays(date, i - daysOffset);
+      days[i] = this.addDays(date, i - this.selectedDayIndex);
     }
-    this.days = week;
+    this.days = days;
   }
 
-  makeSchedule() {
-    const weekDay = this.days[Math.trunc(this.daysLength/2)].toLocaleDateString('en-us', { weekday: 'short' }).toUpperCase();
-    const schedule = this.klass.weeklySchedule.filter(x => x.weekDay == weekDay);
-    this.schedule = schedule;
+  private makeSchedule() {
+    const weekDay = this.days[this.selectedDayIndex]
+      .toLocaleDateString('en-us', { weekday: 'short' })
+      .toUpperCase();
+    this.schedule = this.klass.weeklySchedule.filter(x => x.weekDay == weekDay);
   }
 
-  styleSchedule() {
-    if (this.scheDivs && this.scheDivs.length > 0) {
+  private styleSchedule() {
+    if (this.scheDivs?.length) {
       let index = 0;
       for (let scheItem of this.schedule) {
         let startTime: number = parseInt(scheItem.startTime.substring(0, 2));
         let offset: number = startTime - 8;
         let height: number = parseInt(scheItem.endTime.substring(0, 2)) - startTime;
-        let el = this.scheDivs!.get(index)?.nativeElement
+        let el = this.scheDivs!.get(index)?.nativeElement;
         this.renderer.setStyle(el, 'margin-top', 42.4 * offset + 'px');
         this.renderer.setStyle(el, 'height', 42.9 * height + 'px');
-        this.renderer.setStyle(el, 'border', '4px solid ' + scheItem.module.renderColor)
+        this.renderer.setStyle(el, 'border', '4px solid ' + scheItem.module.renderColor);
         index++;
       }
     }
   }
 
-  styleScheduleSubs() {
-    if (!this.scheduleSubscription) {
-      this.scheduleSubscription = this.scheDivs!.changes.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
-        this.styleSchedule();
-      });
-    }
-  }
-
-  selectDay(event: Event, date: Date) {
-    this.buildWeek(date);
+  selectDayByClicking(dayIndex: number) {
+    this.buildCalendar(this.days[dayIndex]);
     this.makeSchedule();
-    this.styleScheduleSubs();
-    this.dayDivs.forEach(div => this.renderer.removeClass(div.nativeElement, 'active-day'));
-    this.renderer.addClass(event.target, 'active-day');
+    this.translateX = 143 * (dayIndex - this.selectedDayIndex);
   }
 
-  addDays(date: Date, days: number) {
-    let result = new Date(date);
+  private selectDayByDragging() {
+    const dayToPass = this.addDays(this.days[this.selectedDayIndex], this.dayIndex - this.selectedDayIndex);
+    this.buildCalendar(dayToPass);
+    this.makeSchedule();
+    let tempTransX =
+      (-this.offsetX +
+        (this.daysLength - 1) * 21.4 -
+        (this.daysLength * 42.8 - this.wrapp.nativeElement.offsetWidth) / 2) %
+      42.8;
+    tempTransX = ((tempTransX + 21.4) % 42.8) - 21.4;
+    this.translateX = -tempTransX * 3;
+  }
+
+  doCloseDropdown(date: Date | void) {
+    if (date) {
+      const datesDifference = date.getTime() - this.getSelectedDay().getTime();
+
+      if (datesDifference == 0) {
+        this.translateX = 0;
+      } else if (datesDifference > 0) {
+        this.translateX = 143 * this.selectedDayIndex - this.wrapp.nativeElement.offsetWidth * 1.5;
+      } else {
+        this.translateX = -143 * this.selectedDayIndex + this.wrapp.nativeElement.offsetWidth * 1.5;
+      }
+
+      this.buildCalendar(date);
+      this.makeSchedule();
+    }
+
+    this.showMonthDropdown = false;
+  }
+
+  private addDays(date: Date, days: number): Date {
+    const result = new Date(date);
     result.setDate(result.getDate() + days);
     return result;
   }
 
-  lessonCondition() {
-    let dayNum = Math.trunc(this.daysLength/2)
-    return (
-      this.days[dayNum] >= this.course.startDate &&
-      this.days[dayNum] <= this.course.endDate
-    );
+  ngOnDestroy(): void {
+    this.unsub$.next();
+    this.unsub$.complete();
   }
 
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+  //======================== PIPED METHODS ========================
+
+  getSelectedDay = (): Date => {
+    return this.days[this.selectedDayIndex];
+  };
+
+  getDayName = (day: Date): string => {
+    return day.toLocaleDateString('en-us', { weekday: 'short' });
+  };
+
+  getDayNumber = (day: Date): number => {
+    return day.getDate();
+  };
+
+  lessonCondition = (): boolean => {
+    return (
+      this.days[this.selectedDayIndex] >= this.course.startDate &&
+      this.days[this.selectedDayIndex] <= this.course.endDate
+    );
+  };
+
+  isActiveDay = (dayIndex: number): boolean => {
+    return dayIndex == this.selectedDayIndex;
+  };
+
+  //======================== DRAG ========================
+
+  isDragging = false;
+  dragged = false;
+  initialX = 0;
+  offsetX = 0;
+  dayIndex = this.daysLength / 2 - 0.5;
+
+  onDragStart(event: MouseEvent) {
+    this.isDragging = true;
+    this.dragged = false;
+    this.initialX = event.clientX - this.roller.nativeElement.offsetLeft;
+    this.translateX = 0;
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onDragging(event: MouseEvent) {
+    if (this.isDragging) {
+      this.dragged = true;
+
+      if (this.dayIndex < this.selectedDayIndex || this.dayIndex > this.selectedDayIndex) {
+        const dayToPass = this.addDays(
+          this.days[this.selectedDayIndex],
+          this.dayIndex - this.selectedDayIndex
+        );
+        this.buildCalendar(dayToPass);
+        this.initialX -= 42.8 * (this.dayIndex - this.selectedDayIndex);
+      }
+
+      this.offsetX = event.clientX - this.initialX;
+      this.renderer.setStyle(this.roller.nativeElement, 'left', this.offsetX + 'px');
+      this.dayIndex = Math.round(
+        -this.offsetX / 42.8 +
+          (this.daysLength - 1) / 2 -
+          (this.daysLength - this.wrapp.nativeElement.offsetWidth / 42.8) / 2
+      );
+    }
+  }
+
+  @HostListener('document:mouseup')
+  onDragEnd() {
+    if (this.dragged) {
+      this.renderer.setStyle(this.roller.nativeElement, 'left', 'auto');
+      this.selectDayByDragging();
+    }
+    this.isDragging = false;
+    this.dragged = false;
   }
 }

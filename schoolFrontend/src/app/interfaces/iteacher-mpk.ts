@@ -3,4 +3,5 @@ export interface ITeacherMPK {
   klassId: number;
   klassCourse: string;
   modules: string[];
+  renderColor: string;
 }

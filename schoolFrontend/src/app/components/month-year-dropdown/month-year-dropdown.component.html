@@ -1,0 +1,16 @@
+<div class="dropdown-header text-muted">
+  <i class="bi bi-chevron-left" (click)="prevYear()"></i>
+  {{ selectedYear }}
+  <i class="bi bi-chevron-right" (click)="nextYear()"></i>
+</div>
+
+<div class="dropdown-body">
+  <button
+    *ngFor="let month of months"
+    class="dropdown-item"
+    [class.active-month]="month | pureFn : isSelectedMonth"
+    (click)="selectMonth(month)"
+  >
+    {{ month.toLocaleDateString('en-us', { month: 'long' }) }}
+  </button>
+</div>

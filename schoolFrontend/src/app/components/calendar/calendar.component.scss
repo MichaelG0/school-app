@@ -1,88 +1,107 @@
 #wrapp {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 #head {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    position: relative;
-    height: 148px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  height: 148px;
 
-    h4,
-    h6 {
-        white-space: nowrap;
-    }
+  h4,
+  h6 {
+    white-space: nowrap;
+  }
 
-    #roller {
-        position: absolute;
-        align-self: center;
-        top: 70px;
-    }
+  #month-btn {
+    cursor: pointer;
+  }
+
+  #active-day-bg {
+    position: absolute;
+    top: 102px;
+    align-self: center;
+    padding: 19px;
+    border-radius: 10rem;
+    background-color: var(--primary-medium);
+  }
+
+  #roller {
+    position: absolute;
+    align-self: center;
+    top: 70px;
+  }
 }
 
 .my-flex {
-    display: flex;
-    margin: .5rem 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0;
 
-    >div,
-    >.btn {
-        font-size: .8rem;
-        text-align: center;
-        width: 30px;
-        margin: 0 .4rem;
-        border: none;
+  > div,
+  > .btn {
+    font-size: 0.8rem;
+    text-align: center;
+    width: 30px;
+    margin: 0 0.4rem;
+    border: none;
+  }
+
+  > .btn {
+    padding: 0.35rem;
+    margin-bottom: 0.5rem;
+    border-radius: 10rem;
+    z-index: 1;
+    transition: all 0.1s ease-out;
+
+    &:hover:not(.active-day) {
+      background-color: var(--primary-light);
     }
+  }
+}
 
-    >.btn {
-        padding: .35rem;
-        margin-bottom: .5rem;
-        border-radius: 10rem;
-        transition: all .3s ease;
+.my-flex.day-names {
+  user-select: none;
+  cursor: grab;
 
-        &:hover:not(.active-day) {
-            background-color: rgb(255, 110, 110);
-            color: white;
-        }
-    }
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .my-flex.flex-column {
-    margin-top: 0;
+  margin-top: 0;
 
-    >div {
-        text-align: end;
-        border-right: 2px dotted lightgray;
-        font-size: .7rem;
-        width: 50px;
-        padding: .8rem;
-        padding-left: 0;
-        margin-right: 0;
-    }
+  > div {
+    text-align: end;
+    border-right: 2px dotted lightgray;
+    font-size: 0.7rem;
+    width: 50px;
+    padding: 0.8rem;
+    padding-left: 0;
+    margin-right: 0;
+  }
 }
 
 .schedule-flex {
-    display: flex;
-    border-top: 2px solid lightgray;
+  display: flex;
+  border-top: 2px solid lightgray;
 }
 
 #schedule {
-    position: relative;
-    margin-top: 21.5px;
+  position: relative;
+  margin-top: 21.5px;
+  width: 100%;
+
+  > div {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-
-    >div {
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        background-color: rgba(0, 255, 255, 0.25);
-        border: 4px solid aqua;
-    }
-}
-
-.active-day {
-    background-color: red;
-    color: white;
+    background-color: rgba(0, 255, 255, 0.25);
+    border: 4px solid aqua;
+  }
 }

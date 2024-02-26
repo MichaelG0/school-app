@@ -1,24 +1,27 @@
 .inner-cont {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: 900px;
-    gap: 1.5rem;
-    >div{
-        flex: 1 1 66%;
-    }
-    .border-end{
-        flex: 0 1 0;
-    }
-    >h2{
-        white-space: nowrap;
-    }
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 900px;
+  gap: 1.5rem;
+
+  > div {
+    flex: 1 1 66%;
+  }
+
+  .border-end {
+    flex: 0 1 0;
+  }
+
+  > h2 {
+    white-space: nowrap;
+  }
 }
 
 .tcr-mpk {
-    cursor: pointer;
-    transition: all .3s ease-out;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
 
-    &:hover {
-        transform: scale(1.01);
-    }
+  &:hover {
+    transform: scale(1.01);
+  }
 }

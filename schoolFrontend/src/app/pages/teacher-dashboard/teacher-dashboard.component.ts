@@ -12,15 +12,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class TeacherDashboardComponent implements OnInit {
   loggedUser!: IJwtResponse | null;
-  teacherMPKList$!: Observable<ITeacherMPK[]>
+  teacherMPKList$!: Observable<ITeacherMPK[]>;
 
   constructor(private usrSrv: UserService, private tcrMPKSrv: TeacherModulePerKlassService) {}
 
   ngOnInit(): void {
     this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => {
-      this.loggedUser = res
-      this.teacherMPKList$ = this.tcrMPKSrv.getByTeacherId(res!.user.id)
-    })
+      this.loggedUser = res;
+      this.teacherMPKList$ = this.tcrMPKSrv.getByTeacherId(res!.user.id);
+    });
   }
-
 }

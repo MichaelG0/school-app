@@ -1,8 +1,12 @@
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
-$l-black: #3c3f42;
-$my-green: #198754;
-$my-red: #dc3545;
+:root {
+  --l-black: #3c3f42;
+  --my-green: #198754;
+  --my-red: #dc3545;
+  --primary-medium: #a6c8e6;
+  --primary-light: #e8f1f9;
+}
 
 // ===========================GENERAL===========================
 
@@ -45,8 +49,8 @@ b {
   border-color: #1a1e21 !important;
 
   &:hover {
-    background-color: $l-black !important;
-    border-color: $l-black !important;
+    background-color: var(--l-black) !important;
+    border-color: var(--l-black) !important;
   }
 
   &:active {
@@ -63,8 +67,8 @@ b {
 
   &:active {
     color: #fff !important;
-    background-color: $l-black !important;
-    border-color: $l-black !important;
+    background-color: var(--l-black) !important;
+    border-color: var(--l-black) !important;
   }
 }
 
@@ -111,23 +115,23 @@ textarea {
 // ===========================MODAL===========================
 
 .warning {
-  border-color: $my-red;
+  border-color: var(--my-red);
 
   &:focus {
-    border-color: $my-red;
+    border-color: var(--my-red);
   }
 }
 
 .success {
-  border-color: $my-green;
+  border-color: var(--my-green);
 
   &:focus {
-    border-color: $my-green;
+    border-color: var(--my-green);
   }
 }
 
 .text-success {
-  color: $my-green !important;
+  color: var(--my-green) !important;
 }
 
 .modal-dialog {

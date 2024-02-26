@@ -2,7 +2,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginModalComponent } from './components/login-modal/login-modal.component';
@@ -13,6 +12,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { FooterComponent } from './components/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KlassListModule } from './components/klass-list/klass-list.module';
+import { PureFunctionModule } from './pipes/pure-function/pure-function.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { KlassListModule } from './components/klass-list/klass-list.module';
     NavComponent,
     OffcanvasNavComponent,
     RegisterModalComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,15 +29,16 @@ import { KlassListModule } from './components/klass-list/klass-list.module';
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    KlassListModule
+    KlassListModule,
+    PureFunctionModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

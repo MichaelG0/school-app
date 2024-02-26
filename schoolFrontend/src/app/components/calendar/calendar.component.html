@@ -1,18 +1,46 @@
-<div id="wrapp">
+<div #wrapp id="wrapp">
   <div id="head">
     <div class="my-flex align-items-baseline justify-content-between mt-3 mb-4 mx-3">
       <h4>Calendar</h4>
-      <h6>{{ days[3].toLocaleDateString('en-us', { month: 'long', year: 'numeric' }) }}</h6>
+      <h6 id="month-btn" (click)="showMonthDropdown = !showMonthDropdown">
+        {{
+          (days | pureFn : getSelectedDay).toLocaleDateString('en-us', {
+            month: 'long',
+            year: 'numeric'
+          })
+        }}
+        <i class="bi bi-caret-down-fill"></i>
+      </h6>
+      <app-month-year-dropdown
+        *ngIf="showMonthDropdown"
+        [selectedDay]="days | pureFn : getSelectedDay"
+        (closeDropdown)="doCloseDropdown($event)"
+      ></app-month-year-dropdown>
     </div>
-    <div id="roller" >
-      <div class="my-flex">
-        <div @roll *ngFor="let day of days" class="text-muted" scope="col">
-          {{ day.toLocaleDateString('en-us', { weekday: 'short' }) }}
+
+    <div id="active-day-bg"></div>
+
+    <div #roller id="roller">
+      <div class="my-flex day-names" (mousedown)="onDragStart($event)">
+        <div
+          [@slideIn]="{ value: true, params: { translateX: translateX } }"
+          *ngFor="let day of days"
+          class="text-muted"
+          scope="col"
+        >
+          {{ day | pureFn : getDayName }}
         </div>
       </div>
       <div class="my-flex">
-        <button #day @roll (click)="selectDay($event, day)" *ngFor="let day of days" class="btn" scope="col">
-          {{ day.getDate() }}
+        <button
+          [@slideIn]="{ value: true, params: { translateX: translateX } }"
+          *ngFor="let day of days; let i = index"
+          class="btn"
+          scope="col"
+          [class.active-day]="i | pureFn : isActiveDay"
+          (click)="selectDayByClicking(i)"
+        >
+          <span>{{ day | pureFn : getDayNumber }}</span>
         </button>
       </div>
     </div>
@@ -23,7 +51,7 @@
       <div *ngFor="let hour of hours" class="text-muted">{{ hour }}</div>
     </div>
 
-    <div *ngIf="lessonCondition()" id="schedule">
+    <div *ngIf="days | pureFn : lessonCondition" id="schedule">
       <div #sched *ngFor="let scheItem of schedule">
         {{ scheItem.module.name }}
       </div>
