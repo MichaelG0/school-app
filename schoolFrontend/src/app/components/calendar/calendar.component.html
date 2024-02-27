@@ -21,7 +21,7 @@
     <div id="active-day-bg"></div>
 
     <div #roller id="roller">
-      <div class="my-flex day-names" (mousedown)="onDragStart($event)">
+      <div class="my-flex day-names" (mousedown)="onDragStart($event)" (touchstart)="onDragStart($event)">
         <div
           [@slideIn]="{ value: true, params: { translateX: translateX } }"
           *ngFor="let day of days"

@@ -193,15 +193,17 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   offsetX = 0;
   dayIndex = this.daysLength / 2 - 0.5;
 
-  onDragStart(event: MouseEvent) {
+  onDragStart(event: MouseEvent | TouchEvent) {
     this.isDragging = true;
     this.dragged = false;
-    this.initialX = event.clientX - this.roller.nativeElement.offsetLeft;
+    const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+    this.initialX = clientX - this.roller.nativeElement.offsetLeft;
     this.translateX = 0;
   }
 
   @HostListener('document:mousemove', ['$event'])
-  onDragging(event: MouseEvent) {
+  @HostListener('document:touchmove', ['$event'])
+  onDragging(event: MouseEvent | TouchEvent) {
     if (this.isDragging) {
       this.dragged = true;
 
@@ -214,7 +216,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initialX -= 42.8 * (this.dayIndex - this.selectedDayIndex);
       }
 
-      this.offsetX = event.clientX - this.initialX;
+      const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
+      this.offsetX = clientX - this.initialX;
       this.renderer.setStyle(this.roller.nativeElement, 'left', this.offsetX + 'px');
       this.dayIndex = Math.round(
         -this.offsetX / 42.8 +
@@ -225,6 +228,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('document:mouseup')
+  @HostListener('document:touchend')
   onDragEnd() {
     if (this.dragged) {
       this.renderer.setStyle(this.roller.nativeElement, 'left', 'auto');

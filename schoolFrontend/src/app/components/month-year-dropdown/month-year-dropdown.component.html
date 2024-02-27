@@ -11,6 +11,6 @@
     [class.active-month]="month | pureFn : isSelectedMonth"
     (click)="selectMonth(month)"
   >
-    {{ month.toLocaleDateString('en-us', { month: 'long' }) }}
+    {{ month | pureFn : getMonthName }}
   </button>
 </div>

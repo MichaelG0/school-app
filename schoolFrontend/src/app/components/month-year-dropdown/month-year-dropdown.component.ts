@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnInit,
-  Output,
-  inject,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-month-year-dropdown',
@@ -43,15 +34,8 @@ export class MonthYearDropdownComponent implements OnInit {
     this.months = Array.from({ length: 12 }, (_, i) => new Date(this.selectedYear, i, 1));
   }
 
-  isSelectedMonth = (month: Date): boolean => {
-    return (
-      month.getMonth() == this.selectedDay.getMonth() &&
-      month.getFullYear() == this.selectedDay.getFullYear()
-    );
-  };
-
   @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
+  closeDropdownOnClickOutside(event: MouseEvent) {
     if (this.isOpenClick) {
       this.isOpenClick = false;
       return;
@@ -62,4 +46,17 @@ export class MonthYearDropdownComponent implements OnInit {
       this.closeDropdown.emit();
     }
   }
+
+  //======================== PIPED METHODS ========================
+
+  isSelectedMonth = (month: Date): boolean => {
+    return (
+      month.getMonth() == this.selectedDay.getMonth() &&
+      month.getFullYear() == this.selectedDay.getFullYear()
+    );
+  };
+
+  getMonthName = (month: Date): string => {
+    return month.toLocaleDateString('en-us', { month: 'long' });
+  };
 }
