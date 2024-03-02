@@ -13,10 +13,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { ICourseDatesConverted } from 'src/app/interfaces/icourse-dates-converted';
-import { IKlass } from 'src/app/interfaces/iklass';
-import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
-import { DatesConverterService } from 'src/app/services/dates-converter.service';
+import { ISuperWeeklyScheduleItem } from 'src/app/interfaces/isuper-weekly-schedule-item';
 
 @Component({
   selector: 'app-calendar',
@@ -36,14 +33,13 @@ import { DatesConverterService } from 'src/app/services/dates-converter.service'
   ],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() klass!: IKlass;
+  @Input() weeklySchedule: ISuperWeeklyScheduleItem[] = [];
   @ViewChild('wrapp') readonly wrapp!: ElementRef<HTMLElement>;
   @ViewChild('roller') readonly roller!: ElementRef<HTMLElement>;
-  @ViewChildren('sched') readonly scheDivs?: QueryList<ElementRef>;
+  @ViewChildren('sched') readonly scheDivs: QueryList<ElementRef<HTMLElement>> = new QueryList();
   readonly unsub$ = new Subject<void>();
   scheduleSubscription?: Subscription;
-  course!: ICourseDatesConverted;
-  schedule: IWeeklyScheduleItem[] = [];
+  daySchedule: ISuperWeeklyScheduleItem[] = [];
   days!: Date[];
   readonly daysLength = 15; // keep this an odd number
   readonly selectedDayIndex = this.daysLength / 2 - 0.5;
@@ -64,18 +60,16 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   translateX = 0;
   showMonthDropdown = false;
 
-  constructor(private renderer: Renderer2, private datesConv: DatesConverterService) {}
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    this.course = this.datesConv.convertDates(this.klass.course);
-    // console.log(this.klass);
     this.buildCalendar();
     this.makeSchedule();
   }
 
   ngAfterViewInit(): void {
     this.styleSchedule();
-    this.scheduleSubscription = this.scheDivs!.changes.pipe(takeUntil(this.unsub$)).subscribe(() => {
+    this.scheduleSubscription = this.scheDivs.changes.pipe(takeUntil(this.unsub$)).subscribe(() => {
       this.styleSchedule();
     });
   }
@@ -92,21 +86,25 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     const weekDay = this.days[this.selectedDayIndex]
       .toLocaleDateString('en-us', { weekday: 'short' })
       .toUpperCase();
-    this.schedule = this.klass.weeklySchedule.filter(x => x.weekDay == weekDay);
+    this.daySchedule = this.weeklySchedule.filter(x => x.weekDay == weekDay);
   }
 
   private styleSchedule() {
-    if (this.scheDivs?.length) {
-      let index = 0;
-      for (let scheItem of this.schedule) {
-        let startTime: number = parseInt(scheItem.startTime.substring(0, 2));
-        let offset: number = startTime - 8;
-        let height: number = parseInt(scheItem.endTime.substring(0, 2)) - startTime;
-        let el = this.scheDivs!.get(index)?.nativeElement;
-        this.renderer.setStyle(el, 'margin-top', 42.4 * offset + 'px');
-        this.renderer.setStyle(el, 'height', 42.9 * height + 'px');
-        this.renderer.setStyle(el, 'border', '4px solid ' + scheItem.module.renderColor);
-        index++;
+    if (this.scheDivs.length) {
+      console.log(this.daySchedule);
+
+      for (let i = 0; i < this.daySchedule.length; i++) {
+        const startTime = parseInt(this.daySchedule[i].startTime.substring(0, 2));
+        const offset = startTime - 8;
+        const height = parseInt(this.daySchedule[i].endTime.substring(0, 2)) - startTime;
+        const el = this.scheDivs.get(i)?.nativeElement;
+        if (el) {
+          this.renderer.setStyle(el, 'margin-top', 42.4 * offset + 'px');
+          this.renderer.setStyle(el, 'height', 42.9 * height + 'px');
+          this.renderer.setStyle(el, 'border', '4px solid ' + this.daySchedule[i].module.renderColor);
+          const gap = el.offsetHeight < 80 ? 0 : 1;
+          this.renderer.setStyle(el, 'gap', gap + 'rem');
+        }
       }
     }
   }
@@ -174,10 +172,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     return day.getDate();
   };
 
-  lessonCondition = (): boolean => {
+  lessonCondition = (days: Date[] /* pipe trigger */, scheduleItem: ISuperWeeklyScheduleItem): boolean => {
     return (
-      this.days[this.selectedDayIndex] >= this.course.startDate &&
-      this.days[this.selectedDayIndex] <= this.course.endDate
+      this.days[this.selectedDayIndex] < scheduleItem.course.startDate ||
+      this.days[this.selectedDayIndex] > scheduleItem.course.endDate
     );
   };
 

@@ -1,24 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICourse } from '../interfaces/icourse';
+import { map } from 'rxjs';
+import { DatesConverterService } from './dates-converter.service';
+import { ICourseResponse } from '../interfaces/icourse-response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CourseService {
   private readonly apiUrl = 'http://localhost:8080';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private datesConv: DatesConverterService) {}
 
   getCourses() {
-    return this.http.get<ICourse[]>(`${this.apiUrl}/courses`);
+    return this.http
+      .get<ICourseResponse[]>(`${this.apiUrl}/courses`)
+      .pipe(map(courses => this.datesConv.convertCourses(courses)));
   }
 
   getUpcoming() {
-    return this.http.get<ICourse[]>(`${this.apiUrl}/courses/upcoming`);
+    return this.http
+      .get<ICourseResponse[]>(`${this.apiUrl}/courses/upcoming`)
+      .pipe(map(courses => this.datesConv.convertCourses(courses)));
   }
 
   getCourseById(id: number) {
-    return this.http.get<ICourse>(`${this.apiUrl}/courses/${id}`);
+    return this.http
+      .get<ICourseResponse>(`${this.apiUrl}/courses/${id}`)
+      .pipe(map(course => this.datesConv.convertCourse(course)));
   }
 }

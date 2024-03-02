@@ -10,3 +10,11 @@ export interface IKlass {
   students: IUserBasicResponse[];
   weeklySchedule: IWeeklyScheduleItem[];
 }
+
+export class Klass implements IKlass {
+  id!: number;
+  course!: ICourse;
+  teachers!: ITeacherBasicResponse[];
+  students!: IUserBasicResponse[];
+  weeklySchedule!: IWeeklyScheduleItem[];
+}

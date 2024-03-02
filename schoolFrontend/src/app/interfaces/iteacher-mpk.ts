@@ -1,4 +1,4 @@
-export interface ITeacherMPK {
+export interface ITeacherMPK { // ITeacherModulesPerKlass
   id: number;
   klassId: number;
   klassCourse: string;

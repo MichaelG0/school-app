@@ -10,6 +10,10 @@ import { CompletedAssignmentService } from 'src/app/services/completed-assignmen
 import { KlassService } from 'src/app/services/klass.service';
 import { RegisterService } from 'src/app/services/register.service';
 import { UserService } from 'src/app/services/user.service';
+import {
+  ISuperWeeklyScheduleItem,
+  SuperWeeklyScheduleItem,
+} from 'src/app/interfaces/isuper-weekly-schedule-item';
 
 @Component({
   selector: 'app-student-dashboard',
@@ -19,6 +23,7 @@ import { UserService } from 'src/app/services/user.service';
 export class StudentDashboardComponent implements OnInit {
   loggedUser!: IJwtResponse | null;
   klass!: IKlass;
+  weeklySchedule: ISuperWeeklyScheduleItem[] = [];
   attendance$!: Observable<number>;
   completedAssignments$!: Observable<IComplAssignBasicResponseWithAverageGrade>;
   complAssIds!: number[];
@@ -43,6 +48,13 @@ export class StudentDashboardComponent implements OnInit {
         this.klass = res;
         this.attendance$ = this.rgsSrv.getAttendance(this.loggedUser!.user.id, this.klass.id);
         this.paginate();
+
+        for (const scheItem of this.klass.weeklySchedule) {
+          const superScheItem = new SuperWeeklyScheduleItem();
+          Object.assign(superScheItem, scheItem);
+          superScheItem.course = this.klass.course;
+          this.weeklySchedule.push(superScheItem);
+        }
       });
     this.completedAssignments$ = this.complAssSrv
       .getBasicByStudentId(this.loggedUser!.user.id)

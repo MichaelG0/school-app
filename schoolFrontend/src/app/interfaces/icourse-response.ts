@@ -1,8 +1,8 @@
 import { ICourseInfo } from "./icourse-info";
 
-export interface ICourseDatesConverted {
+export interface ICourseResponse {
   id: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   info: ICourseInfo;
 }

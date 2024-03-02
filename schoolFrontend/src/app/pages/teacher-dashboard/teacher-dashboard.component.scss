@@ -1,24 +1,24 @@
-.inner-cont {
+h3 {
+  margin-bottom: 1.5rem;
+}
+
+section {
   display: flex;
   flex-wrap: wrap;
-  max-width: 900px;
-  gap: 1.5rem;
+  gap: 1rem;
 
-  > div {
-    flex: 1 1 66%;
+  .classes-wrp {
+    flex: 6 1 17rem;
   }
 
-  .border-end {
-    flex: 0 1 0;
-  }
-
-  > h2 {
-    white-space: nowrap;
+  app-calendar {
+    flex: 1 1 18.5rem;
   }
 }
 
 .tcr-mpk {
   cursor: pointer;
+  overflow: hidden;
   transition: all 0.3s ease-out;
 
   &:hover {
