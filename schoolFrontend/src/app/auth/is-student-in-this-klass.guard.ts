@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
 import { IJwtResponse } from '../interfaces/ijwt-response';
 import { IKlass } from '../interfaces/iklass';
@@ -9,7 +9,7 @@ import { UserService } from '../services/user.service';
 @Injectable({
   providedIn: 'root',
 })
-export class IsStudentInThisKlassGuard implements CanActivate {
+export class IsStudentInThisKlassGuard  {
   jwt!: IJwtResponse | null;
 
   constructor(private userSrv: UserService, private klassSrv: KlassService, private router: Router) {
