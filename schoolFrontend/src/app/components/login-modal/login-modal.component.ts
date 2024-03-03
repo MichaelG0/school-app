@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
 import { ILoginRequest } from 'src/app/interfaces/ilogin-request';
@@ -14,12 +14,12 @@ declare var bootstrap: any;
 })
 export class LoginModalComponent implements OnInit {
   modalProps$!: Observable<{ title: string; link: string }>;
-  loginForm!: FormGroup;
+  loginForm!: UntypedFormGroup;
   btnClicked: boolean = false;
   loginFailed: boolean = false;
   loading: boolean = false;
 
-  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: FormBuilder, private router: Router) {}
+  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: UntypedFormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.modalProps$ = this.modalSrv.modalProps$;
@@ -35,7 +35,7 @@ export class LoginModalComponent implements OnInit {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid) return;
 
     this.loading = true;

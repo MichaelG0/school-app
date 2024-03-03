@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { ICompletedAssignment } from 'src/app/interfaces/icompleted-assignment';
 import { CompletedAssignmentService } from 'src/app/services/completed-assignment.service';
@@ -17,13 +17,13 @@ export class GradeModalComponent implements OnInit, OnDestroy {
   @Output() updatedAss = new EventEmitter<void>();
   complAssignment$!: Observable<ICompletedAssignment | null>
   complAssignment!: ICompletedAssignment | null;
-  gradeForm!: FormGroup;
+  gradeForm!: UntypedFormGroup;
   loading: boolean = false;
 
   constructor(
     private complAssSrv: CompletedAssignmentService,
     private mdlSrv: ModalService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private renderer: Renderer2
   ) {}
 
@@ -47,7 +47,7 @@ export class GradeModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid) return;
 
     this.loading = true;

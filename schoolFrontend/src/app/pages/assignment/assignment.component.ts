@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { map, Observable, take } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
@@ -20,7 +20,7 @@ export class AssignmentComponent implements OnInit {
   assignmentId!: number;
   complAssignment!: ICompletedAssignment | null;
   loggedUser!: null | IJwtResponse;
-  linkForm!: FormGroup;
+  linkForm!: UntypedFormGroup;
   confirmation: boolean = false;
   loading: boolean = false;
 
@@ -29,7 +29,7 @@ export class AssignmentComponent implements OnInit {
     private assSrv: AssignmentService,
     private complAssSrv: CompletedAssignmentService,
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: UntypedFormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class AssignmentComponent implements OnInit {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid && !this.loggedUser) return;
 
     this.loading = true;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, take } from 'rxjs';
 import { ICourse } from 'src/app/interfaces/icourse';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
@@ -15,13 +15,13 @@ import { UserService } from 'src/app/services/user.service';
 export class ApplyComponent implements OnInit {
   jwtResp!: IJwtResponse | null;
   upcCourses$!: Observable<ICourse[]>
-  applyForm!: FormGroup;
+  applyForm!: UntypedFormGroup;
   loading: boolean = false;
   btnClicked: boolean = false;
   submissionFailed: boolean = false;
   confirmation: boolean = false
   
-  constructor(private userSrv: UserService, private crsSrv: CourseService, private fb: FormBuilder) {}
+  constructor(private userSrv: UserService, private crsSrv: CourseService, private fb: UntypedFormBuilder) {}
   
   ngOnInit(): void {
     this.userSrv.loggedObs$.pipe(take(1)).subscribe((res) => (this.jwtResp = res));
@@ -41,7 +41,7 @@ export class ApplyComponent implements OnInit {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid) return;
 
     this.loading = true;

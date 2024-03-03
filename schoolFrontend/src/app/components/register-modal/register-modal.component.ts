@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { ISignUpRequest } from 'src/app/interfaces/isign-up-request';
@@ -14,12 +14,12 @@ declare var bootstrap: any;
 })
 export class RegisterModalComponent implements OnInit {
   modalProps$!: Observable<{ title: string; link: string }>;
-  signUpForm!: FormGroup;
+  signUpForm!: UntypedFormGroup;
   gotEmail: boolean = false;
   btnClicked: boolean = false;
   btnClicked2: boolean = false;
 
-  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: FormBuilder, private router: Router) {}
+  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: UntypedFormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.modalProps$ = this.modalSrv.modalProps$;
@@ -38,7 +38,7 @@ export class RegisterModalComponent implements OnInit {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid) return;
 
     const user: ISignUpRequest = {

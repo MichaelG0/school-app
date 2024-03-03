@@ -8,7 +8,7 @@ import {
   Output,
   Renderer2,
 } from '@angular/core';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 import { map, Observable, Subject, take, takeUntil } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
 import { IAssignmentDto } from 'src/app/interfaces/iassignment-dto';
@@ -36,7 +36,7 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
   modalTitle$!: Observable<string>;
   assToUpdate!: IAssignment | null;
   taughtModules$!: Observable<string[]>;
-  assignmentForm!: FormGroup;
+  assignmentForm!: UntypedFormGroup;
   submissionFailed: boolean = false;
   loading: boolean = false;
 
@@ -44,7 +44,7 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
     private assSrv: AssignmentService,
     private tcrMPKSrv: TeacherModulePerKlassService,
     private mdlSrv: ModalService,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private renderer: Renderer2
   ) {}
 
@@ -78,7 +78,7 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  onSubmit(form: FormGroup) {
+  onSubmit(form: UntypedFormGroup) {
     if (!form.valid) return;
 
     this.loading = true;
