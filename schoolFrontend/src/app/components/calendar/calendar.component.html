@@ -57,7 +57,7 @@
         *ngFor="let scheItem of daySchedule; let i = index"
         [ngClass]="{ 'd-none': days | pureFn : lessonCondition : scheItem }"
       >
-        <span *ngIf="scheItem.klassId" class="fw-bold"> Class: {{ scheItem.klassId }} </span>
+        <span *ngIf="showClass" class="fw-bold"> Class: {{ scheItem.klass.id }} </span>
         <span> {{ scheItem.module.name }} </span>
       </div>
     </div>

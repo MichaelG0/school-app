@@ -7,7 +7,11 @@
         class="bg-white rounded shadow fake-border"
       ></app-klass-list>
 
-      <app-calendar [weeklySchedule]="weeklySchedule" class="bg-white rounded shadow fake-border"></app-calendar>
+      <app-calendar
+        [weeklySchedule]="klass.weeklySchedule"
+        [showClass]="false"
+        class="bg-white rounded shadow fake-border"
+      ></app-calendar>
 
       <div id="center">
         <div class="bg-white rounded shadow fake-border">

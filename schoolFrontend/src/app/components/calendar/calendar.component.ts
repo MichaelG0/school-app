@@ -13,7 +13,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
-import { ISuperWeeklyScheduleItem } from 'src/app/interfaces/isuper-weekly-schedule-item';
+import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
 
 @Component({
   selector: 'app-calendar',
@@ -33,13 +33,14 @@ import { ISuperWeeklyScheduleItem } from 'src/app/interfaces/isuper-weekly-sched
   ],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() weeklySchedule: ISuperWeeklyScheduleItem[] = [];
+  @Input() weeklySchedule: IWeeklyScheduleItem[] = [];
+  @Input() showClass = true;
   @ViewChild('wrapp') readonly wrapp!: ElementRef<HTMLElement>;
   @ViewChild('roller') readonly roller!: ElementRef<HTMLElement>;
   @ViewChildren('sched') readonly scheDivs: QueryList<ElementRef<HTMLElement>> = new QueryList();
   readonly unsub$ = new Subject<void>();
   scheduleSubscription?: Subscription;
-  daySchedule: ISuperWeeklyScheduleItem[] = [];
+  daySchedule: IWeeklyScheduleItem[] = [];
   days!: Date[];
   readonly daysLength = 15; // keep this an odd number
   readonly selectedDayIndex = this.daysLength / 2 - 0.5;
@@ -172,10 +173,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     return day.getDate();
   };
 
-  lessonCondition = (days: Date[] /* pipe trigger */, scheduleItem: ISuperWeeklyScheduleItem): boolean => {
+  lessonCondition = (days: Date[] /* pipe trigger */, scheduleItem: IWeeklyScheduleItem): boolean => {
     return (
-      this.days[this.selectedDayIndex] < scheduleItem.course.startDate ||
-      this.days[this.selectedDayIndex] > scheduleItem.course.endDate
+      this.days[this.selectedDayIndex] < scheduleItem.klass.course.startDate ||
+      this.days[this.selectedDayIndex] > scheduleItem.klass.course.endDate
     );
   };
 
