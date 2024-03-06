@@ -43,6 +43,7 @@ public class AssignmentService {
 		LocalDate dueDate = LocalDate.parse(dto.getDueDate());
 		if (dueDate.isBefore(LocalDate.now()))
 			throw new IllegalArgumentException("Due date cannot be a past date");
+
 		Assignment ass = new Assignment();
 		ass.setIssueDate(LocalDate.now());
 		ass.setDueDate(dueDate);
@@ -69,7 +70,7 @@ public class AssignmentService {
 				.toList();
 		return new PageImpl<AssignmentResponse>(assList, pgb, assPage.getTotalElements());
 	}
-	
+
 	public Page<AssignmentResponse> getPastByKlassId(Long klassId, Optional<Integer> page, Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.DESC, "dueDate");
 		Page<Assignment> assPage = assRepo.findPastByKlassId(klassId, pgb)
@@ -80,8 +81,8 @@ public class AssignmentService {
 		return new PageImpl<AssignmentResponse>(assList, pgb, assPage.getTotalElements());
 	}
 
-	public Page<AssignmentResponse> getUpcomingByKlassAndTeacherIds(Long klassId, Long teacherId, Optional<Integer> page,
-			Optional<Integer> size) {
+	public Page<AssignmentResponse> getUpcomingByKlassAndTeacherIds(Long klassId, Long teacherId,
+			Optional<Integer> page, Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.ASC, "dueDate");
 		Page<Assignment> assPage = assRepo.findUpcomingByKlassAndTeacherIds(klassId, teacherId, pgb)
 				.orElseThrow(() -> new EntityNotFoundException("Assignments not found"));
@@ -90,7 +91,7 @@ public class AssignmentService {
 				.toList();
 		return new PageImpl<AssignmentResponse>(assList, pgb, assPage.getTotalElements());
 	}
-	
+
 	public Page<AssignmentResponse> getPastByKlassAndTeacherIds(Long klassId, Long teacherId, Optional<Integer> page,
 			Optional<Integer> size) {
 		PageRequest pgb = PageRequest.of(page.orElse(0), size.orElse(5), Sort.Direction.DESC, "dueDate");

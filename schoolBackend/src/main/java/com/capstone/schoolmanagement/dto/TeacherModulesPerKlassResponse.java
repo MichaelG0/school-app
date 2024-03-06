@@ -13,6 +13,7 @@ public class TeacherModulesPerKlassResponse {
 	private Long klassId;
 	private String klassCourse;
 	private List<String> modules;
+	private String renderColor;
 	
 	public static TeacherModulesPerKlassResponse buildResponse(TeacherModulesPerKlass teacherMPK) {
 		return TeacherModulesPerKlassResponse.builder()
@@ -20,6 +21,7 @@ public class TeacherModulesPerKlassResponse {
 				.klassId(teacherMPK.getKlass().getId())
 				.klassCourse(teacherMPK.getKlass().getCourse().getInfo().getName())
 				.modules(teacherMPK.getModules().stream().map(mdl -> mdl.getName()).toList())
+				.renderColor(teacherMPK.getKlass().getRenderColor())
 				.build();
 	}
 }

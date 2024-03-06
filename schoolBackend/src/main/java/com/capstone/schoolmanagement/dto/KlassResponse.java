@@ -18,7 +18,7 @@ public class KlassResponse {
 	private Course course;
 	private List<TeacherBasicResponse> teachers;
 	private List<UserBasicResponse> students;
-	private List<WeeklyScheduleItem> weeklySchedule;
+	private List<WeeklyScheduleItemResponse> weeklySchedule;
 
 	public static KlassResponse buildKlassResponse(Klass klass) {
 		return KlassResponse.builder()
@@ -32,7 +32,10 @@ public class KlassResponse {
 						.stream()
 						.map(student -> UserBasicResponse.buildBasicUserResponse(student))
 						.toList())
-				.weeklySchedule(klass.getWeeklySchedule().stream().toList())
+				.weeklySchedule(klass.getWeeklySchedule()
+						.stream()
+						.map(wsi -> WeeklyScheduleItemResponse.buildWsiResponse(wsi))
+						.toList())
 				.build();
 	}
 

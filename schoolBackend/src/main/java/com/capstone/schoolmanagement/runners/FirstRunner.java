@@ -215,8 +215,11 @@ public class FirstRunner implements CommandLineRunner {
 			teacher.setName(fkr.name().firstName());
 			teacher.setSurname(fkr.name().lastName());
 			teacher.setAvatar("https://i.pravatar.cc/300?img=" + fkr.random().nextInt(70));
+			teacher.setAddress(fkr.address().fullAddress());
+			teacher.setPhone(fkr.phoneNumber().cellPhone());
+			teacher.setBio(fkr.lorem().paragraph(5));
 			teacher.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
-			teacher.setEmail(fkr.internet().emailAddress());
+			teacher.setEmail(teacher.getName().toLowerCase() + "." + teacher.getSurname().toLowerCase() + "@marsu.com");
 			teacher.setPassword(encoder.encode(fkr.internet().password(8, 10)));
 			teacher.setModules(mdls);
 			teacher.setRoles(staffRoles);
@@ -272,6 +275,14 @@ public class FirstRunner implements CommandLineRunner {
 				wsi.setEndTime(LocalTime.of(13 + (fkr.random().nextInt(4) + 2) * (j % 2), 0));
 				wsi.setKlass(klass);
 				wsi.setModule(moduleArr.get(fkr.random().nextInt(modulesLength)));
+				for (TeacherModulesPerKlass tcrMPKItem : wsi.getKlass().getTeachers()) {
+					for (Mmodule mdlItem : tcrMPKItem.getModules()) {
+						if (mdlItem.equals(wsi.getModule())) {
+							wsi.setTeacher(tcrMPKItem.getTeacher());
+							break;
+						}
+					}
+				}
 				weeklySchedule.add(wsi);
 			}
 		}
@@ -287,9 +298,12 @@ public class FirstRunner implements CommandLineRunner {
 			student.setSurname(fkr.name().lastName());
 			student.setGender((i % 2 == 0) ? EGender.MALE : EGender.FEMALE);
 			student.setAvatar("https://i.pravatar.cc/300?img=" + fkr.random().nextInt(70));
+			student.setAddress(fkr.address().fullAddress());
+			student.setPhone(fkr.phoneNumber().cellPhone());
+			student.setBio(fkr.lorem().paragraph(5));
 			student.setCourse(klasses.get(klassNum).getCourse());
 			student.setKlass(klasses.get(klassNum));
-			student.setEmail(fkr.internet().emailAddress());
+			student.setEmail(student.getName().toLowerCase() + "." + student.getSurname().toLowerCase() + "@marsu.com");
 			student.setPassword(encoder.encode(fkr.internet().password(8, 10)));
 			student.setRoles(studentRoles);
 			students.add(student);
@@ -303,7 +317,11 @@ public class FirstRunner implements CommandLineRunner {
 		Admin admin = adminPrv.getObject();
 		admin.setName("Admin");
 		admin.setSurname("Hoppus");
+		admin.setGender(EGender.MALE);
 		admin.setAvatar("https://i.pravatar.cc/300?img=30");
+		admin.setAddress(fkr.address().fullAddress());
+		admin.setPhone(fkr.phoneNumber().cellPhone());
+		admin.setBio(fkr.lorem().paragraph(5));
 		admin.setEmail("admin@admin.com");
 		admin.setPassword(encoder.encode("adminadmin"));
 		admin.setRoles(adminRoles);
@@ -312,23 +330,53 @@ public class FirstRunner implements CommandLineRunner {
 		Teacher teacherTest = teacherPrv.getObject();
 		teacherTest.setName("Teacher");
 		teacherTest.setSurname("Barker");
+		teacherTest.setGender(EGender.FEMALE);
 		teacherTest.setAvatar("https://i.pravatar.cc/300?img=31");
+		teacherTest.setAddress(fkr.address().fullAddress());
+		teacherTest.setPhone(fkr.phoneNumber().cellPhone());
+		teacherTest.setBio(fkr.lorem().paragraph(5));
 		teacherTest.setEmail("teacher@teacher.com");
 		teacherTest.setPassword(encoder.encode("teacherteacher"));
 		teacherTest.setRoles(teacherRoles);
 		teacherTest.setModules(new HashSet<Mmodule>(modules));
 		usrRepo.save(teacherTest);
 
-		klass.getTeachers().get(0).setTeacher(teacherTest);
+		List<Klass> tcrToReplaceKlassList = new ArrayList<>();
+		List<TeacherModulesPerKlass> tcrToReplaceList = new ArrayList<>();
+		tcrToReplaceKlassList.add(klass);
+		tcrToReplaceList.add(klass.getTeachers().get(0));
 		for (int i = 0; i < 4; i++) {
-			klasses.get(fkr.random().nextInt(10)).getTeachers().get(0).setTeacher(teacherTest);
+			Klass tcrToReplaceKlass = klasses.get(fkr.random().nextInt(10));
+			TeacherModulesPerKlass tcrToReplace = tcrToReplaceKlass.getTeachers().get(0);
+			tcrToReplaceKlassList.add(tcrToReplaceKlass);
+			tcrToReplaceList.add(tcrToReplace);
 		}
+
+		for (TeacherModulesPerKlass tcrToReplace : tcrToReplaceList) {
+			for (Klass tcrToReplaceKlass : tcrToReplaceKlassList) {
+				List<WeeklyScheduleItem> wsOfReplacedTcr = weeklySchedule.stream()
+						.filter(wsiItem -> wsiItem.getKlass().equals(tcrToReplaceKlass)
+								&& wsiItem.getTeacher().equals(tcrToReplace.getTeacher()))
+						.toList();
+				wsOfReplacedTcr.forEach(wsiItem -> {
+					wsiItem.setTeacher(teacherTest);
+				});
+
+			}
+			tcrToReplace.setTeacher(teacherTest);
+		}
+
+		wsiRepo.saveAll(weeklySchedule);
 		klsRepo.saveAll(klasses);
 
 		Student studentTest = studentPrv.getObject();
 		studentTest.setName("Student");
 		studentTest.setSurname("DeLonge");
+		studentTest.setGender(EGender.MALE);
 		studentTest.setAvatar("https://i.pravatar.cc/300?img=32");
+		studentTest.setAddress(fkr.address().fullAddress());
+		studentTest.setPhone(fkr.phoneNumber().cellPhone());
+		studentTest.setBio(fkr.lorem().paragraph(5));
 		studentTest.setEmail("student@student.com");
 		studentTest.setPassword(encoder.encode("studentstudent"));
 		studentTest.setRoles(studentRoles);
@@ -339,7 +387,11 @@ public class FirstRunner implements CommandLineRunner {
 		Staff staffTest = staffPrv.getObject();
 		staffTest.setName("Staff");
 		staffTest.setSurname("Raynor");
+		staffTest.setGender(EGender.FEMALE);
 		staffTest.setAvatar("https://i.pravatar.cc/300?img=33");
+		staffTest.setAddress(fkr.address().fullAddress());
+		staffTest.setPhone(fkr.phoneNumber().cellPhone());
+		staffTest.setBio(fkr.lorem().paragraph(5));
 		staffTest.setEmail("staff@staff.com");
 		staffTest.setPassword(encoder.encode("staffstaff"));
 		staffTest.setRoles(staffRoles);
@@ -377,7 +429,7 @@ public class FirstRunner implements CommandLineRunner {
 		for (int i = 0; i < 100; i++) {
 			TeacherModulesPerKlass tcrMPK = tcrMPKs.get(fkr.random().nextInt(tcrMPKsSize));
 			List<Mmodule> mdls = tcrMPK.getModules().stream().toList();
-			
+
 			Assignment ass = assPrv.getObject();
 			ass.setIssueDate(
 					fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -399,7 +451,8 @@ public class FirstRunner implements CommandLineRunner {
 		int assignmentsSize = assignments.size();
 		for (int i = 0; i < 100; i++) {
 			CompletedAssignment ass = complAssPrv.getObject();
-			ass.setSubmittedDate(fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+			ass.setSubmittedDate(
+					fkr.date().past(15, 6, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 			ass.setStudent(i % 3 == 0 ? studentTest : klass1Stds.get(fkr.random().nextInt(klass1StdsSize)));
 			ass.setLink(fkr.internet().url());
 			if (i % 2 == 0)

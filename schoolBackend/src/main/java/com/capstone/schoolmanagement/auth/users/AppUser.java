@@ -3,6 +3,7 @@ package com.capstone.schoolmanagement.auth.users;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,6 +40,9 @@ public abstract class AppUser {
 	private EGender gender;
 	private String address;
 	private String avatar;
+	private String phone;
+	@Column(columnDefinition = "TEXT")
+	private String bio;
 
 //	ACCESS DATA
 	@NotBlank

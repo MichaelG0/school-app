@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
 import com.capstone.schoolmanagement.model.users.Student;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,11 +34,20 @@ public class Klass {
 	private List<TeacherModulesPerKlass> teachers = new ArrayList<TeacherModulesPerKlass>();
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
-    private Set<Student> students = new HashSet<Student>();
+	private Set<Student> students = new HashSet<Student>();
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
 	private Set<WeeklyScheduleItem> weeklySchedule = new HashSet<WeeklyScheduleItem>();
 	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "klass")
 	private Set<Register> registers = new HashSet<Register>();
+	private String renderColor;
+
+	public Klass() {
+		this.renderColor = generateRandomColor();
+	}
+
+	private String generateRandomColor() {
+		return "#" + RandomStringUtils.random(6, "0123456789ABCDEF");
+	}
 }

@@ -15,6 +15,8 @@ public class UserResponse {
 	private String surname;
 	private String email;
 	private String avatar;
+	private String phone;
+	private String bio;
 	private EGender gender;
 	private String address;
 	private List<String> roles;
@@ -26,6 +28,8 @@ public class UserResponse {
 				.surname(user.getSurname())
 				.email(user.getEmail())
 				.avatar(user.getAvatar())
+				.phone(user.getPhone())
+				.bio(user.getBio())
 				.gender(user.getGender())
 				.address(user.getAddress())
 				.roles(user.getRoles().stream().map(role -> role.getRoleName().name()).toList())
@@ -39,6 +43,8 @@ public class UserResponse {
 				.surname(user.getSurname())
 				.email(user.getUsername())
 				.avatar(user.getAvatar())
+				.phone(user.getPhone())
+				.bio(user.getBio())
 				.gender(user.getGender())
 				.address(user.getAddress())
 				.roles(user.getAuthorities().stream().map(role -> role.getAuthority()).toList())

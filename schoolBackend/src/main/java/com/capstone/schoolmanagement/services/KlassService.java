@@ -11,16 +11,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.capstone.schoolmanagement.auth.users.UserResponse;
 import com.capstone.schoolmanagement.dto.KlassDto;
 import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.repos.KlassRepo;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor

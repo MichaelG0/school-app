@@ -22,6 +22,8 @@ public class UserDetailsImpl implements UserDetails {
 	private String name;
 	private String surname;
 	private String avatar;
+	private String phone;
+	private String bio;
 	private EGender gender;
 	private String address;
 	private Collection<? extends GrantedAuthority> authorities;
@@ -43,8 +45,8 @@ public class UserDetailsImpl implements UserDetails {
 				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
 				.collect(Collectors.toList());
 
-		return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword(), user.getName(), user.getSurname(), user.getAvatar(),
-				authorities);
+		return new UserDetailsImpl(user.getId(), user.getEmail(), user.getPassword(), user.getName(), user.getSurname(),
+				user.getAvatar(), authorities);
 	}
 
 	@Override

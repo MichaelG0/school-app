@@ -10,9 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.capstone.schoolmanagement.model.users.Teacher;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +29,9 @@ public class WeeklyScheduleItem {
 	private LocalTime endTime;
 	@ManyToOne
 	private Mmodule module;
+	@JsonBackReference
+	@ManyToOne
+	private Teacher teacher;
 	@JsonBackReference
 	@ManyToOne
 	private Klass klass;
