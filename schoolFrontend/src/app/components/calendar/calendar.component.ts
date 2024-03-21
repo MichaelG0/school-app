@@ -3,7 +3,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -34,7 +33,7 @@ import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() weeklySchedule: IWeeklyScheduleItem[] = [];
-  @Input() showClass = true;
+  @Input() showKlass = true;
   @ViewChild('wrapp') readonly wrapp!: ElementRef<HTMLElement>;
   @ViewChild('roller') readonly roller!: ElementRef<HTMLElement>;
   @ViewChildren('sched') readonly scheDivs: QueryList<ElementRef<HTMLElement>> = new QueryList();
@@ -92,8 +91,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private styleSchedule() {
     if (this.scheDivs.length) {
-      console.log(this.daySchedule);
-
       for (let i = 0; i < this.daySchedule.length; i++) {
         const startTime = parseInt(this.daySchedule[i].startTime.substring(0, 2));
         const offset = startTime - 8;
@@ -102,7 +99,9 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
         if (el) {
           this.renderer.setStyle(el, 'margin-top', 42.4 * offset + 'px');
           this.renderer.setStyle(el, 'height', 42.9 * height + 'px');
-          this.renderer.setStyle(el, 'border', '4px solid ' + this.daySchedule[i].module.renderColor);
+          if (this.showKlass)
+            this.renderer.setStyle(el, 'border', '4px solid ' + this.daySchedule[i].klass.renderColor);
+          else this.renderer.setStyle(el, 'border', '4px solid ' + this.daySchedule[i].module.renderColor);
           const gap = el.offsetHeight < 80 ? 0 : 1;
           this.renderer.setStyle(el, 'gap', gap + 'rem');
         }
@@ -191,6 +190,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   initialX = 0;
   offsetX = 0;
   dayIndex = this.daysLength / 2 - 0.5;
+  private unlistenMouseMove!: () => void;
+  private unlistenTouchMove!: () => void;
+  private unlistenMouseUp!: () => void;
+  private unlistenTouchEnd!: () => void;
 
   onDragStart(event: MouseEvent | TouchEvent) {
     this.isDragging = true;
@@ -198,10 +201,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     const clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX;
     this.initialX = clientX - this.roller.nativeElement.offsetLeft;
     this.translateX = 0;
+    // LISTENERS
+    this.unlistenMouseMove = this.renderer.listen('document', 'mousemove', event => this.onDragging(event));
+    this.unlistenTouchMove = this.renderer.listen('document', 'touchmove', event => this.onDragging(event));
+    this.unlistenMouseUp = this.renderer.listen('document', 'mouseup', () => this.onDragEnd());
+    this.unlistenTouchEnd = this.renderer.listen('document', 'touchend', () => this.onDragEnd());
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  @HostListener('document:touchmove', ['$event'])
   onDragging(event: MouseEvent | TouchEvent) {
     if (this.isDragging) {
       this.dragged = true;
@@ -226,8 +232,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  @HostListener('document:mouseup')
-  @HostListener('document:touchend')
   onDragEnd() {
     if (this.dragged) {
       this.renderer.setStyle(this.roller.nativeElement, 'left', 'auto');
@@ -235,5 +239,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.isDragging = false;
     this.dragged = false;
+    // LISTENERS
+    this.unlistenMouseMove();
+    this.unlistenTouchMove();
+    this.unlistenMouseUp();
+    this.unlistenTouchEnd();
   }
 }
