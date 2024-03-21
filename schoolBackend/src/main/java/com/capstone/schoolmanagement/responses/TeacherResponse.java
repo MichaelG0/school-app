@@ -1,4 +1,4 @@
-package com.capstone.schoolmanagement.dto;
+package com.capstone.schoolmanagement.responses;
 
 import java.util.List;
 import java.util.Set;

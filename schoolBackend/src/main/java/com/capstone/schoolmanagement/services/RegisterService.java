@@ -10,11 +10,11 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.dto.RegisterDto;
-import com.capstone.schoolmanagement.dto.RegisterResponse;
 import com.capstone.schoolmanagement.model.Register;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.repos.RegisterRepo;
 import com.capstone.schoolmanagement.repos.StudentRepo;
+import com.capstone.schoolmanagement.responses.RegisterResponse;
 
 import lombok.RequiredArgsConstructor;
 

@@ -13,15 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.capstone.schoolmanagement.dto.ComplAssignBasicResponseWithAverageGrade;
 import com.capstone.schoolmanagement.dto.CompletedAssignmentDto;
-import com.capstone.schoolmanagement.dto.CompletedAssignmentResponse;
 import com.capstone.schoolmanagement.model.Assignment;
 import com.capstone.schoolmanagement.model.CompletedAssignment;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.repos.AssignmentRepo;
 import com.capstone.schoolmanagement.repos.CompletedAssignmentRepo;
 import com.capstone.schoolmanagement.repos.StudentRepo;
+import com.capstone.schoolmanagement.responses.ComplAssignBasicResponseWithAverageGrade;
+import com.capstone.schoolmanagement.responses.CompletedAssignmentResponse;
 
 import lombok.RequiredArgsConstructor;
 

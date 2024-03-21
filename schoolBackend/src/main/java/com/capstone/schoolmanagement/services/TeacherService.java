@@ -6,9 +6,9 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
 
-import com.capstone.schoolmanagement.dto.TeacherResponse;
 import com.capstone.schoolmanagement.model.users.Teacher;
 import com.capstone.schoolmanagement.repos.TeacherRepo;
+import com.capstone.schoolmanagement.responses.TeacherResponse;
 
 import lombok.RequiredArgsConstructor;
 

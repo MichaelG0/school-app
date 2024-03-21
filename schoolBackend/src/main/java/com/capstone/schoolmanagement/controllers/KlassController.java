@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capstone.schoolmanagement.dto.KlassDto;
-import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
+import com.capstone.schoolmanagement.responses.KlassResponse;
 import com.capstone.schoolmanagement.services.KlassService;
 
 import lombok.RequiredArgsConstructor;

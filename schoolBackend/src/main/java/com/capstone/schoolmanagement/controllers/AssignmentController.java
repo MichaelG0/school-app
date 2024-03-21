@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capstone.schoolmanagement.dto.AssignmentDto;
-import com.capstone.schoolmanagement.dto.AssignmentResponse;
+import com.capstone.schoolmanagement.responses.AssignmentResponse;
 import com.capstone.schoolmanagement.services.AssignmentService;
 
 import lombok.RequiredArgsConstructor;

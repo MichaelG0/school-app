@@ -1,4 +1,4 @@
-package com.capstone.schoolmanagement.dto;
+package com.capstone.schoolmanagement.responses;
 
 import java.time.LocalTime;
 import com.capstone.schoolmanagement.model.EWeekDay;

@@ -9,5 +9,6 @@ public class WeeklyScheduleItemDto {
 	private String startTime;
 	private String endTime;
 	private Long moduleId;
+	private Long teacherId;
 	private Long klassId;
 }

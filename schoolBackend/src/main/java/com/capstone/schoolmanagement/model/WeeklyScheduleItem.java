@@ -35,4 +35,35 @@ public class WeeklyScheduleItem {
 	@JsonBackReference
 	@ManyToOne
 	private Klass klass;
+
+	public boolean setTeacher(Teacher tcr) {
+		boolean setSuccessfully = true;
+
+		if (this.weekDay == null || this.startTime == null || this.endTime == null)
+			throw new IllegalArgumentException("weekDay, startTime and endTime must be set");
+
+		for (WeeklyScheduleItem tcrWsi : tcr.getWeeklySchedule()) {
+			if (this.weekDay.equals(tcrWsi.getWeekDay())) {
+				if (this.startTime.isBefore(tcrWsi.getEndTime()) && this.endTime.isAfter(tcrWsi.getStartTime())) {
+					setSuccessfully = false;
+					return setSuccessfully;
+				}
+			}
+		}
+
+		this.teacher = tcr;
+		return setSuccessfully;
+	}
+
+	public void setStartTime(LocalTime startTime) {
+		if (this.endTime != null && startTime.compareTo(this.endTime) >= 0)
+			throw new IllegalArgumentException("Start time must be before end time");
+		this.startTime = startTime;
+	}
+
+	public void setEndTime(LocalTime endTime) {
+		if (this.startTime != null && endTime.compareTo(this.startTime) <= 0)
+			throw new IllegalArgumentException("End time must be after start time");
+		this.endTime = endTime;
+	}
 }

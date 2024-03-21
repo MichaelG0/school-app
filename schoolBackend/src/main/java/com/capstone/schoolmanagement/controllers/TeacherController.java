@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capstone.schoolmanagement.dto.TeacherResponse;
 import com.capstone.schoolmanagement.model.users.Teacher;
+import com.capstone.schoolmanagement.responses.TeacherResponse;
 import com.capstone.schoolmanagement.services.TeacherService;
 
 import lombok.RequiredArgsConstructor;

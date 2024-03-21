@@ -1,12 +1,12 @@
-package com.capstone.schoolmanagement.dto;
+package com.capstone.schoolmanagement.responses;
 
 import java.util.List;
 import java.util.Optional;
 import com.capstone.schoolmanagement.auth.users.UserBasicResponse;
-import com.capstone.schoolmanagement.dto.users.TeacherBasicResponse;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.WeeklyScheduleItem;
+import com.capstone.schoolmanagement.responses.users.TeacherBasicResponse;
 
 import lombok.Builder;
 import lombok.Data;

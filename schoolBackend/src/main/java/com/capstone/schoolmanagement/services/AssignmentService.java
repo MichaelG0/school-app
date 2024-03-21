@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.auth.users.UserRepository;
 import com.capstone.schoolmanagement.dto.AssignmentDto;
-import com.capstone.schoolmanagement.dto.AssignmentResponse;
 import com.capstone.schoolmanagement.model.Assignment;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.model.Mmodule;
@@ -22,6 +21,7 @@ import com.capstone.schoolmanagement.model.users.Teacher;
 import com.capstone.schoolmanagement.repos.AssignmentRepo;
 import com.capstone.schoolmanagement.repos.KlassRepo;
 import com.capstone.schoolmanagement.repos.MmoduleRepo;
+import com.capstone.schoolmanagement.responses.AssignmentResponse;
 
 import lombok.RequiredArgsConstructor;
 

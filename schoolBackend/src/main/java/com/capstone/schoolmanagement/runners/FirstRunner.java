@@ -135,10 +135,11 @@ public class FirstRunner implements CommandLineRunner {
 					"Algebra", "Geography", "Sociology", "Medicine", "Geology", "Physics", "Anthropology", "Genealogy",
 					"Philosophy", "Critical Thinking", "Psychology", "Economics", "Rhetoric" };
 			String[] colors = { "aqua", "coral", "crimson", "cadetblue", "chartreuse", "cornflowerblue", "chocolate",
-					"darkcyan", "darkgoldenrod", "yellow" };
+					"darkcyan", "darkgoldenrod", "yellow", "mediumpurple", "darkorange", "deepskyblue", "forestgreen",
+					"gold", "hotpink", "lightslategray", "mediumaquamarine", "olivedrab", "royalblue" };
 			Mmodule module = modulePrv.getObject();
 			module.setName(subjects[i]);
-			module.setRenderColor(colors[i / 2]);
+			module.setRenderColor(colors[i]);
 			modules.add(module);
 		}
 		moduleRepo.saveAll(modules);
@@ -203,12 +204,30 @@ public class FirstRunner implements CommandLineRunner {
 		}
 		crsRepo.saveAll(courses);
 
+		Teacher teacherTest = teacherPrv.getObject();
+		teacherTest.setName("Teacher");
+		teacherTest.setSurname("Barker");
+		teacherTest.setGender(EGender.FEMALE);
+		teacherTest.setAvatar("https://i.pravatar.cc/300?img=31");
+		teacherTest.setAddress(fkr.address().fullAddress());
+		teacherTest.setPhone(fkr.phoneNumber().cellPhone());
+		teacherTest.setBio(fkr.lorem().paragraph(5));
+		teacherTest.setEmail("teacher@teacher.com");
+		teacherTest.setPassword(encoder.encode("teacherteacher"));
+		teacherTest.setRoles(teacherRoles);
+		List<Mmodule> mdlsForTcrTest = modules.stream()
+				.filter(mdl -> mdl.getId() == 2 || mdl.getId() == 3 || mdl.getId() == 11 || mdl.getId() == 14
+						|| mdl.getId() == 15 || mdl.getId() == 17 || mdl.getId() == 18)
+				.toList();
+		teacherTest.setModules(new HashSet<Mmodule>(mdlsForTcrTest));
+
 		List<Teacher> teachers = new ArrayList<Teacher>();
-		for (int i = 0; i < 10; i++) {
+		teachers.add(teacherTest);
+		for (int i = 0; i < 19; i++) {
 			Set<Mmodule> mdls = new HashSet<Mmodule>();
-			mdls.add(modules.get(i * 2));
-			mdls.add(modules.get(i * 2 + 1));
-			for (int j = -1; j < fkr.random().nextInt(2); j++)
+			mdls.add(modules.get(i));
+			mdls.add(modules.get(i + 1));
+			for (int j = -1; j < fkr.random().nextInt(19); j++)
 				mdls.add(modules.get(fkr.random().nextInt(20)));
 
 			Teacher teacher = teacherPrv.getObject();
@@ -239,16 +258,27 @@ public class FirstRunner implements CommandLineRunner {
 
 			Set<Mmodule> moduleSet = klass.getCourse().getInfo().getModules();
 			List<Mmodule> moduleArr = moduleSet.stream().toList();
-			int modulesLength = moduleArr.size();
 
 			List<TeacherModulesPerKlass> tcrMPKList = new ArrayList<TeacherModulesPerKlass>();
-			for (int j = 0; j < modulesLength; j++) {
+			for (int j = 0; j < moduleArr.size(); j++) {
 				final int index = j;
 				Mmodule taughtModule = moduleArr.get(index);
-				List<Teacher> filteredTeachers = teachers.stream()
-						.filter(tcr -> tcr.getModules().contains(taughtModule))
-						.toList();
-				Teacher chosenTcr = filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size()));
+				Teacher chosenTcr;
+
+				if (i == 0 && (j == 0 || j == 1) || i == 2 && j == 0 || i == 7 && j == 0) {
+					teacherTest.getModules().add(taughtModule);
+					chosenTcr = teacherTest;
+				} else {
+					List<Teacher> filteredTeachersList = teachers.stream()
+							.filter(tcr -> tcr.getModules().contains(taughtModule))
+							.toList();
+					// List is immutable, so the remove method used later wouldn't work.
+					// Thus I need to work with an ArrayList
+					ArrayList<Teacher> filteredTeachers = new ArrayList<>(filteredTeachersList);
+					if (i > 4)
+						filteredTeachers.remove(teacherTest);
+					chosenTcr = filteredTeachers.get(fkr.random().nextInt(filteredTeachers.size()));
+				}
 
 				Optional<TeacherModulesPerKlass> tcrMPKOpt = tcrMPKList.stream()
 						.filter(tcrMPKItem -> tcrMPKItem.getTeacher().equals(chosenTcr))
@@ -271,14 +301,21 @@ public class FirstRunner implements CommandLineRunner {
 			for (int j = 0; j < 10; j++) {
 				WeeklyScheduleItem wsi = wsiPrv.getObject();
 				wsi.setWeekDay(weekDays[j / 2]);
-				wsi.setStartTime(LocalTime.of(9 + 5 * (j % 2), 0));
-				wsi.setEndTime(LocalTime.of(13 + (fkr.random().nextInt(4) + 2) * (j % 2), 0));
+				int startTimeHour = 9 + 5 * (j % 2);
+				wsi.setStartTime(LocalTime.of(startTimeHour, 0));
+				wsi.setEndTime(LocalTime.of(startTimeHour + (fkr.random().nextInt(3) + 1), 0));
 				wsi.setKlass(klass);
-				wsi.setModule(moduleArr.get(fkr.random().nextInt(modulesLength)));
-				for (TeacherModulesPerKlass tcrMPKItem : wsi.getKlass().getTeachers()) {
+				int moduleIndex = j < moduleArr.size() ? j : fkr.random().nextInt(moduleArr.size());
+				wsi.setModule(moduleArr.get(moduleIndex));
+				for (TeacherModulesPerKlass tcrMPKItem : klass.getTeachers()) {
 					for (Mmodule mdlItem : tcrMPKItem.getModules()) {
 						if (mdlItem.equals(wsi.getModule())) {
-							wsi.setTeacher(tcrMPKItem.getTeacher());
+							Teacher tcr = tcrMPKItem.getTeacher();
+							while (!wsi.setTeacher(tcr) || wsi.getStartTime().getHour() == 13) {
+								wsi.setEndTime(wsi.getStartTime().plusHours(2));
+								wsi.setStartTime(wsi.getStartTime().plusHours(1));
+							}
+							tcr.getWeeklySchedule().add(wsi);
 							break;
 						}
 					}
@@ -326,48 +363,6 @@ public class FirstRunner implements CommandLineRunner {
 		admin.setPassword(encoder.encode("adminadmin"));
 		admin.setRoles(adminRoles);
 		usrRepo.save(admin);
-
-		Teacher teacherTest = teacherPrv.getObject();
-		teacherTest.setName("Teacher");
-		teacherTest.setSurname("Barker");
-		teacherTest.setGender(EGender.FEMALE);
-		teacherTest.setAvatar("https://i.pravatar.cc/300?img=31");
-		teacherTest.setAddress(fkr.address().fullAddress());
-		teacherTest.setPhone(fkr.phoneNumber().cellPhone());
-		teacherTest.setBio(fkr.lorem().paragraph(5));
-		teacherTest.setEmail("teacher@teacher.com");
-		teacherTest.setPassword(encoder.encode("teacherteacher"));
-		teacherTest.setRoles(teacherRoles);
-		teacherTest.setModules(new HashSet<Mmodule>(modules));
-		usrRepo.save(teacherTest);
-
-		List<Klass> tcrToReplaceKlassList = new ArrayList<>();
-		List<TeacherModulesPerKlass> tcrToReplaceList = new ArrayList<>();
-		tcrToReplaceKlassList.add(klass);
-		tcrToReplaceList.add(klass.getTeachers().get(0));
-		for (int i = 0; i < 4; i++) {
-			Klass tcrToReplaceKlass = klasses.get(fkr.random().nextInt(10));
-			TeacherModulesPerKlass tcrToReplace = tcrToReplaceKlass.getTeachers().get(0);
-			tcrToReplaceKlassList.add(tcrToReplaceKlass);
-			tcrToReplaceList.add(tcrToReplace);
-		}
-
-		for (TeacherModulesPerKlass tcrToReplace : tcrToReplaceList) {
-			for (Klass tcrToReplaceKlass : tcrToReplaceKlassList) {
-				List<WeeklyScheduleItem> wsOfReplacedTcr = weeklySchedule.stream()
-						.filter(wsiItem -> wsiItem.getKlass().equals(tcrToReplaceKlass)
-								&& wsiItem.getTeacher().equals(tcrToReplace.getTeacher()))
-						.toList();
-				wsOfReplacedTcr.forEach(wsiItem -> {
-					wsiItem.setTeacher(teacherTest);
-				});
-
-			}
-			tcrToReplace.setTeacher(teacherTest);
-		}
-
-		wsiRepo.saveAll(weeklySchedule);
-		klsRepo.saveAll(klasses);
 
 		Student studentTest = studentPrv.getObject();
 		studentTest.setName("Student");

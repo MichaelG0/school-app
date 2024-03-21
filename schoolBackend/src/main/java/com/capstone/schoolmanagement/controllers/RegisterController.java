@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capstone.schoolmanagement.dto.RegisterDto;
-import com.capstone.schoolmanagement.dto.RegisterResponse;
 import com.capstone.schoolmanagement.model.Register;
+import com.capstone.schoolmanagement.responses.RegisterResponse;
 import com.capstone.schoolmanagement.services.RegisterService;
 
 import lombok.RequiredArgsConstructor;

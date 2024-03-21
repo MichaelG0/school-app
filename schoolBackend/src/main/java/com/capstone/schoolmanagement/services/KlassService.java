@@ -13,9 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.capstone.schoolmanagement.dto.KlassDto;
-import com.capstone.schoolmanagement.dto.KlassResponse;
 import com.capstone.schoolmanagement.model.Klass;
 import com.capstone.schoolmanagement.repos.KlassRepo;
+import com.capstone.schoolmanagement.responses.KlassResponse;
 
 import lombok.RequiredArgsConstructor;
 

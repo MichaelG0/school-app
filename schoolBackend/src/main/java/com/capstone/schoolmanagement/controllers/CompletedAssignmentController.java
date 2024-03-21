@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capstone.schoolmanagement.dto.ComplAssignBasicResponseWithAverageGrade;
 import com.capstone.schoolmanagement.dto.CompletedAssignmentDto;
-import com.capstone.schoolmanagement.dto.CompletedAssignmentResponse;
+import com.capstone.schoolmanagement.responses.ComplAssignBasicResponseWithAverageGrade;
+import com.capstone.schoolmanagement.responses.CompletedAssignmentResponse;
 import com.capstone.schoolmanagement.services.CompletedAssignmentService;
 
 import lombok.RequiredArgsConstructor;
