@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Observable, take, tap } from 'rxjs';
 import { IComplAssignBasicResponseWithAverageGrade } from 'src/app/interfaces/icompl-assign-basic-response-with-average-grade';
 import { IAssignment } from 'src/app/interfaces/iassignment';
@@ -24,6 +24,7 @@ export class StudentDashboardComponent implements OnInit {
   complAssIds!: number[];
   assignments$!: Observable<IPageable<IAssignment>>;
   page: number = 0;
+  pageSize: number;
   upcoming: boolean = true;
 
   constructor(
@@ -32,7 +33,10 @@ export class StudentDashboardComponent implements OnInit {
     private rgsSrv: RegisterService,
     private assSrv: AssignmentService,
     private complAssSrv: CompletedAssignmentService
-  ) {}
+  ) {
+    const tempPageSize = Math.floor((window.innerHeight - 170) / 65) + 1;
+    this.pageSize = tempPageSize > 0 ? tempPageSize : 1;
+  }
 
   ngOnInit(): void {
     this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => (this.loggedUser = res));
@@ -49,7 +53,17 @@ export class StudentDashboardComponent implements OnInit {
       .pipe(tap(res => (this.complAssIds = res.completedAssignments.map(x => x.assignmentId))));
   }
 
-  switchPage() {
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    let tempPageSize = Math.floor((window.innerHeight - 170) / 65) + 1;
+    tempPageSize = tempPageSize > 0 ? tempPageSize : 1;
+    if (this.pageSize != tempPageSize) {
+      this.pageSize = tempPageSize;
+      this.paginate();
+    }
+  }
+
+  switchUpcoming() {
     this.upcoming = !this.upcoming;
     let value = -this.page;
     this.paginate(value);
@@ -58,7 +72,7 @@ export class StudentDashboardComponent implements OnInit {
   paginate(value: number = 0) {
     this.page += value;
     this.assignments$ = this.upcoming
-      ? this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, 5)
-      : this.assSrv.getPastByKlassId(this.klass.id, this.page, 5);
+      ? this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, this.pageSize)
+      : this.assSrv.getPastByKlassId(this.klass.id, this.page, this.pageSize);
   }
 }

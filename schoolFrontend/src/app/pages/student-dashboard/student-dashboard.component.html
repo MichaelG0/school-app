@@ -16,7 +16,9 @@
       <div id="center">
         <div class="bg-white rounded shadow fake-border">
           <h4 class="my-3 mx-3">{{ klass.course.info.name }}</h4>
+
           <hr />
+
           <div id="main">
             <div>
               <h5>Attendance</h5>
@@ -29,16 +31,18 @@
           </div>
         </div>
 
-        <div class="bg-white rounded shadow fake-border">
+        <div class="bg-white rounded shadow fake-border position-relative">
           <div class="d-flex justify-content-between align-items-baseline my-3 mx-3">
             <h4>Assignments</h4>
-            <a (click)="switchPage()" class="color">
-              <small *ngIf="upcoming; else past">Past</small>
-              <ng-template #past><small>Upcoming</small></ng-template>
-            </a>
+
+            <app-switch-upcoming
+              [upcoming]="upcoming"
+              (switchUpcoming)="switchUpcoming()"
+            ></app-switch-upcoming>
           </div>
+
           <div *ngIf="assignments$ | async as assignments; else loading" class="mx-3">
-            <div id="assignments">
+            <div class="assignments" [style.min-height.px]="pageSize * 57 + 40">
               <div *ngFor="let assignment of assignments.content" class="ass-item text-reset">
                 <input
                   type="checkbox"
@@ -46,6 +50,7 @@
                   disabled
                   [checked]="complAssIds && complAssIds.includes(assignment.id)"
                 />
+
                 <a [routerLink]="['/' + klass.id + '/assignment/' + assignment.id]" class="text-dark">
                   <div [class.assignment-done]="complAssIds && complAssIds.includes(assignment.id)">
                     <p class="text-primary">{{ assignment.module }} -</p>
@@ -63,40 +68,25 @@
                 </a>
               </div>
             </div>
-            <div class="d-flex justify-content-center">
-              <div class="px-4 pb-1 d-inline-flex align-items-baseline">
-                <small class="text-muted me-4">Page {{ page + 1 }} of {{ assignments.totalPages }}</small>
-                <button (click)="paginate(-1)" class="btn pag-btn" [disabled]="page + 1 == 1">
-                  <i class="bi bi-chevron-left me-2"></i>
-                </button>
-                <button
-                  (click)="paginate(1)"
-                  class="btn pag-btn"
-                  [disabled]="page + 1 == assignments.totalPages"
-                >
-                  <i class="bi bi-chevron-right ms-2"></i>
-                </button>
-              </div>
-            </div>
+
+            <app-paginator
+              [pageable]="assignments"
+              [pageNum]="page"
+              (switchPage)="paginate($event)"
+            ></app-paginator>
           </div>
 
           <ng-template #loading>
-            <div id="assignments-placeholder" class="text-center">
+            <div
+              class="assignments assignments-placeholder"
+              [style.min-height.px]="pageSize * 57 + 40"
+            >
               <svg class="spinner big-spin" viewBox="0 0 50 50">
                 <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
               </svg>
             </div>
-            <div class="d-flex justify-content-center">
-              <div class="px-4 pb-1 d-inline-flex align-items-baseline">
-                <small class="text-muted me-4">Page {{ page + 1 }} of ?</small>
-                <button class="btn pag-btn" disabled>
-                  <i class="bi bi-chevron-left me-2"></i>
-                </button>
-                <button class="btn pag-btn" disabled>
-                  <i class="bi bi-chevron-right ms-2"></i>
-                </button>
-              </div>
-            </div>
+
+            <app-paginator></app-paginator>
           </ng-template>
         </div>
       </div>

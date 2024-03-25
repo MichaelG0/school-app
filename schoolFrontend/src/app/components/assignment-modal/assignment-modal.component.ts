@@ -31,7 +31,6 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
   unsub$ = new Subject<void>();
   @Input() klass!: IKlass;
   @Input() loggedUser!: IJwtResponse | null;
-  @Input() assignments$!: Observable<IPageable<IAssignment>>;
   @Output() updatedAss = new EventEmitter<void>();
   modalTitle$!: Observable<string>;
   assToUpdate!: IAssignment | null;
@@ -139,5 +138,4 @@ export class AssignmentModalComponent implements OnInit, OnDestroy {
     this.unsub$.next();
     this.unsub$.complete();
   }
-
 }

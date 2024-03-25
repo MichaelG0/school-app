@@ -1,157 +1,162 @@
 .container {
-    margin-top: -.7rem;
-    padding: 0;
+  margin-top: -0.7rem;
+  padding: 0;
 }
 
 .big-wrap {
-    display: flex;
-    flex-wrap: wrap-reverse;
-    gap: 1rem;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  gap: 1rem;
 }
 
 .fake-border {
-    border: 1px solid rgba(0, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 
 #class-wrp {
-    position: relative;
-    flex: 1 1 13.5rem;
-    overflow: hidden;
-    height: 668px;
+  position: relative;
+  flex: 1 1 13.5rem;
+  overflow: hidden;
+  height: 668px;
 }
 
 #center {
-    display: flex;
-    flex-direction: column;
-    flex: 100 1 43%;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 100 1 43%;
+  gap: 1rem;
 }
 
 #main {
-    display: flex;
-    justify-content: space-around;
-    text-align: center;
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
 
-    >* {
-        flex: 1 1 0;
-    }
+  > * {
+    flex: 1 1 0;
+  }
 }
 
 .progress-circle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 200px;
-    height: 200px;
-    border: 1rem solid aqua;
-    border-radius: 10rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  border: 1rem solid aqua;
+  border-radius: 10rem;
 }
 
-#assignments {
-    min-height: 281.4px;
+.assignments {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.8rem;
 
-    .ass-item {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-        margin-bottom: .8rem;
+  .ass-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
-        >a {
-            max-width: 250px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+    > a {
+      max-width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-            &:hover {
-                filter: brightness(.7);
-            }
-        }
-
-        .form-check-input:disabled {
-            padding: 8px;
-            border-radius: .4rem;
-            opacity: 1;
-        }
-
-        * {
-            display: inline;
-            margin: 0;
-        }
-
-        .text-muted {
-            display: block;
-            font-size: .8rem;
-            font-weight: 500;
-        }
+      &:hover {
+        filter: brightness(0.7);
+      }
     }
+
+    .form-check-input:disabled {
+      padding: 8px;
+      border-radius: 0.4rem;
+      opacity: 1;
+    }
+
+    * {
+      display: inline;
+      margin: 0;
+    }
+
+    .text-muted {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+
+  .big-spin {
+    margin-top: -4rem;
+  }
 }
 
 .assignment-done {
-    text-decoration: line-through;
-    text-decoration-thickness: 1px;
-    opacity: .5;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  opacity: 0.5;
 
-    b {
-        font-weight: 400;
-    }
+  b {
+    font-weight: 400;
+  }
 }
 
-#assignments-placeholder {
-    padding-top: 75px;
-    min-height: 281.4px;
+.assignments-placeholder {
+  justify-content: center;
+  align-items: center;
 }
 
 app-calendar {
-    flex: 1 1 18.5rem;
-    align-self: stretch;
+  flex: 1 1 18.5rem;
+  align-self: stretch;
 }
 
 // ============MEDIA QUERY============
 
 @media screen and (min-width: 425px) {
-    #assignments>.ass-item>a {
-        max-width: 355px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 355px;
+  }
 }
 
 @media screen and (min-width: 528px) {
-    #assignments>.ass-item>a {
-        max-width: 476px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 476px;
+  }
 
-    #class-wrp {
-        height: auto;
-    }
+  #class-wrp {
+    height: auto;
+  }
 }
 
 @media screen and (min-width: 768px) {
-    #assignments>.ass-item>a {
-        max-width: 648px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 648px;
+  }
 }
 
 @media screen and (min-width: 992px) {
-    #assignments>.ass-item>a {
-        max-width: 355px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 355px;
+  }
 
-    app-calendar {
-        order: 1;
-    }
+  app-calendar {
+    order: 1;
+  }
 
-    #class-wrp {
-        flex-grow: 25;
-    }
+  #class-wrp {
+    flex-grow: 25;
+  }
 }
 
 @media screen and (min-width: 1200px) {
-    #assignments>.ass-item>a {
-        max-width: 520px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 520px;
+  }
 }
 
 @media screen and (min-width: 1400px) {
-    #assignments>.ass-item>a {
-        max-width: 690px;
-    }
+  #assignments > .ass-item > a {
+    max-width: 690px;
+  }
 }

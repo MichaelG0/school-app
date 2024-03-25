@@ -35,7 +35,7 @@ export class ModalService {
     this.assignmentId.next(id);
   }
 
-  setAssignment(modalTitle: string, assignment: IAssignment | null) {
+  setAssignment(modalTitle: string, assignment: IAssignment | null = null) {
     this.assignment.next({ modalTitle, assignment });
   }
 

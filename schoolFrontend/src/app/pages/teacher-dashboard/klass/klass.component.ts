@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
@@ -22,9 +22,11 @@ export class KlassComponent implements OnInit {
   klass!: IKlass;
   assignments$!: Observable<IPageable<IAssignment>>;
   complAssignments$!: Observable<IPageable<ICompletedAssignment>>;
-  page: number = 0;
-  page2: number = 0;
-  upcoming: boolean = true;
+  issuedAssPageNum = 0;
+  submittedAssPageNum = 0;
+  issuedAssPageSize: number;
+  submittedAssPageSize: number;
+  upcoming = true;
 
   constructor(
     private usrSrv: UserService,
@@ -33,7 +35,11 @@ export class KlassComponent implements OnInit {
     private complAssSrv: CompletedAssignmentService,
     private mdlSrv: ModalService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    const tempIssuedAssPageSize = Math.floor((window.innerHeight - 170) / 65);
+    this.issuedAssPageSize = tempIssuedAssPageSize > 0 ? tempIssuedAssPageSize : 1;
+    this.submittedAssPageSize = this.issuedAssPageSize + 1;
+  }
 
   ngOnInit(): void {
     this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => (this.loggedUser = res));
@@ -43,41 +49,78 @@ export class KlassComponent implements OnInit {
       .pipe(take(1))
       .subscribe(res => {
         this.klass = res;
-        this.paginate();
-        this.paginate2();
+        this.paginateIssued();
+        this.paginateSubmitted();
       });
   }
 
-  switchPage() {
+  @HostListener('window:resize', ['$event'])
+  onWindowResize() {
+    let tempIssuedAssPageSize = Math.floor((window.innerHeight - 170) / 65);
+    tempIssuedAssPageSize = tempIssuedAssPageSize > 0 ? tempIssuedAssPageSize : 1;
+    if (this.issuedAssPageSize != tempIssuedAssPageSize) {
+      this.issuedAssPageSize = tempIssuedAssPageSize;
+      this.submittedAssPageSize = this.issuedAssPageSize + 1;
+      this.paginateIssued();
+      this.paginateSubmitted();
+    }
+  }
+
+  switchUpcoming() {
     this.upcoming = !this.upcoming;
-    let value = -this.page;
-    this.paginate(value);
+    let value = -this.issuedAssPageNum;
+    this.paginateIssued(value);
   }
 
-  paginate(value: number = 0) {
-    this.page += value;
+  paginateIssued(value = 0) {
+    this.issuedAssPageNum += value;
     this.assignments$ = this.upcoming
-      ? this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9)
-      : this.assSrv.getPastByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
+      ? this.assSrv.getUpcomingByKlassAndTeacherIds(
+          this.klass.id,
+          this.loggedUser!.user.id,
+          this.issuedAssPageNum,
+          this.issuedAssPageSize
+        )
+      : this.assSrv.getPastByKlassAndTeacherIds(
+          this.klass.id,
+          this.loggedUser!.user.id,
+          this.issuedAssPageNum,
+          this.issuedAssPageSize
+        );
   }
 
-  paginate2(value: number = 0) {
-    this.page2 += value;
-    this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
+  paginateSubmitted(value = 0) {
+    this.submittedAssPageNum += value;
+    this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(
+      this.klass.id,
+      this.loggedUser!.user.id,
+      this.submittedAssPageNum,
+      this.submittedAssPageSize
+    );
   }
 
   updateAll() {
-    this.page = 0;
-    this.page2 = 0;
-    this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page, 9);
-    this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.page2, 9);
+    this.issuedAssPageNum = 0;
+    this.submittedAssPageNum = 0;
+    this.assignments$ = this.assSrv.getUpcomingByKlassAndTeacherIds(
+      this.klass.id,
+      this.loggedUser!.user.id,
+      this.issuedAssPageNum,
+      this.issuedAssPageSize
+    );
+    this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(
+      this.klass.id,
+      this.loggedUser!.user.id,
+      this.submittedAssPageNum,
+      this.submittedAssPageSize
+    );
   }
 
   setAssignmentToDeleteId(id: number) {
     this.mdlSrv.setAssignmnetId(id);
   }
 
-  setAssignmentToUpdate(modalTitle: string, assignment: IAssignment | null = null) {
+  setAssignmentToUpdate(modalTitle: string, assignment?: IAssignment) {
     this.mdlSrv.setAssignment(modalTitle, assignment);
   }
 

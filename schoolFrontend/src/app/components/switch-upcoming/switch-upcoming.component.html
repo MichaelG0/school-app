@@ -1,0 +1,7 @@
+<a (click)="doSwitchUpcoming(false)" class="color" [class.muted-link]="!upcoming">
+  <small> Past </small>
+</a>
+<i class="bi bi-dot text-primary"> </i>
+<a (click)="doSwitchUpcoming(true)" class="color" [class.muted-link]="upcoming">
+  <small> Upcoming </small>
+</a>

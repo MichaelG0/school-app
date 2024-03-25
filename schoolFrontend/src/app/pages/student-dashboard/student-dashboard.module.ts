@@ -6,6 +6,8 @@ import { StudentDashboardComponent } from './student-dashboard.component';
 import { CircleProgressComponent } from 'src/app/components/circle-progress/circle-progress.component';
 import { KlassListModule } from 'src/app/components/klass-list/klass-list.module';
 import { CalendarModule } from 'src/app/components/calendar/calendar.module';
+import { PaginatorModule } from 'src/app/components/paginator/paginator.module';
+import { SwitchUpcomingModule } from 'src/app/components/switch-upcoming/switch-upcoming.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { CalendarModule } from 'src/app/components/calendar/calendar.module';
     CommonModule,
     StudentDashboardRoutingModule,
     KlassListModule,
-    CalendarModule
+    CalendarModule,
+    PaginatorModule,
+    SwitchUpcomingModule
   ]
 })
 export class StudentDashboardModule { }

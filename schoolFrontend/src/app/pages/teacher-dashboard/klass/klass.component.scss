@@ -1,143 +1,128 @@
 .container {
-    margin-top: -.7rem;
-    padding: 0;
+  margin-top: -0.7rem;
+  padding: 0;
 }
 
 .big-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .fake-border {
-    border: 1px solid rgba(0, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 
 app-klass-list {
-    position: relative;
-    overflow: hidden;
-    height: 668px;
-    flex: 10 1 15rem;
+  position: relative;
+  overflow: hidden;
+  height: 668px;
+  flex: 10 1 15rem;
 }
 
 #ass-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    flex: 1 1 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  flex: 1 1 0;
 }
 
 .ass-wrap {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 320px;
-    flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 320px;
+  flex-grow: 1;
 }
 
 .assignments {
-    min-height: 549.2px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.8rem;
 
-    .ass-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: .8rem;
+  .ass-item {
+    display: flex;
+    align-items: center;
 
-        >a, .issued {
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: default;
+    > a,
+    .issued {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: default;
 
-            &:hover {
-                filter: brightness(.7);
+      &:hover {
+        filter: brightness(0.7);
 
-                &+.icons {
-                    display: block;
-                }
-            }
+        & + .icons {
+          display: block;
         }
-
-        >.icons {
-            display: none;
-            white-space: nowrap;
-
-            &:hover {
-                display: block;
-            }
-
-            a:hover {
-                filter: brightness(.7);
-            }
-        }
-
-        .form-check-input:disabled {
-            padding: 8px;
-            border-radius: .4rem;
-            opacity: 1;
-        }
-
-        * {
-            display: inline;
-            margin: 0;
-        }
-
-        .text-muted {
-            display: block;
-            font-size: .8rem;
-            font-weight: 500;
-        }
+      }
     }
-}
 
-.assignment-assessed {
-    text-decoration: line-through;
-    text-decoration-thickness: 1px;
-    opacity: .5;
+    > .icons {
+      display: none;
+      white-space: nowrap;
 
-    b {
-        font-weight: 400;
+      &:hover {
+        display: block;
+      }
+
+      a:hover {
+        filter: brightness(0.7);
+      }
     }
+
+    .form-check-input:disabled {
+      padding: 8px;
+      border-radius: 0.4rem;
+      opacity: 1;
+    }
+
+    * {
+      display: inline;
+      margin: 0;
+    }
+
+    .text-muted {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+  }
+
+  .big-spin {
+    margin-top: -4rem;
+  }
 }
 
 .assignments-placeholder {
-    padding-top: 200px;
-    min-height: 533.2px;
+  justify-content: center;
+  align-items: center;
 }
 
-#new-ass {
-    position: absolute;
-    bottom: 2.5rem;
-    right: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    color: white;
-    background-color: #0d6efd;
-    border-radius: 10rem;
-    width: 3rem;
-    height: 3rem;
-    text-shadow: 3px 3px rgba(0, 0, 0, 0.5);
+.assignment-assessed {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+  opacity: 0.5;
 
-    &:hover {
-        background-color: #0a58ca;
-    }
+  b {
+    font-weight: 400;
+  }
 }
 
 // ============MEDIA QUERY============
 
 @media screen and (min-width: 768px) {
-    #ass-grid {
-        flex-wrap: nowrap;
-    }
-
+  #ass-grid {
+    flex-wrap: nowrap;
+  }
 }
 
 @media screen and (min-width: 992px) {
-    app-klass-list {
-        height: auto;
-    }
+  app-klass-list {
+    height: auto;
+  }
 }
