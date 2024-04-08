@@ -58,22 +58,26 @@ export class KlassComponent implements OnInit {
   onWindowResize() {
     let tempIssuedAssPageSize = Math.floor((window.innerHeight - 170) / 65);
     tempIssuedAssPageSize = tempIssuedAssPageSize > 0 ? tempIssuedAssPageSize : 1;
-    if (this.issuedAssPageSize != tempIssuedAssPageSize) {
+    if (this.issuedAssPageSize > tempIssuedAssPageSize) {
       this.issuedAssPageSize = tempIssuedAssPageSize;
       this.submittedAssPageSize = this.issuedAssPageSize + 1;
       this.paginateIssued();
       this.paginateSubmitted();
+    } else if (this.issuedAssPageSize < tempIssuedAssPageSize) {
+      this.issuedAssPageSize = tempIssuedAssPageSize;
+      this.submittedAssPageSize = this.issuedAssPageSize + 1;
+      this.paginateIssued(0);
+      this.paginateSubmitted(0);
     }
   }
 
   switchUpcoming() {
     this.upcoming = !this.upcoming;
-    let value = -this.issuedAssPageNum;
-    this.paginateIssued(value);
+    this.paginateIssued(0);
   }
 
-  paginateIssued(value = 0) {
-    this.issuedAssPageNum += value;
+  paginateIssued(value = this.issuedAssPageNum) {
+    this.issuedAssPageNum = value;
     this.assignments$ = this.upcoming
       ? this.assSrv.getUpcomingByKlassAndTeacherIds(
           this.klass.id,
@@ -89,8 +93,8 @@ export class KlassComponent implements OnInit {
         );
   }
 
-  paginateSubmitted(value = 0) {
-    this.submittedAssPageNum += value;
+  paginateSubmitted(value = this.submittedAssPageNum) {
+    this.submittedAssPageNum = value;
     this.complAssignments$ = this.complAssSrv.getByKlassAndTeacherIds(
       this.klass.id,
       this.loggedUser!.user.id,

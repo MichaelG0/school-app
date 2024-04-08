@@ -2,8 +2,12 @@ package com.capstone.schoolmanagement.auth.users;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 
@@ -21,6 +25,7 @@ import com.capstone.schoolmanagement.auth.roles.ERole;
 import com.capstone.schoolmanagement.auth.roles.RoleRepository;
 import com.capstone.schoolmanagement.dto.KlassDto;
 import com.capstone.schoolmanagement.dto.users.StudentDto;
+import com.capstone.schoolmanagement.dto.users.UserRolesDto;
 import com.capstone.schoolmanagement.email.EmailService;
 import com.capstone.schoolmanagement.model.Course;
 import com.capstone.schoolmanagement.model.Klass;
@@ -85,7 +90,7 @@ public class UserService {
 		token.setExpirationDate(LocalDate.now().plusDays(30));
 		token.setUser(usr);
 		token.setCourse(crsRepo.findById(studentDto.getCourseId())
-				.orElseThrow(() -> new EntityNotFoundException("User not found")));
+				.orElseThrow(() -> new EntityNotFoundException("Course not found")));
 		studentTokenRepo.save(token);
 
 		String link = "http://localhost:4200/" + token.getToken() + "/confirmation";
@@ -133,12 +138,12 @@ public class UserService {
 	}
 
 	public UserResponse getById(Long id) {
-		AppUser user = usrRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		AppUser user = usrRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 		return UserResponse.buildUserResponse(user);
 	}
 
 	public UserResponse update(Long id, UserDto usrDto) {
-		AppUser usr = usrRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+		AppUser usr = usrRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 		BeanUtils.copyProperties(usrDto, usr);
 		usr.setPassword(encoder.encode(usrDto.getPassword()));
 		usr.setGender(EGender.valueOf(usrDto.getGender()));
@@ -148,24 +153,28 @@ public class UserService {
 
 	public void delete(Long id) {
 		if (!usrRepo.existsById(id))
-			throw new EntityNotFoundException("User not found");
+			throw new EntityNotFoundException("User not found with id: " + id);
 		usrRepo.deleteById(id);
 	}
 
-	public void addRole(Long userId, String roleName) {
-		AppUser usr = usrRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		AppRole role = roleRepo.findByRoleName(ERole.valueOf(roleName))
-				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
-		usr.getRoles().add(role);
-		usrRepo.save(usr);
-	}
+	public List<UserResponse> editUsersRoles(List<UserRolesDto> userRolesList) {
+		Map<Long, List<String>> userRolesMap = userRolesList.stream()
+				.collect(Collectors.toMap(UserRolesDto::getUserId, UserRolesDto::getRoles));
+		List<Long> userIds = userRolesMap.keySet().stream().toList();
+		List<AppUser> users = usrRepo.findAllById(userIds);
 
-	public void removeRole(Long userId, String roleName) {
-		AppUser usr = usrRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-		AppRole role = roleRepo.findByRoleName(ERole.valueOf(roleName))
-				.orElseThrow(() -> new EntityNotFoundException("Role not found"));
-		usr.getRoles().remove(role);
-		usrRepo.save(usr);
+		for (AppUser user : users) {
+			List<ERole> rolesEnum = userRolesMap.get(user.getId())
+					.stream()
+					.map(roleStr -> ERole.valueOf(roleStr))
+					.toList();
+			List<AppRole> roles = roleRepo.findAllByRoleNameIn(rolesEnum);
+			user.getRoles().clear();
+			user.getRoles().addAll(roles);
+		}
+
+		usrRepo.saveAll(users);
+		return users.stream().map(UserResponse::buildUserResponse).toList();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

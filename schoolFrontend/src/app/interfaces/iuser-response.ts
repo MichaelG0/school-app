@@ -10,3 +10,16 @@ export interface IUserResponse {
   bio: string;
   roles: string[];
 }
+
+export class UserResponse implements IUserResponse {
+  id = 0;
+  name = '';
+  surname = '';
+  email = '';
+  avatar = '';
+  gender = '';
+  address = '';
+  phone = '';
+  bio = '';
+  roles = [];
+}

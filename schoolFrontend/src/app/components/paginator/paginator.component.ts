@@ -9,7 +9,8 @@ import { IPageable } from 'src/app/interfaces/ipageable';
 })
 export class PaginatorComponent implements OnInit {
   @Input() pageable!: IPageable<any>;
-  @Input() pageNum = 0;
+  @Input() selectedPage = 0;
+  @Input() firstLast = false
   @Output() switchPage = new EventEmitter<number>();
 
   constructor() {}

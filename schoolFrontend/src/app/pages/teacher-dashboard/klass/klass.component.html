@@ -64,7 +64,7 @@
 
             <app-paginator
               [pageable]="assignments"
-              [pageNum]="issuedAssPageNum"
+              [selectedPage]="issuedAssPageNum"
               (switchPage)="paginateIssued($event)"
             ></app-paginator>
           </div>
@@ -121,7 +121,7 @@
 
             <app-paginator
               [pageable]="complAssignments"
-              [pageNum]="submittedAssPageNum"
+              [selectedPage]="submittedAssPageNum"
               (switchPage)="paginateSubmitted($event)"
             ></app-paginator>
           </div>

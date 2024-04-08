@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
@@ -10,8 +10,8 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
 })
-export class NavComponent implements OnInit, OnDestroy {
-  unsub$ = new Subject<void>();
+export class NavComponent implements OnInit {
+  loggedObs$ = this.usrSrv.loggedObs$.pipe(takeUntilDestroyed());
   loggedUser!: null | IJwtResponse;
   roles!: null | string[];
   rtr!: Router;
@@ -19,7 +19,7 @@ export class NavComponent implements OnInit, OnDestroy {
   constructor(private usrSrv: UserService, private modalSrv: ModalService, private router: Router) {}
 
   ngOnInit(): void {
-    this.usrSrv.loggedObs$.pipe(takeUntil(this.unsub$)).subscribe(res => {
+    this.loggedObs$.subscribe(res => {
       this.loggedUser = res;
       this.roles = res ? res.user.roles : null;
     });
@@ -35,13 +35,7 @@ export class NavComponent implements OnInit, OnDestroy {
   }
 
   dashboardCondition(): string {
-    if (this.roles && this.roles.includes('ROLE_TEACHER'))
-      return '/teacher_dashboard';
+    if (this.roles && this.roles.includes('ROLE_TEACHER')) return '/teacher_dashboard';
     return '/student_dashboard';
-  }
-
-  ngOnDestroy(): void {
-    this.unsub$.next();
-    this.unsub$.complete();
   }
 }

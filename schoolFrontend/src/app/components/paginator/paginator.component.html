@@ -1,21 +1,49 @@
-<div *ngIf="pageable; else loading" class="px-4 pb-1 d-inline-flex align-items-baseline">
-  <small class="text-muted me-4"> Page {{ pageNum + 1 }} of {{ pageable.totalPages }} </small>
-  <button (click)="switchPage.emit(-1)" class="btn pag-btn" [disabled]="pageNum + 1 <= 1">
+<div *ngIf="pageable; else loading" class="d-inline-flex align-items-baseline">
+  <small class="text-muted me-4"> Page {{ selectedPage + 1 }} of {{ pageable.totalPages }} </small>
+
+  <button
+    *ngIf="firstLast"
+    (click)="switchPage.emit(0)"
+    class="btn pag-btn"
+    [disabled]="selectedPage + 1 <= 1"
+  >
+    <i class="bi bi-chevron-bar-left"></i>
+  </button>
+  <button (click)="switchPage.emit(selectedPage - 1)" class="btn pag-btn" [disabled]="selectedPage + 1 <= 1">
     <i class="bi bi-chevron-left me-2"></i>
   </button>
-  <button (click)="switchPage.emit(1)" class="btn pag-btn" [disabled]="pageNum + 1 >= pageable.totalPages">
+  <button
+    (click)="switchPage.emit(selectedPage + 1)"
+    class="btn pag-btn"
+    [disabled]="selectedPage + 1 >= pageable.totalPages"
+  >
     <i class="bi bi-chevron-right ms-2"></i>
+  </button>
+  <button
+    *ngIf="firstLast"
+    (click)="switchPage.emit(pageable.totalPages - 1)"
+    class="btn pag-btn"
+    [disabled]="selectedPage + 1 >= pageable.totalPages"
+  >
+    <i class="bi bi-chevron-bar-right"></i>
   </button>
 </div>
 
 <ng-template #loading>
-  <div class="px-4 pb-1 d-inline-flex align-items-baseline">
-    <small class="text-muted me-4"> Page {{ pageNum + 1 }} of ? </small>
+  <div class="d-inline-flex align-items-baseline">
+    <small class="text-muted me-4"> Page {{ selectedPage + 1 }} of ? </small>
+
+    <button *ngIf="firstLast" class="btn pag-btn" disabled>
+      <i class="bi bi-chevron-bar-left"></i>
+    </button>
     <button class="btn pag-btn" disabled>
       <i class="bi bi-chevron-left me-2"></i>
     </button>
     <button class="btn pag-btn" disabled>
       <i class="bi bi-chevron-right ms-2"></i>
+    </button>
+    <button *ngIf="firstLast" class="btn pag-btn" disabled>
+      <i class="bi bi-chevron-bar-right"></i>
     </button>
   </div>
 </ng-template>

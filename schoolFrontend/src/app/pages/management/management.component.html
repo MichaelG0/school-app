@@ -1,5 +1,64 @@
-<ng-container *ngIf="users$ | async as users; else loading">
-  <div class="container shadow-sm">
+<div class="container">
+  <div class="d-flex justify-content-end gap-2 mb-3">
+    <ng-container *ngIf="usersRolesMap.size; else disabledBtns">
+      <button type="button" class="btn btn-light shadow-sm" (click)="undoChanges()">
+        <i class="bi bi-arrow-counterclockwise"></i> Undo
+      </button>
+      <button type="button" class="btn btn-dark shadow-sm" (click)="save()">Save</button>
+    </ng-container>
+
+    <ng-template #disabledBtns>
+      <button type="button" class="btn btn-light shadow-sm" disabled>
+        <i class="bi bi-arrow-counterclockwise"></i> Undo
+      </button>
+      <button type="button" class="btn btn-dark shadow-sm" disabled>Save</button>
+    </ng-template>
+  </div>
+</div>
+
+<div
+  *ngIf="users$ | async as users; else loading"
+  class="container bg-white rounded overflow-hidden shadow-sm p-3"
+>
+  <table class="m-0 table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th *ngFor="let role of roles" scope="col" class="text-center">
+          {{ role.displayName }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users.content">
+        <th [routerLink]="['/' + user.id + '/profile']" scope="row" class="user-row">
+          {{ user.name }} {{ user.surname }}
+        </th>
+        <td *ngFor="let role of roles" class="text-center">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            (change)="toggleRole(user, role.name)"
+            [checked]="user.roles.includes(role.name)"
+            [disabled]="user | pureFn : disabledCondition : role.name"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="text-end pt-2 pe-2">
+    <app-paginator
+      [pageable]="users"
+      [selectedPage]="page"
+      [firstLast]="true"
+      (switchPage)="goToPage($event)"
+    ></app-paginator>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading-placeholder container bg-white rounded overflow-hidden shadow-sm p-3">
     <table class="m-0 table table-striped table-hover">
       <thead>
         <tr>
@@ -10,7 +69,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users.content">
+        <tr *ngFor="let user of savedTableContent.content">
           <th [routerLink]="['/' + user.id + '/profile']" scope="row" class="user-row">
             {{ user.name }} {{ user.surname }}
           </th>
@@ -18,43 +77,27 @@
             <input
               type="checkbox"
               class="form-check-input"
-              (change)="toggleRole(user, role.name)"
               [checked]="user.roles.includes(role.name)"
-              [disabled]="
-                role.name == 'ROLE_ADMIN' && !(loggedObs$ | async)?.user?.roles?.includes('ROLE_ADMIN')
-              "
+              disabled
             />
           </td>
         </tr>
       </tbody>
     </table>
 
-    <div class="py-2 d-flex justify-content-end align-items-baseline">
-      <small class="me-3 text-muted">Page {{ page + 1 }} of {{ users.totalPages }}</small>
-      <button (click)="goToPage(0)" class="btn pag-btn" [disabled]="page + 1 == 1">
-        <i class="bi bi-chevron-bar-left"></i>
-      </button>
-      <button (click)="paginate(-1)" class="btn pag-btn" [disabled]="page + 1 == 1">
-        <i class="bi bi-chevron-left"></i>
-      </button>
-      <button (click)="paginate(1)" class="btn pag-btn" [disabled]="page + 1 == users.totalPages">
-        <i class="bi bi-chevron-right"></i>
-      </button>
-      <button
-        (click)="goToPage(users.totalPages - 1)"
-        class="btn pag-btn"
-        [disabled]="page + 1 == users.totalPages"
-      >
-        <i class="bi bi-chevron-bar-right"></i>
-      </button>
+    <div class="spinner-wrp">
+      <svg class="spinner big-spin" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
     </div>
-  </div>
-</ng-container>
 
-<ng-template #loading>
-  <div class="text-center">
-    <svg class="spinner big-spin" viewBox="0 0 50 50">
-      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-    </svg>
+    <div class="text-end pt-2 pe-2">
+      <app-paginator
+        [pageable]="savedTableContent"
+        [selectedPage]="page"
+        [firstLast]="true"
+        (switchPage)="goToPage($event)"
+      ></app-paginator>
+    </div>
   </div>
 </ng-template>

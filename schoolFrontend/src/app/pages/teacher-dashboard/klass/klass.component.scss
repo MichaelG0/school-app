@@ -113,6 +113,17 @@ app-klass-list {
   }
 }
 
+app-paginator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 1.5rem;
+  padding-bottom: 0.25rem;
+  display: flex;
+  justify-content: center;
+}
+
 // ============MEDIA QUERY============
 
 @media screen and (min-width: 768px) {

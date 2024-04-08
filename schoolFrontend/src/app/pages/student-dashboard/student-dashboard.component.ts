@@ -23,7 +23,7 @@ export class StudentDashboardComponent implements OnInit {
   completedAssignments$!: Observable<IComplAssignBasicResponseWithAverageGrade>;
   complAssIds!: number[];
   assignments$!: Observable<IPageable<IAssignment>>;
-  page: number = 0;
+  page = 0;
   pageSize: number;
   upcoming: boolean = true;
 
@@ -46,7 +46,7 @@ export class StudentDashboardComponent implements OnInit {
       .subscribe(res => {
         this.klass = res;
         this.attendance$ = this.rgsSrv.getAttendance(this.loggedUser!.user.id, this.klass.id);
-        this.paginate();
+        this.goToPage();
       });
     this.completedAssignments$ = this.complAssSrv
       .getBasicByStudentId(this.loggedUser!.user.id)
@@ -57,20 +57,22 @@ export class StudentDashboardComponent implements OnInit {
   onWindowResize() {
     let tempPageSize = Math.floor((window.innerHeight - 170) / 65) + 1;
     tempPageSize = tempPageSize > 0 ? tempPageSize : 1;
-    if (this.pageSize != tempPageSize) {
+    if (this.pageSize > tempPageSize) {
       this.pageSize = tempPageSize;
-      this.paginate();
+      this.goToPage();
+    } else if (this.pageSize < tempPageSize) {
+      this.pageSize = tempPageSize;
+      this.goToPage(0);
     }
   }
 
   switchUpcoming() {
     this.upcoming = !this.upcoming;
-    let value = -this.page;
-    this.paginate(value);
+    this.goToPage(0);
   }
 
-  paginate(value: number = 0) {
-    this.page += value;
+  goToPage(value = this.page) {
+    this.page = value;
     this.assignments$ = this.upcoming
       ? this.assSrv.getUpcomingByKlassId(this.klass.id, this.page, this.pageSize)
       : this.assSrv.getPastByKlassId(this.klass.id, this.page, this.pageSize);

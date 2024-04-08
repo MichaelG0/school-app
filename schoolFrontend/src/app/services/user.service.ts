@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, from, of } from 'rxjs';
-import { catchError, concatMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { IJwtResponse } from '../interfaces/ijwt-response';
 import { ILoginRequest } from '../interfaces/ilogin-request';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -17,11 +17,10 @@ import { IPageable } from '../interfaces/ipageable';
 export class UserService {
   private readonly apiUrl = 'http://localhost:8080';
 
-  jwtHelper = new JwtHelperService();
-  autoLogoutTimer: any
+  private readonly jwtHelper = new JwtHelperService();
 
-  private loggedUser = new BehaviorSubject<null | IJwtResponse>(null);
-  loggedObs$ = this.loggedUser.asObservable();
+  private readonly loggedUser = new BehaviorSubject<null | IJwtResponse>(null);
+  readonly loggedObs$ = this.loggedUser.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
     this.restore();
@@ -29,20 +28,19 @@ export class UserService {
 
   restore() {
     let userJson = localStorage.getItem('user');
-    if (!userJson)
-      return;
+    if (!userJson) return;
     const user: IJwtResponse = JSON.parse(userJson);
     if (this.jwtHelper.isTokenExpired(user.token)) {
       this.logout();
       return;
     }
     this.loggedUser.next(user);
-    this.autoLogout(user.token)
+    this.autoLogout(user.token);
   }
 
   signUp(user: ISignUpRequest) {
-    return this.http.post<IJwtResponse>(`${this.apiUrl}/users`, user).pipe(
-      tap((res) => {
+    return this.http.post<IJwtResponse>(`${this.apiUrl}/users/signup`, user).pipe(
+      tap(res => {
         localStorage.setItem('user', JSON.stringify(res));
         this.loggedUser.next(res);
       })
@@ -51,9 +49,9 @@ export class UserService {
 
   login(authData: ILoginRequest) {
     return this.http.post<IJwtResponse>(`${this.apiUrl}/login`, authData).pipe(
-      tap((res) => {
+      tap(res => {
         localStorage.setItem('user', JSON.stringify(res));
-        this.autoLogout(res.token)
+        this.autoLogout(res.token);
         this.loggedUser.next(res);
       }),
       catchError(() => of(true))
@@ -63,7 +61,7 @@ export class UserService {
   logout(navData?: boolean) {
     localStorage.removeItem('user');
     this.loggedUser.next(null);
-    this.router.navigate([''], {state: {data: navData}})
+    this.router.navigate([''], { state: { data: navData } });
   }
 
   // editUser(id: number, userData: ISignUpRequest) {
@@ -82,13 +80,13 @@ export class UserService {
 
   apply(student: IStudentRequest) {
     return this.http.post<IUserResponse>(`${this.apiUrl}/users/apply`, student).pipe(
-      tap((res) => {
+      tap(res => {
         const user: IJwtResponse = {
           token: JSON.parse(localStorage.getItem('user')!).token,
           type: 'Bearer',
-          user: res
-        }
-        localStorage.setItem('user', JSON.stringify(user))
+          user: res,
+        };
+        localStorage.setItem('user', JSON.stringify(user));
         this.loggedUser.next(user);
       }),
       catchError(() => of(true))
@@ -97,21 +95,21 @@ export class UserService {
 
   enrol(token: string) {
     return this.http.get<IUserResponse>(`${this.apiUrl}/users/enrol?token=${token}`).pipe(
-      tap((res) => {
+      tap(res => {
         const user: IJwtResponse = {
           token: JSON.parse(localStorage.getItem('user')!).token,
           type: 'Bearer',
-          user: res
-        }
-        localStorage.setItem('user', JSON.stringify(user))
+          user: res,
+        };
+        localStorage.setItem('user', JSON.stringify(user));
         this.loggedUser.next(user);
       }),
       catchError(() => of(false))
-    )
+    );
   }
 
   getUser(id: number) {
-    return this.http.get<IUserResponse>(`${this.apiUrl}/users/${id}`)
+    return this.http.get<IUserResponse>(`${this.apiUrl}/users/${id}`);
   }
 
   // getSpecificUsers(ids: number[]) {
@@ -120,29 +118,29 @@ export class UserService {
   //   );
   // }
 
-  getUsers(page: number = 0, size: number = 20) {
-    return this.http.get<IPageable<IUserResponse>>(`${this.apiUrl}/users?page=${page}&size=${size}`)
+  getUsers(page = 0, size = 20) {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<IPageable<IUserResponse>>(`${this.apiUrl}/users/get-all`, { params });
   }
 
   deleteUser(id: number) {
-    return this.http.delete<void>(`${this.apiUrl}/users/${id}`)
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
   }
 
-  addRole(id: number, roleName: string) {
-    return this.http.put<void>(`${this.apiUrl}/users/${id}/add_role`, roleName)
-  }
-
-  removeRole(id: number, roleName: string) {
-    return this.http.put<void>(`${this.apiUrl}/users/${id}/remove_role`, roleName)
+  editUsersRoles(usersRolesMap: Map<number /*userId*/, string[] /*roles*/>) {
+    const usersRolesArray = Array.from(usersRolesMap.entries()).map(([userId, roles]) => ({
+      userId,
+      roles,
+    }));
+    return this.http.put<IUserResponse[]>(`${this.apiUrl}/users/edit-users-roles`, usersRolesArray);
   }
 
   autoLogout(at: string) {
     const exDate = this.jwtHelper.getTokenExpirationDate(at) as Date;
-    const exMs = exDate.getTime() - new Date().getTime()
+    const exMs = exDate.getTime() - new Date().getTime();
 
-    this.autoLogoutTimer = setTimeout(() => {
+    setTimeout(() => {
       this.logout();
-    }, exMs)
+    }, exMs);
   }
-
 }

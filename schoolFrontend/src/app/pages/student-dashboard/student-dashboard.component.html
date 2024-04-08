@@ -71,8 +71,8 @@
 
             <app-paginator
               [pageable]="assignments"
-              [pageNum]="page"
-              (switchPage)="paginate($event)"
+              [selectedPage]="page"
+              (switchPage)="goToPage($event)"
             ></app-paginator>
           </div>
 

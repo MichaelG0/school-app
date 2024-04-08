@@ -1,7 +1,13 @@
-import { IUserResponse } from "./iuser-response";
+import { IUserResponse, UserResponse } from './iuser-response';
 
 export interface IJwtResponse {
   token: string;
   type: string;
-  user: IUserResponse
+  user: IUserResponse;
+}
+
+export class JwtResponse implements IJwtResponse{
+  token = '';
+  type = '';
+  user = new UserResponse();
 }

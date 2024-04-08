@@ -2,6 +2,7 @@ package com.capstone.schoolmanagement.auth.users;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ import com.capstone.schoolmanagement.auth.login.LoginController;
 import com.capstone.schoolmanagement.auth.login.LoginRequest;
 import com.capstone.schoolmanagement.controllers.IControllerPage;
 import com.capstone.schoolmanagement.dto.users.StudentDto;
+import com.capstone.schoolmanagement.dto.users.UserRolesDto;
 import com.capstone.schoolmanagement.model.users.Student;
 import com.capstone.schoolmanagement.model.users.StudentConfirmationToken;
 
@@ -48,7 +50,7 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 	private final JwtUtils jwtUtils;
 
 	@Override
-	@PostMapping
+	@PostMapping("/signup")
 	public ResponseEntity<JwtResponse> create(@RequestBody UserDto usrDto) {
 		LoginRequest request = usrSrv.create(usrDto);
 		UsernamePasswordAuthenticationToken usrNameAuth = new UsernamePasswordAuthenticationToken(request.getEmail(),
@@ -57,7 +59,7 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtUtils.generateJwtToken(authentication);
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
+
 		JwtResponse jwtresp = new JwtResponse(jwt, UserResponse.buildUserResponse(userDetails));
 
 		return ResponseEntity.ok(jwtresp);
@@ -76,7 +78,7 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 	}
 
 	@Override
-	@GetMapping
+	@GetMapping("/get-all")
 	public ResponseEntity<Page<UserResponse>> getAll(@RequestParam Optional<Integer> page,
 			@RequestParam Optional<Integer> size) {
 		return ResponseEntity.ok(usrSrv.getAll(page, size));
@@ -101,18 +103,10 @@ public class UserController implements IControllerPage<UserResponse, UserDto> {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/{userId}/add_role")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> addRole(@PathVariable Long userId, @RequestBody String roleName) {
-		usrSrv.addRole(userId, roleName);
-		return ResponseEntity.ok().build();
-	}
-	
-	@PutMapping("/{userId}/remove_role")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Void> removeRole(@PathVariable Long userId, @RequestBody String roleName) {
-		usrSrv.removeRole(userId, roleName);
-		return ResponseEntity.ok().build();
+	@PutMapping("/edit-users-roles")
+	@PreAuthorize("hasPermission(#usersRoles, authentication)")
+	public ResponseEntity<List<UserResponse>> editUsersRoles(@RequestBody List<UserRolesDto> usersRoles) {
+		return ResponseEntity.ok(usrSrv.editUsersRoles(usersRoles));
 	}
 
 }
