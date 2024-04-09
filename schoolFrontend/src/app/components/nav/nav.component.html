@@ -26,7 +26,7 @@
             placeholder="Search..."
             aria-label="Search"
           />
-          <button type="button" class="src-btn btn btn-dark me-2"><i class="bi bi-search"></i></button>
+          <button type="button" class="src-btn btn btn-primary me-2"><i class="bi bi-search"></i></button>
         </form>
       </div>
 
@@ -51,7 +51,7 @@
             <a [routerLink]="['/academics']" routerLinkActive="active" class="nav-link px-0 link-dark">
               Academics
             </a>
-            <ul class="drop-link-menu shadow border">
+            <ul class="drop-link-menu shadow border rounded">
               <li>
                 <a
                   [routerLink]="['/academics/undergraduate']"
@@ -82,7 +82,7 @@
             (click)="setModal('Log In', rtr.url)"
             id="lgn-btn"
             type="button"
-            class="btn btn-outline-dark px-sm-3 me-sm-2 me-0 px-2"
+            class="btn btn-outline-primary px-sm-3 me-sm-2 me-0 px-2"
             data-bs-toggle="modal"
             href="#exampleModalToggle2"
           >
@@ -91,7 +91,7 @@
           <button
             (click)="setModal('Log In To Apply', '/apply')"
             type="button"
-            class="apply-btn btn btn-dark px-sm-4 px-3"
+            class="apply-btn btn btn-primary px-sm-4 px-3"
             data-bs-toggle="modal"
             href="#exampleModalToggle2"
           >
@@ -126,7 +126,7 @@
             *ngIf="roles && roles.length <= 1 && roles.includes('ROLE_GUEST')"
             [routerLink]="['/apply']"
             type="button"
-            class="apply-btn btn btn-dark px-sm-4 px-3"
+            class="apply-btn btn btn-primary px-sm-4 px-3"
           >
             Apply
           </button>

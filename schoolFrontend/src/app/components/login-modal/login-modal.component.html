@@ -16,7 +16,7 @@
         <input formControlName="password" type="password" class="form-control" placeholder="Password" />
         <small *ngIf="loginFailed" class="text-danger">Wrong email or password</small>
         <div (click)="btnClicked = true" class="btn-wrp">
-          <button class="btn btn-dark px-4" type="submit" [disabled]="loginForm.invalid">
+          <button class="btn btn-primary px-4" type="submit" [disabled]="loginForm.invalid">
             <span *ngIf="!loading">Continue</span>
             <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
               <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>

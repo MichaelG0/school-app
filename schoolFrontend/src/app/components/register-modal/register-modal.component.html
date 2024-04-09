@@ -29,12 +29,12 @@
                     </div>
                 </div>
                 <div (click)="btnClicked = true" class="btn-wrp">
-                    <button *ngIf="!gotEmail" (click)="gotEmail = true" class="btn btn-dark px-4" type="button"
+                    <button *ngIf="!gotEmail" (click)="gotEmail = true" class="btn btn-primary px-4" type="button"
                         data-bs-target="#carouselExampleIndicators" data-bs-slide="next"
                         [disabled]="signUpForm.get('email')!.invalid">Continue</button>
                 </div>
                 <div (click)="btnClicked2 = true" class="btn-wrp">
-                    <button *ngIf="gotEmail" class="btn btn-dark px-4" type="submit" [disabled]="signUpForm.invalid">Join</button>
+                    <button *ngIf="gotEmail" class="btn btn-primary px-4" type="submit" [disabled]="signUpForm.invalid">Join</button>
                 </div>
             </form>
 

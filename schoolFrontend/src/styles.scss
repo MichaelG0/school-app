@@ -1,3 +1,5 @@
+$primary: #393e46;
+
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
 :root {
@@ -37,43 +39,33 @@ b {
 
 // ===========================BUTTONS===========================
 
-.btn {
-  &:focus {
-    box-shadow: none !important;
-  }
-}
-
-.btn-dark {
-  color: #fff !important;
-  background-color: #1c1f23 !important;
-  border-color: #1a1e21 !important;
-
-  &:hover {
-    background-color: var(--l-black) !important;
-    border-color: var(--l-black) !important;
-  }
-
-  &:active {
-    background-color: #1c1f23 !important;
-    border-color: #1a1e21 !important;
-  }
-}
-
-.btn-outline-dark {
-  &:hover {
-    background-color: #1c1f23 !important;
-    border-color: #1a1e21 !important;
-  }
-
-  &:active {
-    color: #fff !important;
-    background-color: var(--l-black) !important;
-    border-color: var(--l-black) !important;
-  }
-}
-
 .btn-link {
   text-decoration: none;
+}
+
+// ===========================NAV-LINK===========================
+
+.nav-link {
+  position: relative;
+
+  &::after {
+    content: '';
+    background-color: var(--bs-primary);
+    position: absolute;
+    bottom: 1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    transition: all 0.15s ease;
+  }
+
+  &:hover::after {
+    width: 1rem;
+  }
+
+  &.active::after {
+    width: 100%;
+  }
 }
 
 // ===========================PAGINATION===========================

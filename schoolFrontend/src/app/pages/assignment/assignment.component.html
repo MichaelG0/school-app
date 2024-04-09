@@ -24,7 +24,7 @@
       <input formControlName="link" type="url" class="form-control" placeholder="Link" id="link" />
 
       <div class="btn-wrp">
-        <button class="btn btn-dark px-4" type="submit" [disabled]="linkForm.invalid">
+        <button class="btn btn-primary px-4" type="submit" [disabled]="linkForm.invalid">
           <span *ngIf="!loading"><i class="bi bi-cloud-arrow-up"></i> Upload</span>
           <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
             <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>

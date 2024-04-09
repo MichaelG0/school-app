@@ -74,7 +74,7 @@
     <small *ngIf="warning('course', btnClicked)" class="text-danger">Select one</small>
 
     <div (click)="btnClicked = true" class="btn-wrp">
-      <button class="btn btn-dark px-4" type="submit" [disabled]="applyForm.invalid">
+      <button class="btn btn-primary px-4" type="submit" [disabled]="applyForm.invalid">
         <span *ngIf="!loading">Apply Now</span>
         <svg *ngIf="loading" class="spinner" viewBox="0 0 50 50">
           <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
