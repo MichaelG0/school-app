@@ -26,15 +26,15 @@ public class KlassResponse {
 				.course(klass.getCourse())
 				.teachers(klass.getTeachers()
 						.stream()
-						.map(teacher -> TeacherBasicResponse.buildBasicTeacherResponse(teacher))
+						.map(TeacherBasicResponse::buildBasicTeacherResponse)
 						.toList())
 				.students(klass.getStudents()
 						.stream()
-						.map(student -> UserBasicResponse.buildBasicUserResponse(student))
+						.map(UserBasicResponse::buildBasicUserResponse)
 						.toList())
 				.weeklySchedule(klass.getWeeklySchedule()
 						.stream()
-						.map(wsi -> WeeklyScheduleItemResponse.buildWsiResponse(wsi))
+						.map(WeeklyScheduleItemResponse::buildWsiResponse)
 						.toList())
 				.build();
 	}

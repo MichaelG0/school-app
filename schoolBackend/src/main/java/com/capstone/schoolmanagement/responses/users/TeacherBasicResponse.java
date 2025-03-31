@@ -2,6 +2,7 @@ package com.capstone.schoolmanagement.responses.users;
 
 import java.util.List;
 
+import com.capstone.schoolmanagement.model.Mmodule;
 import com.capstone.schoolmanagement.model.TeacherModulesPerKlass;
 import com.capstone.schoolmanagement.model.users.Teacher;
 
@@ -24,7 +25,7 @@ public class TeacherBasicResponse {
 				.name(teacher.getName())
 				.surname(teacher.getSurname())
 				.avatar(teacher.getAvatar())
-				.modules(teacherMPK.getModules().stream().map(mdl -> mdl.getName()).toList())
+				.modules(teacherMPK.getModules().stream().map(Mmodule::getName).toList())
 				.build();
 	}
 	

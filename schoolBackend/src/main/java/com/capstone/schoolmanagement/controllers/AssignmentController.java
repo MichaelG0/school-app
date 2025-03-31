@@ -3,8 +3,7 @@ package com.capstone.schoolmanagement.controllers;
 import java.net.URI;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,62 +27,61 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/assignments")
 @RequiredArgsConstructor
 public class AssignmentController implements IControllerPage<AssignmentResponse, AssignmentDto> {
-	private final AssignmentService assSrv;
+  private final AssignmentService assSrv;
 
-	@Override
-	@PostMapping
-	public ResponseEntity<AssignmentResponse> create(@RequestBody @Valid AssignmentDto dto) {
-		URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
-		return ResponseEntity.created(uri).body(assSrv.create(dto));
-	}
+  @Override
+  @PostMapping
+  public ResponseEntity<AssignmentResponse> create(@RequestBody @Valid AssignmentDto dto) {
+    URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().toUriString());
+    return ResponseEntity.created(uri).body(assSrv.create(dto));
+  }
 
-	@Override
-	public ResponseEntity<Page<AssignmentResponse>> getAll(Optional<Integer> page, Optional<Integer> size) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  @Override
+  public ResponseEntity<Page<AssignmentResponse>> getAll(Optional<Integer> page, Optional<Integer> size) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	@Override
-	@GetMapping("/{id}")
-	public ResponseEntity<AssignmentResponse> getById(@PathVariable Long id) {
-		return ResponseEntity.ok(assSrv.getById(id));
-	}
+  @Override
+  @GetMapping("/{id}")
+  public ResponseEntity<AssignmentResponse> getById(@PathVariable Long id) {
+    return ResponseEntity.ok(assSrv.getById(id));
+  }
 
-	@GetMapping("/class/{klassId}/upcoming")
-	public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassId(@PathVariable Long klassId,
-			@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(assSrv.getUpcomingByKlassId(klassId, page, size));
-	}
-	
-	@GetMapping("/class/{klassId}/past")
-	public ResponseEntity<Page<AssignmentResponse>> getPastByKlassId(@PathVariable Long klassId,
-			@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(assSrv.getPastByKlassId(klassId, page, size));
-	}
+  @GetMapping("/class/{klassId}/upcoming")
+  public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassId(@PathVariable Long klassId,
+                                                                       @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+    return ResponseEntity.ok(assSrv.getUpcomingByKlassId(klassId, page, size));
+  }
 
-	@GetMapping("/class/{klassId}/{teacherId}/upcoming")
-	public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassAndTeacherIds(@PathVariable Long klassId,
-			@PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(assSrv.getUpcomingByKlassAndTeacherIds(klassId, teacherId, page, size));
-	}
-	
-	@GetMapping("/class/{klassId}/{teacherId}/past")
-	public ResponseEntity<Page<AssignmentResponse>> getPastByKlassAndTeacherIds(@PathVariable Long klassId,
-			@PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
-		return ResponseEntity.ok(assSrv.getPastByKlassAndTeacherIds(klassId, teacherId, page, size));
-	}
+  @GetMapping("/class/{klassId}/past")
+  public ResponseEntity<Page<AssignmentResponse>> getPastByKlassId(@PathVariable Long klassId,
+                                                                   @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+    return ResponseEntity.ok(assSrv.getPastByKlassId(klassId, page, size));
+  }
 
-	@Override
-	@PutMapping("/{id}")
-	public ResponseEntity<AssignmentResponse> update(@PathVariable Long id, @RequestBody @Valid AssignmentDto dto) {
-		return ResponseEntity.ok(assSrv.update(id, dto));
-	}
+  @GetMapping("/class/{klassId}/{teacherId}/upcoming")
+  public ResponseEntity<Page<AssignmentResponse>> getUpcomingByKlassAndTeacherIds(@PathVariable Long klassId,
+                                                                                  @PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+    return ResponseEntity.ok(assSrv.getUpcomingByKlassAndTeacherIds(klassId, teacherId, page, size));
+  }
 
-	@Override
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		assSrv.delete(id);
-		return ResponseEntity.ok().build();
-	}
+  @GetMapping("/class/{klassId}/{teacherId}/past")
+  public ResponseEntity<Page<AssignmentResponse>> getPastByKlassAndTeacherIds(@PathVariable Long klassId,
+                                                                              @PathVariable Long teacherId, @RequestParam Optional<Integer> page, @RequestParam Optional<Integer> size) {
+    return ResponseEntity.ok(assSrv.getPastByKlassAndTeacherIds(klassId, teacherId, page, size));
+  }
 
+  @Override
+  @PutMapping("/{id}")
+  public ResponseEntity<AssignmentResponse> update(@PathVariable Long id, @RequestBody @Valid AssignmentDto dto) {
+    return ResponseEntity.ok(assSrv.update(id, dto));
+  }
+
+  @Override
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> delete(@PathVariable Long id) {
+    assSrv.delete(id);
+    return ResponseEntity.ok().build();
+  }
 }

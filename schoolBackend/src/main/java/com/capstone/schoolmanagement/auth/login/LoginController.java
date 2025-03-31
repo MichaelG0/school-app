@@ -1,7 +1,6 @@
 package com.capstone.schoolmanagement.auth.login;
 
-import javax.validation.Valid;
-
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,23 +24,22 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/login")
 @RequiredArgsConstructor
 public class LoginController {
-	private final AuthenticationManager authManager;
-	private final JwtUtils jwtUtils;
-	
-	@PostMapping
-	public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
-		UsernamePasswordAuthenticationToken usrNameAuth = new UsernamePasswordAuthenticationToken(request.getEmail(),
-				request.getPassword());
-		Authentication authentication = authManager.authenticate(usrNameAuth);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
-		System.out.println(userDetails.toString());
+  private final AuthenticationManager authManager;
+  private final JwtUtils jwtUtils;
 
-		JwtResponse jwtresp = new JwtResponse(jwt, UserResponse.buildUserResponse(userDetails));
+  @PostMapping
+  public ResponseEntity<JwtResponse> login(@Valid @RequestBody LoginRequest request) {
+    UsernamePasswordAuthenticationToken usrNameAuth = new UsernamePasswordAuthenticationToken(request.getEmail(),
+      request.getPassword());
+    Authentication authentication = authManager.authenticate(usrNameAuth);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-		return ResponseEntity.ok(jwtresp);
-	}
+    System.out.println(userDetails.toString());
 
+    JwtResponse jwtresp = new JwtResponse(jwt, UserResponse.buildUserResponse(userDetails));
+
+    return ResponseEntity.ok(jwtresp);
+  }
 }

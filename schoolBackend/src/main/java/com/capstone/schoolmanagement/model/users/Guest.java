@@ -1,9 +1,8 @@
 package com.capstone.schoolmanagement.model.users;
 
-import javax.persistence.Entity;
-
 import com.capstone.schoolmanagement.auth.users.AppUser;
 
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 

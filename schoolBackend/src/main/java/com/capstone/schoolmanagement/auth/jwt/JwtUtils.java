@@ -4,7 +4,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -13,65 +20,66 @@ import com.capstone.schoolmanagement.auth.users.UserDetailsImpl;
 import com.capstone.schoolmanagement.auth.users.UserResponse;
 import com.capstone.schoolmanagement.auth.users.UserService;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.crypto.SecretKey;
+
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class JwtUtils {
-	@Autowired
-	UserService userService;
+  private final UserService userService;
 
-	@Value("${application.jwtSecret}")
-	private String jwtSecret;
+  @Value("${application.jwtSecret}")
+  private String jwtSecret;
 
-	@Value("${application.jwtExpirationMs}")
-	private int jwtExpirationMs;
+  @Value("${application.jwtExpirationMs}")
+  private int jwtExpirationMs;
 
-	public String generateJwtToken(Authentication authentication) {
+  private SecretKey getSigningKey() {
+    byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+    return Keys.hmacShaKeyFor(keyBytes);
+  }
 
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-		log.info(userPrincipal.getUsername() + " - logged in");
+  public String generateJwtToken(Authentication authentication) {
 
-		UserResponse userResponse = userService.getById(userPrincipal.getId());
+    UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+    log.info(userPrincipal.getUsername() + " - logged in");
 
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("role", userResponse.getRoles());
-		claims.put("sub", userPrincipal.getUsername());
-		return Jwts.builder()
-				.setSubject(userPrincipal.getUsername())
-				.setClaims(claims)
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret)
-				.compact();
-	}
+    UserResponse userResponse = userService.getById(userPrincipal.getId());
 
-	public String getUsernameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
-	}
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("role", userResponse.getRoles());
+    claims.put("sub", userPrincipal.getUsername());
+    return Jwts.builder()
+      .subject(userPrincipal.getUsername())
+      .claims(claims)
+      .issuedAt(new Date())
+      .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+      .signWith(getSigningKey())
+      .compact();
+  }
 
-	public boolean validateJwtToken(String authToken) {
-		try {
-			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
-			return true;
-		} catch (SignatureException e) {
-			log.error("Invalid JWT signature: {}", e.getMessage());
-		} catch (MalformedJwtException e) {
-			log.error("Invalid JWT token: {}", e.getMessage());
-		} catch (ExpiredJwtException e) {
-			log.error("JWT token is expired: {}", e.getMessage());
-		} catch (UnsupportedJwtException e) {
-			log.error("JWT token is unsupported: {}", e.getMessage());
-		} catch (IllegalArgumentException e) {
-			log.error("JWT claims string is empty: {}", e.getMessage());
-		}
+  public String getUsernameFromJwtToken(String token) {
+    return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload().getSubject();
+  }
 
-		return false;
-	}
+  public boolean validateJwtToken(String token) {
+    try {
+      Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
+      return true;
+    } catch (MalformedJwtException e) {
+      log.error("Invalid JWT token: {}", e.getMessage());
+    } catch (ExpiredJwtException e) {
+      log.error("JWT token is expired: {}", e.getMessage());
+    } catch (UnsupportedJwtException e) {
+      log.error("JWT token is unsupported: {}", e.getMessage());
+    } catch (IllegalArgumentException e) {
+      log.error("JWT claims string is empty: {}", e.getMessage());
+    } catch (JwtException e) {
+      log.error("JWT signature validation failed: {}", e.getMessage());
+    }
+
+    return false;
+  }
 }
