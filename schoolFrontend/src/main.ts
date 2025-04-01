@@ -3,10 +3,11 @@ import { environment } from './environments/environment';
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './app/auth/auth.interceptor';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { AppRoutingModule } from './app/app-routing.module';
+import { routes } from './app/app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
+import { provideRouter } from '@angular/router';
 
 if (environment.production) {
   enableProdMode();
@@ -14,7 +15,8 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(BrowserModule, AppRoutingModule, ReactiveFormsModule),
+    importProvidersFrom(BrowserModule, ReactiveFormsModule),
+    provideRouter(routes),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
