@@ -13,6 +13,9 @@ import {
 } from '@angular/core';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
+import { NgIf, NgFor, NgClass } from '@angular/common';
+import { MonthYearDropdownComponent } from '../month-year-dropdown/month-year-dropdown.component';
+import { PureFunctionPipe } from '../../pipes/pure-function/pure-function.pipe';
 
 @Component({
   selector: 'app-calendar',
@@ -30,6 +33,8 @@ import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
       ),
     ]),
   ],
+  standalone: true,
+  imports: [NgIf, MonthYearDropdownComponent, NgFor, NgClass, PureFunctionPipe],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() weeklySchedule: IWeeklyScheduleItem[] = [];

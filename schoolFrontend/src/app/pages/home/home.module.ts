@@ -7,13 +7,11 @@ import { HeroComponent } from 'src/app/components/hero/hero.component';
 
 
 @NgModule({
-  declarations: [
-    HomeComponent,
-    HeroComponent
-  ],
-  imports: [
-    CommonModule,
-    HomeRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        HomeRoutingModule,
+        HomeComponent,
+        HeroComponent
+    ]
 })
 export class HomeModule { }

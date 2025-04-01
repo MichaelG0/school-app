@@ -11,11 +11,30 @@ import { CompletedAssignmentService } from 'src/app/services/completed-assignmen
 import { KlassService } from 'src/app/services/klass.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { KlassListComponent } from '../../../components/klass-list/klass-list.component';
+import { SwitchUpcomingComponent } from '../../../components/switch-upcoming/switch-upcoming.component';
+import { DeleteAssignmentComponent } from '../../../components/delete-assignment/delete-assignment.component';
+import { PaginatorComponent } from '../../../components/paginator/paginator.component';
+import { AssignmentModalComponent } from '../../../components/assignment-modal/assignment-modal.component';
+import { GradeModalComponent } from '../../../components/grade-modal/grade-modal.component';
 
 @Component({
   selector: 'app-klass',
   templateUrl: './klass.component.html',
   styleUrls: ['./klass.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    KlassListComponent,
+    SwitchUpcomingComponent,
+    NgFor,
+    DeleteAssignmentComponent,
+    PaginatorComponent,
+    AssignmentModalComponent,
+    GradeModalComponent,
+    AsyncPipe,
+  ],
 })
 export class KlassComponent implements OnInit {
   loggedUser!: IJwtResponse | null;

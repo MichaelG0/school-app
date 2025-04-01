@@ -1,9 +1,18 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
-import { Validators, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer2,
+} from '@angular/core';
+import { Validators, UntypedFormGroup, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { ICompletedAssignment } from 'src/app/interfaces/icompleted-assignment';
 import { CompletedAssignmentService } from 'src/app/services/completed-assignment.service';
 import { ModalService } from 'src/app/services/modal.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
@@ -11,11 +20,13 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './grade-modal.component.html',
   styleUrls: ['./grade-modal.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgIf, AsyncPipe],
 })
 export class GradeModalComponent implements OnInit, OnDestroy {
   unsub$ = new Subject<void>();
   @Output() updatedAss = new EventEmitter<void>();
-  complAssignment$!: Observable<ICompletedAssignment | null>
+  complAssignment$!: Observable<ICompletedAssignment | null>;
   complAssignment!: ICompletedAssignment | null;
   gradeForm!: UntypedFormGroup;
   loading: boolean = false;
@@ -28,7 +39,7 @@ export class GradeModalComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.complAssignment$ = this.mdlSrv.complAss$
+    this.complAssignment$ = this.mdlSrv.complAss$;
     this.mdlSrv.complAss$.pipe(takeUntil(this.unsub$)).subscribe(res => {
       this.complAssignment = res;
       if (this.gradeForm && res && res.grade) {
@@ -84,5 +95,4 @@ export class GradeModalComponent implements OnInit, OnDestroy {
     this.unsub$.next();
     this.unsub$.complete();
   }
-
 }

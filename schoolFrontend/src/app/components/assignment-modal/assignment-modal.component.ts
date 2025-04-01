@@ -8,17 +8,17 @@ import {
   Output,
   Renderer2,
 } from '@angular/core';
-import { Validators, UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
+import { Validators, UntypedFormGroup, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { map, Observable, Subject, take, takeUntil } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
 import { IAssignmentDto } from 'src/app/interfaces/iassignment-dto';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { IKlass } from 'src/app/interfaces/iklass';
-import { IPageable } from 'src/app/interfaces/ipageable';
 import { ITeacherMPK } from 'src/app/interfaces/iteacher-mpk';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { ModalService } from 'src/app/services/modal.service';
 import { TeacherModulePerKlassService } from 'src/app/services/teacher-module-per-klass.service';
+import { NgFor, NgIf, AsyncPipe } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
@@ -26,6 +26,8 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './assignment-modal.component.html',
   styleUrls: ['./assignment-modal.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgFor, NgIf, AsyncPipe],
 })
 export class AssignmentModalComponent implements OnInit, OnDestroy {
   unsub$ = new Subject<void>();

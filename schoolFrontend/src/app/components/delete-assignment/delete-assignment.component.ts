@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, Rende
 import { Observable, take } from 'rxjs';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { ModalService } from 'src/app/services/modal.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
@@ -9,6 +10,8 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './delete-assignment.component.html',
   styleUrls: ['./delete-assignment.component.scss'],
+  standalone: true,
+  imports: [NgIf, AsyncPipe],
 })
 export class DeleteAssignmentComponent implements OnInit {
   @Output() updatedAss = new EventEmitter<void>();
@@ -55,5 +58,4 @@ export class DeleteAssignmentComponent implements OnInit {
     );
     this.renderer.appendChild(document.body, alert);
   }
-  
 }

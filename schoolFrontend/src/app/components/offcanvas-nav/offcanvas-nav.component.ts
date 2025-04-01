@@ -1,14 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterLinkActive, RouterLink } from '@angular/router';
+import { NgIf } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-offcanvas-nav',
   templateUrl: './offcanvas-nav.component.html',
   styleUrls: ['./offcanvas-nav.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, RouterLinkActive, RouterLink, NgIf],
 })
 export class OffcanvasNavComponent implements OnInit, OnDestroy {
   unsub$ = new Subject<void>();
@@ -42,8 +47,7 @@ export class OffcanvasNavComponent implements OnInit, OnDestroy {
   }
 
   dashboardCondition(): string {
-    if (this.roles && this.roles.includes('ROLE_TEACHER'))
-      return '/teacher_dashboard';
+    if (this.roles && this.roles.includes('ROLE_TEACHER')) return '/teacher_dashboard';
     return '/student_dashboard';
   }
 

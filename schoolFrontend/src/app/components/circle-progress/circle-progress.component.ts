@@ -6,6 +6,7 @@ import { IComplAssignBasicResponseWithAverageGrade } from 'src/app/interfaces/ic
   selector: 'app-circle-progress',
   templateUrl: './circle-progress.component.html',
   styleUrls: ['./circle-progress.component.scss'],
+  standalone: true,
 })
 export class CircleProgressComponent implements OnInit, AfterViewInit {
   @Input() percentage$!: Observable<number | IComplAssignBasicResponseWithAverageGrade>;
@@ -19,9 +20,8 @@ export class CircleProgressComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.percentage$.pipe(take(1)).subscribe((res: number | IComplAssignBasicResponseWithAverageGrade) => {
       this.percentage = typeof res == 'number' ? res : res.averageGrade;
-      let offset: string = 377 - (this.percentage * 377 / 100) + ''
+      let offset: string = 377 - (this.percentage * 377) / 100 + '';
       this.renderer.setAttribute(this.circle.nativeElement, 'stroke-dashoffset', offset);
     });
   }
-  
 }

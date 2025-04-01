@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, Observable, take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { ILoginRequest } from 'src/app/interfaces/ilogin-request';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
   styleUrls: ['./login-modal.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgIf, AsyncPipe],
 })
 export class LoginModalComponent implements OnInit {
   modalProps$!: Observable<{ title: string; link: string }>;
@@ -19,7 +22,12 @@ export class LoginModalComponent implements OnInit {
   loginFailed: boolean = false;
   loading: boolean = false;
 
-  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: UntypedFormBuilder, private router: Router) {}
+  constructor(
+    private userSrv: UserService,
+    private modalSrv: ModalService,
+    private fb: UntypedFormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.modalProps$ = this.modalSrv.modalProps$;
@@ -57,5 +65,4 @@ export class LoginModalComponent implements OnInit {
         this.loading = false;
       });
   }
-
 }

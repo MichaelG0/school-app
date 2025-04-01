@@ -5,11 +5,16 @@ import { IWeeklyScheduleItem } from 'src/app/interfaces/iweekly-schedule-item';
 import { TeacherModulePerKlassService } from 'src/app/services/teacher-module-per-klass.service';
 import { TeacherService } from 'src/app/services/teacher.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, NgFor } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
 
 @Component({
   selector: 'app-teacher-dashboard',
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.scss'],
+  standalone: true,
+  imports: [NgIf, NgFor, RouterLink, CalendarComponent],
 })
 export class TeacherDashboardComponent implements OnInit {
   teacherMPKList: ITeacherMPK[] = [];

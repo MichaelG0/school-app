@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
   templateUrl: './switch-upcoming.component.html',
   styleUrl: './switch-upcoming.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class SwitchUpcomingComponent implements OnInit {
   @Input() upcoming = true;

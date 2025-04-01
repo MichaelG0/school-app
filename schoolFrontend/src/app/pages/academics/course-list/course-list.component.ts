@@ -1,13 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { ICourseInfo } from 'src/app/interfaces/icourse-info';
 import { CourseInfoService } from 'src/app/services/course-info.service';
+import { NgIf, NgFor, AsyncPipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.scss'],
+  standalone: true,
+  imports: [NgIf, NgFor, RouterLink, AsyncPipe, TitleCasePipe],
 })
 export class CourseListComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject<void>();

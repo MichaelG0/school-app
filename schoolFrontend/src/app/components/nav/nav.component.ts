@@ -1,14 +1,18 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss'],
+  standalone: true,
+  imports: [RouterLink, ReactiveFormsModule, RouterLinkActive, NgIf],
 })
 export class NavComponent implements OnInit {
   loggedObs$ = this.usrSrv.loggedObs$.pipe(takeUntilDestroyed());

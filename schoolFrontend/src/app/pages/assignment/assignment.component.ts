@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { map, Observable, take } from 'rxjs';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Observable, take } from 'rxjs';
 import { IAssignment } from 'src/app/interfaces/iassignment';
 import { ICompletedAssignment } from 'src/app/interfaces/icompleted-assignment';
 import { ICompletedAssignmentDto } from 'src/app/interfaces/icompleted-assignment-dto';
@@ -9,11 +9,14 @@ import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { AssignmentService } from 'src/app/services/assignment.service';
 import { CompletedAssignmentService } from 'src/app/services/completed-assignment.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-assignment',
   templateUrl: './assignment.component.html',
   styleUrls: ['./assignment.component.scss'],
+  standalone: true,
+  imports: [NgIf, ReactiveFormsModule, RouterLink, AsyncPipe],
 })
 export class AssignmentComponent implements OnInit {
   assignment$!: Observable<IAssignment>;
@@ -37,12 +40,15 @@ export class AssignmentComponent implements OnInit {
     this.assignmentId = parseInt(idStr);
     this.assignment$ = this.assSrv.getById(this.assignmentId);
     this.usrSrv.loggedObs$.pipe(take(1)).subscribe(res => (this.loggedUser = res));
-    this.complAssSrv.getByStudentAndAssignmentIds(this.loggedUser!.user.id, this.assignmentId).pipe(take(1)).subscribe(res => {
-      this.complAssignment = res;
-      this.linkForm.patchValue({
-        link: this.complAssignment?.link
+    this.complAssSrv
+      .getByStudentAndAssignmentIds(this.loggedUser!.user.id, this.assignmentId)
+      .pipe(take(1))
+      .subscribe(res => {
+        this.complAssignment = res;
+        this.linkForm.patchValue({
+          link: this.complAssignment?.link,
+        });
       });
-    });
     this.setForm();
   }
 
@@ -62,10 +68,12 @@ export class AssignmentComponent implements OnInit {
       assignmentId: this.assignmentId,
     };
 
-    this.complAssSrv.create(data).pipe(take(1)).subscribe((res: any) => {
-      if (typeof res === 'object') this.confirmation = true;
-      this.loading = false;
-    });
+    this.complAssSrv
+      .create(data)
+      .pipe(take(1))
+      .subscribe((res: any) => {
+        if (typeof res === 'object') this.confirmation = true;
+        this.loading = false;
+      });
   }
-  
 }

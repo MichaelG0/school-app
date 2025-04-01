@@ -10,11 +10,30 @@ import { CompletedAssignmentService } from 'src/app/services/completed-assignmen
 import { KlassService } from 'src/app/services/klass.service';
 import { RegisterService } from 'src/app/services/register.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { KlassListComponent } from '../../components/klass-list/klass-list.component';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
+import { CircleProgressComponent } from '../../components/circle-progress/circle-progress.component';
+import { SwitchUpcomingComponent } from '../../components/switch-upcoming/switch-upcoming.component';
+import { RouterLink } from '@angular/router';
+import { PaginatorComponent } from '../../components/paginator/paginator.component';
 
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    KlassListComponent,
+    CalendarComponent,
+    CircleProgressComponent,
+    SwitchUpcomingComponent,
+    NgFor,
+    RouterLink,
+    PaginatorComponent,
+    AsyncPipe,
+  ],
 })
 export class StudentDashboardComponent implements OnInit {
   loggedUser!: IJwtResponse | null;

@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, take } from 'rxjs';
 import { ISignUpRequest } from 'src/app/interfaces/isign-up-request';
 import { ModalService } from 'src/app/services/modal.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgClass, NgIf } from '@angular/common';
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-register-modal',
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.scss'],
+  standalone: true,
+  imports: [ReactiveFormsModule, NgClass, NgIf],
 })
 export class RegisterModalComponent implements OnInit {
   modalProps$!: Observable<{ title: string; link: string }>;
@@ -19,7 +22,12 @@ export class RegisterModalComponent implements OnInit {
   btnClicked: boolean = false;
   btnClicked2: boolean = false;
 
-  constructor(private userSrv: UserService, private modalSrv: ModalService, private fb: UntypedFormBuilder, private router: Router) {}
+  constructor(
+    private userSrv: UserService,
+    private modalSrv: ModalService,
+    private fb: UntypedFormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.modalProps$ = this.modalSrv.modalProps$;
@@ -47,14 +55,17 @@ export class RegisterModalComponent implements OnInit {
       surname: form.value.surname,
       password: form.value.password,
     };
-    this.userSrv.signUp(user).pipe(take(1)).subscribe((res: any) => {
-      if (typeof res === 'object') {
-        const sgnMdlEl = document.querySelector('#exampleModalToggle');
-        const signUpModal = bootstrap.Modal.getInstance(sgnMdlEl);
-        signUpModal.hide();
-        this.modalProps$.pipe(take(1)).subscribe(res => this.router.navigate([res.link]));
-      }
-    });
+    this.userSrv
+      .signUp(user)
+      .pipe(take(1))
+      .subscribe((res: any) => {
+        if (typeof res === 'object') {
+          const sgnMdlEl = document.querySelector('#exampleModalToggle');
+          const signUpModal = bootstrap.Modal.getInstance(sgnMdlEl);
+          signUpModal.hide();
+          this.modalProps$.pipe(take(1)).subscribe(res => this.router.navigate([res.link]));
+        }
+      });
   }
 
   resetModal() {
@@ -76,5 +87,4 @@ export class RegisterModalComponent implements OnInit {
     else if (this.signUpForm.get(prop)!.valid && btnClk === true) return 'success';
     return '';
   }
-  
 }

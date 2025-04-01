@@ -3,19 +3,15 @@ import { CommonModule } from '@angular/common';
 
 import { ManagementRoutingModule } from './management-routing.module';
 import { ManagementComponent } from './management.component';
-import { PaginatorModule } from 'src/app/components/paginator/paginator.module';
-import { PureFunctionModule } from 'src/app/pipes/pure-function/pure-function.module';
+
+
 
 
 @NgModule({
-  declarations: [
-    ManagementComponent
-  ],
-  imports: [
+    imports: [
     CommonModule,
     ManagementRoutingModule,
-    PaginatorModule,
-    PureFunctionModule
-  ]
+    ManagementComponent
+]
 })
 export class ManagementModule { }

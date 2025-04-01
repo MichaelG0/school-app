@@ -5,11 +5,17 @@ import { IUserResponse } from 'src/app/interfaces/iuser-response';
 import { UserService } from 'src/app/services/user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { PaginatorComponent } from '../../components/paginator/paginator.component';
+import { PureFunctionPipe } from '../../pipes/pure-function/pure-function.pipe';
 
 @Component({
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.scss'],
+  standalone: true,
+  imports: [NgIf, NgFor, RouterLink, PaginatorComponent, AsyncPipe, PureFunctionPipe],
 })
 export class ManagementComponent implements OnInit {
   loggedObs$ = this.usrSrv.loggedObs$.pipe(takeUntilDestroyed());

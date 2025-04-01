@@ -4,14 +4,7 @@ import { CommonModule } from '@angular/common';
 import { EnrolmentConfirmationRoutingModule } from './enrolment-confirmation-routing.module';
 import { EnrolmentConfirmationComponent } from './enrolment-confirmation.component';
 
-
 @NgModule({
-  declarations: [
-    EnrolmentConfirmationComponent
-  ],
-  imports: [
-    CommonModule,
-    EnrolmentConfirmationRoutingModule
-  ]
+  imports: [CommonModule, EnrolmentConfirmationRoutingModule, EnrolmentConfirmationComponent],
 })
-export class EnrolmentConfirmationModule { }
+export class EnrolmentConfirmationModule {}

@@ -4,14 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CourseListRoutingModule } from './course-list-routing.module';
 import { CourseListComponent } from './course-list.component';
 
-
 @NgModule({
-  declarations: [
-    CourseListComponent
-  ],
-  imports: [
-    CommonModule,
-    CourseListRoutingModule
-  ]
+  imports: [CommonModule, CourseListRoutingModule, CourseListComponent],
 })
-export class CourseListModule { }
+export class CourseListModule {}

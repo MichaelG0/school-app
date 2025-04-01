@@ -3,6 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'pureFn',
   pure: true,
+  standalone: true,
 })
 export class PureFunctionPipe implements PipeTransform {
   // IMPORTANT: in order to pass the context to the pipe, the methods passed to

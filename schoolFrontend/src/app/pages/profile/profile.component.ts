@@ -4,11 +4,14 @@ import { Observable } from 'rxjs';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { IUserResponse } from 'src/app/interfaces/iuser-response';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
+  standalone: true,
+  imports: [NgIf, NgFor, AsyncPipe],
 })
 export class ProfileComponent implements OnInit {
   loggedObs$!: Observable<IJwtResponse | null>;

@@ -1,43 +1,49 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Observable, take } from 'rxjs';
 import { ICourse } from 'src/app/interfaces/icourse';
 import { IJwtResponse } from 'src/app/interfaces/ijwt-response';
 import { IStudentRequest } from 'src/app/interfaces/istudent-request';
 import { CourseService } from 'src/app/services/course.service';
 import { UserService } from 'src/app/services/user.service';
+import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
+  standalone: true,
+  imports: [NgIf, ReactiveFormsModule, NgClass, NgFor, AsyncPipe],
 })
 export class ApplyComponent implements OnInit {
   jwtResp!: IJwtResponse | null;
-  upcCourses$!: Observable<ICourse[]>
+  upcCourses$!: Observable<ICourse[]>;
   applyForm!: UntypedFormGroup;
   loading: boolean = false;
   btnClicked: boolean = false;
   submissionFailed: boolean = false;
-  confirmation: boolean = false
-  
+  confirmation: boolean = false;
+
   constructor(private userSrv: UserService, private crsSrv: CourseService, private fb: UntypedFormBuilder) {}
-  
+
   ngOnInit(): void {
-    this.userSrv.loggedObs$.pipe(take(1)).subscribe((res) => (this.jwtResp = res));
-    this.upcCourses$ = this.crsSrv.getUpcoming()
+    this.userSrv.loggedObs$.pipe(take(1)).subscribe(res => (this.jwtResp = res));
+    this.upcCourses$ = this.crsSrv.getUpcoming();
     this.setForm();
   }
-  
+
   setForm() {
     this.btnClicked = false;
     this.applyForm = this.fb.group({
-      email: [this.jwtResp?.user.email, [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+      email: [
+        this.jwtResp?.user.email,
+        [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')],
+      ],
       firstname: [this.jwtResp?.user.name, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       surname: [this.jwtResp?.user.surname, [Validators.required, Validators.pattern('^[a-zA-Z]+$')]],
       gender: [null, Validators.required],
       address: [null, Validators.required],
-      course: [null, Validators.required]
+      course: [null, Validators.required],
     });
   }
 
@@ -51,14 +57,17 @@ export class ApplyComponent implements OnInit {
       surname: form.value.surname,
       gender: form.value.gender,
       address: form.value.address,
-      courseId: form.value.course
+      courseId: form.value.course,
     };
 
-    this.userSrv.apply(data).pipe(take(1)).subscribe((res: any) => {
-      if (res === true) this.submissionFailed = res;
-      else this.confirmation = true;
-      this.loading = false;
-    });
+    this.userSrv
+      .apply(data)
+      .pipe(take(1))
+      .subscribe((res: any) => {
+        if (res === true) this.submissionFailed = res;
+        else this.confirmation = true;
+        this.loading = false;
+      });
   }
 
   warning(prop: string, btnClk: boolean) {
@@ -70,5 +79,4 @@ export class ApplyComponent implements OnInit {
     else if (this.applyForm.get(prop)!.valid && btnClk === true) return 'success';
     return '';
   }
-  
 }
