@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, switchMap, take } from 'rxjs';
+import { inject } from '@angular/core';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { switchMap, take } from 'rxjs';
 import { UserService } from '../services/user.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(private userSrv: UserService) {}
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const userSrv = inject(UserService);
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return this.userSrv.loggedObs$.pipe(
-      take(1),
-      switchMap(data => {
-        if (!data) return next.handle(request);
+  return userSrv.loggedObs$.pipe(
+    take(1),
+    switchMap(data => {
+      if (!data) return next(req);
 
-        const newRequest = request.clone({
-          headers: request.headers.set('Authorization', `Bearer ${data.token}`),
-        });
-
-        return next.handle(newRequest);
-      })
-    );
-  }
-}
+      const newRequest = req.clone({ headers: req.headers.set('Authorization', `Bearer ${data.token}`) });
+      return next(newRequest);
+    })
+  );
+};
