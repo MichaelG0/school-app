@@ -9,7 +9,6 @@ import { NgIf, AsyncPipe } from '@angular/common';
   selector: 'app-course',
   templateUrl: './course.component.html',
   styleUrls: ['./course.component.scss'],
-  standalone: true,
   imports: [NgIf, AsyncPipe],
 })
 export class CourseComponent implements OnInit {

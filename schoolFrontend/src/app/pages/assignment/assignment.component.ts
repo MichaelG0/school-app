@@ -15,7 +15,6 @@ import { NgIf, AsyncPipe } from '@angular/common';
   selector: 'app-assignment',
   templateUrl: './assignment.component.html',
   styleUrls: ['./assignment.component.scss'],
-  standalone: true,
   imports: [NgIf, ReactiveFormsModule, RouterLink, AsyncPipe],
 })
 export class AssignmentComponent implements OnInit {

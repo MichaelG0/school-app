@@ -20,7 +20,6 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './grade-modal.component.html',
   styleUrls: ['./grade-modal.component.scss'],
-  standalone: true,
   imports: [ReactiveFormsModule, NgIf, AsyncPipe],
 })
 export class GradeModalComponent implements OnInit, OnDestroy {

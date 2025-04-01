@@ -13,7 +13,6 @@ import { CalendarComponent } from '../../components/calendar/calendar.component'
   selector: 'app-teacher-dashboard',
   templateUrl: './teacher-dashboard.component.html',
   styleUrls: ['./teacher-dashboard.component.scss'],
-  standalone: true,
   imports: [NgIf, NgFor, RouterLink, CalendarComponent],
 })
 export class TeacherDashboardComponent implements OnInit {

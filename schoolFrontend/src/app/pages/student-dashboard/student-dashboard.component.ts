@@ -22,7 +22,6 @@ import { PaginatorComponent } from '../../components/paginator/paginator.compone
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
   styleUrls: ['./student-dashboard.component.scss'],
-  standalone: true,
   imports: [
     NgIf,
     KlassListComponent,

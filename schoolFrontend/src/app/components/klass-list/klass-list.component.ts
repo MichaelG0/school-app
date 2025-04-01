@@ -6,7 +6,6 @@ import { NgFor } from '@angular/common';
   selector: 'app-klass-list',
   templateUrl: './klass-list.component.html',
   styleUrls: ['./klass-list.component.scss'],
-  standalone: true,
   imports: [NgFor],
 })
 export class KlassListComponent implements OnInit {

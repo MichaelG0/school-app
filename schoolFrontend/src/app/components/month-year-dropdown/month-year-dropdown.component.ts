@@ -6,7 +6,6 @@ import { PureFunctionPipe } from '../../pipes/pure-function/pure-function.pipe';
   selector: 'app-month-year-dropdown',
   templateUrl: './month-year-dropdown.component.html',
   styleUrls: ['./month-year-dropdown.component.scss'],
-  standalone: true,
   imports: [NgFor, PureFunctionPipe],
 })
 export class MonthYearDropdownComponent implements OnInit {

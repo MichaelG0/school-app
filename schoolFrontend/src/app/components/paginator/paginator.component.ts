@@ -7,7 +7,6 @@ import { NgIf } from '@angular/common';
   templateUrl: './paginator.component.html',
   styleUrl: './paginator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [NgIf],
 })
 export class PaginatorComponent implements OnInit {

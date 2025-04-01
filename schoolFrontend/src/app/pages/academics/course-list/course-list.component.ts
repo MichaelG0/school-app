@@ -9,7 +9,6 @@ import { NgIf, NgFor, AsyncPipe, TitleCasePipe } from '@angular/common';
   selector: 'app-course-list',
   templateUrl: './course-list.component.html',
   styleUrls: ['./course-list.component.scss'],
-  standalone: true,
   imports: [NgIf, NgFor, RouterLink, AsyncPipe, TitleCasePipe],
 })
 export class CourseListComponent implements OnInit, OnDestroy {

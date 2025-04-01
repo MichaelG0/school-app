@@ -26,7 +26,6 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './assignment-modal.component.html',
   styleUrls: ['./assignment-modal.component.scss'],
-  standalone: true,
   imports: [ReactiveFormsModule, NgFor, NgIf, AsyncPipe],
 })
 export class AssignmentModalComponent implements OnInit, OnDestroy {

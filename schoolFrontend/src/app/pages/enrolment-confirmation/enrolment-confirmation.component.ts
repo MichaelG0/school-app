@@ -9,7 +9,6 @@ import { NgIf } from '@angular/common';
   selector: 'app-enrolment-confirmation',
   templateUrl: './enrolment-confirmation.component.html',
   styleUrls: ['./enrolment-confirmation.component.scss'],
-  standalone: true,
   imports: [NgIf, RouterLinkActive, RouterLink],
 })
 export class EnrolmentConfirmationComponent implements OnInit {

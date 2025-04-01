@@ -5,7 +5,6 @@ import { HeroComponent } from '../../components/hero/hero.component';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  standalone: true,
   imports: [HeroComponent],
 })
 export class HomeComponent implements OnInit {

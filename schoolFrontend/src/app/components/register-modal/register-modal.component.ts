@@ -12,7 +12,6 @@ declare var bootstrap: any;
   selector: 'app-register-modal',
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.scss'],
-  standalone: true,
   imports: [ReactiveFormsModule, NgClass, NgIf],
 })
 export class RegisterModalComponent implements OnInit {

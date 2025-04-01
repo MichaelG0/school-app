@@ -14,7 +14,6 @@ import { PureFunctionPipe } from '../../pipes/pure-function/pure-function.pipe';
   selector: 'app-management',
   templateUrl: './management.component.html',
   styleUrls: ['./management.component.scss'],
-  standalone: true,
   imports: [NgIf, NgFor, RouterLink, PaginatorComponent, AsyncPipe, PureFunctionPipe],
 })
 export class ManagementComponent implements OnInit {

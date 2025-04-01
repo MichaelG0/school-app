@@ -33,7 +33,6 @@ import { PureFunctionPipe } from '../../pipes/pure-function/pure-function.pipe';
       ),
     ]),
   ],
-  standalone: true,
   imports: [NgIf, MonthYearDropdownComponent, NgFor, NgClass, PureFunctionPipe],
 })
 export class CalendarComponent implements OnInit, AfterViewInit, OnDestroy {

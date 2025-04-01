@@ -10,7 +10,6 @@ import { NgIf, NgFor, AsyncPipe } from '@angular/common';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  standalone: true,
   imports: [NgIf, NgFor, AsyncPipe],
 })
 export class ProfileComponent implements OnInit {

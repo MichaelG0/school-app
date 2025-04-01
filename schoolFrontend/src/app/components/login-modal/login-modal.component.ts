@@ -12,7 +12,6 @@ declare var bootstrap: any;
   selector: 'app-login-modal',
   templateUrl: './login-modal.component.html',
   styleUrls: ['./login-modal.component.scss'],
-  standalone: true,
   imports: [ReactiveFormsModule, NgIf, AsyncPipe],
 })
 export class LoginModalComponent implements OnInit {

@@ -10,7 +10,6 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './delete-assignment.component.html',
   styleUrls: ['./delete-assignment.component.scss'],
-  standalone: true,
   imports: [NgIf, AsyncPipe],
 })
 export class DeleteAssignmentComponent implements OnInit {

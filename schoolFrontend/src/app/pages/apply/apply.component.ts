@@ -12,7 +12,6 @@ import { NgIf, NgClass, NgFor, AsyncPipe } from '@angular/common';
   selector: 'app-apply',
   templateUrl: './apply.component.html',
   styleUrls: ['./apply.component.scss'],
-  standalone: true,
   imports: [NgIf, ReactiveFormsModule, NgClass, NgFor, AsyncPipe],
 })
 export class ApplyComponent implements OnInit {

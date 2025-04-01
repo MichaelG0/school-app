@@ -12,7 +12,6 @@ declare var bootstrap: any;
   selector: 'app-offcanvas-nav',
   templateUrl: './offcanvas-nav.component.html',
   styleUrls: ['./offcanvas-nav.component.scss'],
-  standalone: true,
   imports: [ReactiveFormsModule, RouterLinkActive, RouterLink, NgIf],
 })
 export class OffcanvasNavComponent implements OnInit, OnDestroy {

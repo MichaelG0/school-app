@@ -23,7 +23,6 @@ import { GradeModalComponent } from '../../../components/grade-modal/grade-modal
   selector: 'app-klass',
   templateUrl: './klass.component.html',
   styleUrls: ['./klass.component.scss'],
-  standalone: true,
   imports: [
     NgIf,
     KlassListComponent,
