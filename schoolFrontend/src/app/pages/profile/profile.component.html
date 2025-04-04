@@ -1,20 +1,26 @@
 <div class="container">
   <ng-container *ngIf="user$ | async as user; else loading">
     <ng-container *ngIf="loggedObs$ | async as loggedUser">
-      <div class="container inner-cont bg-white rounded shadow p-3">
-        <h4 class="mb-4">{{ user.name }} {{ user.surname }}</h4>
-        <table>
-          <tbody>
-            <tr *ngFor="let prop of props">
-              <td class="head text-muted">{{ prop.displayName }}</td>
-              <td>{{ user[prop.name] || '[empty]' }}</td>
-            </tr>
-            <tr *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">
-              <td class="text-muted">Roles:</td>
-              <td>{{ user.roles || '[empty]' }}</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="container inner-cont bg-white rounded shadow p-0 overflow-hidden">
+        <div class="profile-header d-flex flex-column align-items-start gap-4 p-4">
+          <div class="rounded-circle overflow-hidden">
+            <img [ngSrc]="user.avatar" alt="avatar" width="120" height="120" />
+          </div>
+
+          <h4>{{ user.name }} {{ user.surname }}</h4>
+        </div>
+
+        <div class="user-details-grid p-4 pt-0 pb-5">
+          <ng-container *ngFor="let prop of props">
+            <div class="head text-muted">{{ prop.displayName }}</div>
+            <div>{{ user[prop.name] || '[empty]' }}</div>
+          </ng-container>
+
+          <ng-container *ngIf="loggedUser.user.roles.includes('ROLE_ADMIN')">
+            <div class="head text-muted">Roles:</div>
+            <div>{{ user.roles.join(', ') || '[empty]' }}</div>
+          </ng-container>
+        </div>
       </div>
     </ng-container>
   </ng-container>

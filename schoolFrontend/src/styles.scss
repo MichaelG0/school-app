@@ -1,6 +1,9 @@
-$primary: #393e46;
+@use '../node_modules/bootstrap/scss/bootstrap.scss';
 
-@import '../node_modules/bootstrap/scss/bootstrap.scss';
+// IF YOU NEED TO OVERWRITE BOOTSTRAP VARIABLES
+// @use '../node_modules/bootstrap/scss/bootstrap.scss' with (
+//   $primary: #003366
+// );
 
 :root {
   --l-black: #3c3f42;

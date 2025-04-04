@@ -1,17 +1,21 @@
+.profile-header {
+  background: #fff;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0) 45%, var(--bs-primary) 0%);
+}
+
 .inner-cont {
   max-width: 800px;
 }
 
-table {
-  border-collapse: separate;
-  border-spacing: 3rem 1rem;
-  margin: 0 -3rem;
-
-  td {
-    vertical-align: top;
-  }
+.user-details-grid {
+  display: grid;
+  grid-template-columns: auto 1fr; // Two columns: label & value
+  gap: 1rem 3rem; // Row and column spacing
 
   .head {
+    font-weight: 500;
+    text-align: left;
     word-break: keep-all;
+    color: #6c757d; // Bootstrap text-muted color
   }
 }
