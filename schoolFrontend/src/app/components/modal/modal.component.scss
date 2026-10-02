@@ -1,0 +1,28 @@
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1049;
+}
+
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  padding-bottom: 1rem;
+  width: 500px;
+  max-width: 100%;
+  opacity: 0;
+  overflow: hidden;
+  z-index: 1050;
+}

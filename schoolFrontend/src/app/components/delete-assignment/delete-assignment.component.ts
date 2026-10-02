@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, Renderer2 } from '@angular/core';
-import { Observable, take } from 'rxjs';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { take } from 'rxjs';
 import { AssignmentService } from 'src/app/services/assignment.service';
-import { ModalService } from 'src/app/services/modal.service';
-import { NgIf, AsyncPipe } from '@angular/common';
+import { NgIf } from '@angular/common';
+import { DomService } from 'src/app/services/dom.service';
+import { SnackBarComponent } from '../snack-bar/snack-bar.component';
 declare var bootstrap: any;
 
 @Component({
@@ -10,21 +11,16 @@ declare var bootstrap: any;
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './delete-assignment.component.html',
   styleUrls: ['./delete-assignment.component.scss'],
-  imports: [NgIf, AsyncPipe],
+  imports: [NgIf],
 })
-export class DeleteAssignmentComponent implements OnInit {
-  @Output() updatedAss = new EventEmitter<void>();
-  assingmentId$!: Observable<number | null>;
+export class DeleteAssignmentComponent {
+  @Input({ required: true }) assignmentId = 0;
   loading: boolean = false;
 
-  constructor(
-    private assSrv: AssignmentService,
-    private mdlSrv: ModalService,
-    private renderer: Renderer2
-  ) {}
+  constructor(private assSrv: AssignmentService, private domSrv: DomService) {}
 
-  ngOnInit(): void {
-    this.assingmentId$ = this.mdlSrv.assingmentId$;
+  closeModal() {
+    this.domSrv.closeModal(DeleteAssignmentComponent, false);
   }
 
   deleteAssignment(id: number) {
@@ -34,27 +30,22 @@ export class DeleteAssignmentComponent implements OnInit {
       .pipe(take(1))
       .subscribe(res => {
         if (res !== false) {
-          this.updateAssignments();
-          const assMdlEl = document.querySelector('#deleteAssignmentModal');
-          const assModal = bootstrap.Modal.getInstance(assMdlEl);
-          assModal.hide();
-          this.successAlert();
+          this.showSuccess();
+          this.domSrv.closeModal(DeleteAssignmentComponent, res);
         }
+
         this.loading = false;
       });
   }
 
-  updateAssignments() {
-    this.updatedAss.emit();
-  }
-
-  successAlert() {
-    const alert = this.renderer.createElement('div');
-    this.renderer.setProperty(
-      alert,
-      'innerHTML',
-      `<div class="alert alert-success" role="alert">Assignment deleted successfully</div>`
-    );
-    this.renderer.appendChild(document.body, alert);
+  private showSuccess() {
+    this.domSrv.openSnackbar(SnackBarComponent, {
+      name: 'data',
+      value: {
+        type: 'alert-success',
+        message: 'Assignment deleted successfully',
+        icon: 'bi bi-check-circle-fill',
+      },
+    });
   }
 }

@@ -11,29 +11,26 @@
         }}
         <i class="bi bi-caret-down-fill"></i>
       </h6>
+
+      @if(showMonthDropdown) {
       <app-month-year-dropdown
-        *ngIf="showMonthDropdown"
         [selectedDay]="days | pureFn : getSelectedDay"
         (closeDropdown)="doCloseDropdown($event)"
       ></app-month-year-dropdown>
+      }
     </div>
 
     <div id="active-day-bg"></div>
 
     <div #roller id="roller">
       <div class="my-flex day-names" (mousedown)="onDragStart($event)" (touchstart)="onDragStart($event)">
-        <div
-          [@slideIn]="{ value: true, params: { translateX: translateX } }"
-          *ngFor="let day of days"
-          class="text-muted"
-          scope="col"
-        >
+        <div [@slideIn]="{ value: true, params: { translateX } }" *ngFor="let day of days" class="text-muted" scope="col">
           {{ day | pureFn : getDayName }}
         </div>
       </div>
       <div class="my-flex">
         <button
-          [@slideIn]="{ value: true, params: { translateX: translateX } }"
+          [@slideIn]="{ value: true, params: { translateX } }"
           *ngFor="let day of days; let i = index"
           class="btn"
           scope="col"
@@ -48,18 +45,20 @@
 
   <div class="schedule-flex">
     <div class="my-flex flex-column">
-      <div *ngFor="let hour of hours" class="text-muted">{{ hour }}</div>
+      @for(hour of hours; track hour) {
+      <div class="text-muted">{{ hour }}</div>
+      }
     </div>
 
     <div id="schedule">
-      <div
-        #sched
-        *ngFor="let scheItem of daySchedule; let i = index"
-        [ngClass]="{ 'd-none': days | pureFn : lessonCondition : scheItem }"
-      >
-        <span *ngIf="showKlass" class="fw-bold"> Class: {{ scheItem.klass.id }} </span>
+      @for(scheItem of daySchedule; track scheItem.id; let i = $index) {
+      <div #sched [ngClass]="{ 'd-none': days | pureFn : lessonCondition : scheItem }">
+        @if(showKlass) {
+        <span class="fw-bold"> Class: {{ scheItem.klass.id }} </span>
+        }
         <span> {{ scheItem.module.name }} </span>
       </div>
+      }
     </div>
   </div>
 </div>

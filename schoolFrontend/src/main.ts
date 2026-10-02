@@ -4,7 +4,7 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './app/auth/auth.interceptor';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { routes } from './app/app-routing.module';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
 
@@ -17,6 +17,6 @@ bootstrapApplication(AppComponent, {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
-    provideAnimations(),
+    provideAnimationsAsync(),
   ],
 }).catch(err => console.error(err));

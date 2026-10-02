@@ -46,7 +46,7 @@ export class AssignmentService {
   }
 
   update(id: number, assignment: IAssignmentDto) {
-    return this.http.put<IAssignment>(this.apiUrl + '/' + id, assignment)
+    return this.http.put<IAssignment>(this.apiUrl + '/' + id, assignment).pipe(catchError(() => of(null)));
   }
 
   delete(id: number) {

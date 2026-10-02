@@ -1,0 +1,12 @@
+@if(modalOpen) {
+<div
+  #overlay
+  [@overlayFade]="{ value: true, params: { delay: overlayExitDelay, overlayTransitionDuration } }"
+  class="custom-modal-overlay"
+  (click)="closeModal()"
+></div>
+
+<div #modal [@modalFade]="{ value: true, params: { delay: overlayTransitionDuration, modalTransitionDuration } }" class="custom-modal">
+  <ng-container #modalContent></ng-container>
+</div>
+}

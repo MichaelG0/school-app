@@ -18,6 +18,7 @@ import { DeleteAssignmentComponent } from '../../../components/delete-assignment
 import { PaginatorComponent } from '../../../components/paginator/paginator.component';
 import { AssignmentModalComponent } from '../../../components/assignment-modal/assignment-modal.component';
 import { GradeModalComponent } from '../../../components/grade-modal/grade-modal.component';
+import { DomService } from 'src/app/services/dom.service';
 
 @Component({
   selector: 'app-klass',
@@ -28,9 +29,7 @@ import { GradeModalComponent } from '../../../components/grade-modal/grade-modal
     KlassListComponent,
     SwitchUpcomingComponent,
     NgFor,
-    DeleteAssignmentComponent,
     PaginatorComponent,
-    AssignmentModalComponent,
     GradeModalComponent,
     AsyncPipe,
   ],
@@ -52,6 +51,7 @@ export class KlassComponent implements OnInit {
     private assSrv: AssignmentService,
     private complAssSrv: CompletedAssignmentService,
     private mdlSrv: ModalService,
+    private domSrv: DomService,
     private route: ActivatedRoute
   ) {
     const tempIssuedAssPageSize = Math.floor((window.innerHeight - 170) / 65);
@@ -103,12 +103,7 @@ export class KlassComponent implements OnInit {
           this.issuedAssPageNum,
           this.issuedAssPageSize
         )
-      : this.assSrv.getPastByKlassAndTeacherIds(
-          this.klass.id,
-          this.loggedUser!.user.id,
-          this.issuedAssPageNum,
-          this.issuedAssPageSize
-        );
+      : this.assSrv.getPastByKlassAndTeacherIds(this.klass.id, this.loggedUser!.user.id, this.issuedAssPageNum, this.issuedAssPageSize);
   }
 
   paginateSubmitted(value = this.submittedAssPageNum) {
@@ -138,12 +133,30 @@ export class KlassComponent implements OnInit {
     );
   }
 
-  setAssignmentToDeleteId(id: number) {
-    this.mdlSrv.setAssignmnetId(id);
+  openDeleteAssignmentModal(assignment: IAssignment) {
+    this.domSrv
+      .openModal<DeleteAssignmentComponent, boolean | void>(DeleteAssignmentComponent, { name: 'assignmentId', value: assignment.id })
+      .pipe(take(1))
+      .subscribe(res => {
+        if (res !== false) this.updateAll();
+      });
   }
 
-  setAssignmentToUpdate(modalTitle: string, assignment?: IAssignment) {
-    this.mdlSrv.setAssignment(modalTitle, assignment);
+  openAssignmentModal(modalTitle: string, assignment?: IAssignment) {
+    console.log(assignment);
+    
+    this.domSrv
+      .openModal<AssignmentModalComponent, boolean | void>(
+        AssignmentModalComponent,
+        { name: 'modalTitle', value: modalTitle },
+        { name: 'assToUpdate', value: assignment },
+        { name: 'klass', value: this.klass },
+        { name: 'loggedUser', value: this.loggedUser }
+      )
+      .pipe(take(1))
+      .subscribe(res => {
+        if (res !== false) this.updateAll();
+      });
   }
 
   setCompletedAssignment(complAss: ICompletedAssignment) {
